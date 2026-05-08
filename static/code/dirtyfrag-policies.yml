@@ -1,0 +1,96 @@
+# Fleet GitOps policies for Dirty Frag tracking.
+#
+# Apply with:
+#   fleetctl apply -f policies/dirtyfrag-policies.yml
+#
+# Schema reference: https://fleetdm.com/docs/configuration/yaml-files
+#
+# Three policies cover the rollout:
+#   1. dirtyfrag-blacklist-deployed   — primary mitigation present (non-Docker hosts)
+#   2. dirtyfrag-userns-hardened      — alternative mitigation present (Docker / IPsec hosts)
+#   3. dirtyfrag-fully-mitigated      — blacklist present AND no target module resident
+#
+# Policy #3 minus policy #1 = reboot queue (hosts where the conf is in place
+# but a module is still pinned in the running kernel).
+
+---
+apiVersion: v1
+kind: policy
+spec:
+  name: dirtyfrag-blacklist-deployed
+  description: |
+    Verifies that the modprobe blacklist for esp4/esp6/rxrpc is present and
+    non-empty on Linux hosts in scope for the Dirty Frag mitigation.
+
+    Hosts running Docker Swarm encrypted overlay (or other legitimate
+    consumers of xfrm) should be excluded from this policy via team scoping
+    and tracked under dirtyfrag-userns-hardened instead.
+  resolution: |
+    Run scripts/dirtyfrag-mitigation.sh on the affected host via Fleet's
+    run-script feature.
+  platform: linux
+  query: |
+    SELECT 1 AS pass
+    FROM file
+    WHERE path = '/etc/modprobe.d/dirtyfrag.conf'
+      AND size > 0
+      AND mode = '0644';
+
+---
+apiVersion: v1
+kind: policy
+spec:
+  name: dirtyfrag-userns-hardened
+  description: |
+    Verifies that unprivileged user namespace creation is disabled on hosts
+    where the modprobe-based mitigation is not viable (Docker Swarm hosts,
+    hosts running strongSwan/libreswan, etc.).
+
+    This is a partial mitigation — it blunts the xfrm-ESP variant of Dirty
+    Frag but does not cover the RxRPC variant. Hosts under this policy
+    remain partially exposed until a patched kernel is deployed.
+  resolution: |
+    Run scripts/dirtyfrag-userns-mitigation.sh on the affected host via
+    Fleet's run-script feature.
+  platform: linux
+  query: |
+    SELECT 1 AS pass
+    FROM system_controls
+    WHERE name = 'kernel.unprivileged_userns_clone'
+      AND current_value = '0'
+    UNION
+    SELECT 1 AS pass
+    FROM system_controls
+    WHERE name = 'user.max_user_namespaces'
+      AND current_value = '0';
+
+---
+apiVersion: v1
+kind: policy
+spec:
+  name: dirtyfrag-fully-mitigated
+  description: |
+    Verifies that the modprobe blacklist is deployed AND no target module
+    is currently resident in the running kernel.
+
+    A host that fails this policy but passes dirtyfrag-blacklist-deployed
+    is in the "reboot pending" state — the mitigation file is in place,
+    but a module is still pinned and won't be cleared until the host
+    reboots. Use the difference between these two policy results as the
+    reboot queue.
+  resolution: |
+    Schedule a maintenance window and reboot the affected host. After
+    reboot, the modprobe blacklist will block the target modules from
+    loading and this policy will pass.
+  platform: linux
+  query: |
+    SELECT 1 AS pass FROM os_version
+    WHERE
+      EXISTS (
+        SELECT 1 FROM file
+        WHERE path = '/etc/modprobe.d/dirtyfrag.conf' AND size > 0
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM kernel_modules
+        WHERE name IN ('esp4','esp6','rxrpc','af_rxrpc')
+      );

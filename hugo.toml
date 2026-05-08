@@ -1,0 +1,75 @@
+baseURL = "https://example.github.io/"
+languageCode = "en-us"
+title = "investigator's notes"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[params]
+  env = "production"
+  title = "investigator's notes"
+  description = "Notes on security operations, fleet management, and detection engineering."
+  keywords = ["security", "fleet", "osquery", "linux", "detection"]
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowToc = true
+  TocOpen = false
+  comments = false
+  disableScrollToTop = false
+
+  [params.homeInfoParams]
+    Title = "investigator's notes"
+    Content = """
+Notes on security operations, fleet management, and detection engineering. Mostly Linux, mostly osquery, occasionally opinionated.
+"""
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/"
+
+[[menu.main]]
+  identifier = "posts"
+  name = "posts"
+  url = "/posts/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "tags"
+  name = "tags"
+  url = "/tags/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "about"
+  name = "about"
+  url = "/about/"
+  weight = 30
+
+[markup]
+  [markup.highlight]
+    style = "github"
+    lineNos = false
+    codeFences = true
+    guessSyntax = true
+    tabWidth = 2
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = false
+    startLevel = 2
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
