@@ -1,6 +1,6 @@
 ---
 title: "Mini Shai-Hulud: Detecting a Live npm Supply Chain Worm with Fleet"
-date: 2026-05-12T19:30:00-04:00
+date: 2026-05-12T08:00:00-04:00
 draft: false
 tags: ["supply-chain", "npm", "fleet", "osquery", "incident-response", "detection-engineering", "tanstack"]
 categories: ["security-ops"]
