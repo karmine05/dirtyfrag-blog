@@ -246,11 +246,11 @@ All 24 Linux hosts returned exit 0 — CLEAN. Sample output from one host:
 | Socket.dev blog | https://socket.dev/blog/tanstack-npm-packages-compromised-mini-shai-hulud-supply-chain-attack |
 | TanStack postmortem | https://tanstack.com/blog/npm-supply-chain-compromise-postmortem |
 | Mini Shai-Hulud campaign page | https://socket.dev/supply-chain-attacks/mini-shai-hulud |
-| Linux/macOS Fleet SQL | [`/code/tanstack-linux-queries.sql`](/code/tanstack-linux-queries.sql) |
-| macOS Fleet SQL | [`/code/tanstack-macos-queries.sql`](/code/tanstack-macos-queries.sql) |
-| Windows Fleet SQL | [`/code/tanstack-windows-queries.sql`](/code/tanstack-windows-queries.sql) |
-| Linux/macOS deep scan script | [`/code/mini_shai_hulud_scan_fleet_deep.sh`](/code/mini_shai_hulud_scan_fleet_deep.sh) |
-| Windows deep scan script | [`/code/mini_shai_hulud_scan_windows.ps1`](/code/mini_shai_hulud_scan_windows.ps1) |
+| Linux/macOS Fleet SQL | [`/code/tanstack-linux-queries.sql`](/dirtyfrag-blog/code/tanstack-linux-queries.sql) |
+| macOS Fleet SQL | [`/code/tanstack-macos-queries.sql`](/dirtyfrag-blog/code/tanstack-macos-queries.sql) |
+| Windows Fleet SQL | [`/code/tanstack-windows-queries.sql`](/dirtyfrag-blog/code/tanstack-windows-queries.sql) |
+| Linux/macOS deep scan script | [`/code/mini_shai_hulud_scan_fleet_deep.sh`](/dirtyfrag-blog/code/mini_shai_hulud_scan_fleet_deep.sh) |
+| Windows deep scan script | [`/code/mini_shai_hulud_scan_windows.ps1`](/dirtyfrag-blog/code/mini_shai_hulud_scan_windows.ps1) |
 
 ---
 
