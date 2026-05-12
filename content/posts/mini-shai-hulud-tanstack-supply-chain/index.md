@@ -5,20 +5,21 @@ draft: false
 tags: ["supply-chain", "npm", "fleet", "osquery", "incident-response", "detection-engineering", "tanstack"]
 categories: ["security-ops"]
 description: "CVE-2026-45321 is an active npm supply chain worm daemonizing on install and harvesting developer credentials across GitHub Actions, AWS, Vault, and Kubernetes. Full IoC set, Fleet detection tooling, and results from scanning 30 hosts — plus the critical gap in Fleet's npm table and why the deep scan scripts exist."
-summary: "An active npm supply chain worm targeting developer credentials dropped on May 11, 2026. 175 packages, 406 compromised versions, 12M+ weekly downloads in scope. This is the detection approach we ran across 30 hosts using Fleet — and the critical caveat about what Fleet's built-in npm table misses."
+summary: "An active npm supply chain worm targeting developer credentials dropped on May 11, 2026. 42 TanStack packages (84 versions) directly compromised. The broader Mini Shai-Hulud campaign affects 175 packages across 17 namespaces. This is the detection approach we ran across 30 hosts using Fleet — and the critical caveat about what Fleet's built-in npm table misses."
 ShowToc: true
 TocOpen: false
 ShowReadingTime: true
 ---
 
-> **CVE-2026-45321 / GHSA-g7cv-rxg3-hmpx.** Active since May 11, 2026. 175 npm packages across 17 namespaces. Daemonizes silently on `npm install`. Harvests GitHub Actions OIDC, AWS, Vault, and Kubernetes credentials. Propagates autonomously. **If you run JavaScript anywhere near a developer machine: stop and read this.**
+> **CVE-2026-45321 / GHSA-g7cv-rxg3-hmpx.** Active since May 11, 2026. **42 TanStack packages (84 versions) directly compromised**, plus the broader Mini Shai-Hulud campaign affecting 175 packages across 17 namespaces. Daemonizes silently on `npm install`. Harvests GitHub Actions OIDC, AWS, Vault, and Kubernetes credentials. Propagates autonomously. **If you run JavaScript anywhere near a developer machine: stop and read this.**
 
 | | |
 |---|---|
 | **CVE** | CVE-2026-45321 / GHSA-g7cv-rxg3-hmpx |
 | **Campaign** | Mini Shai-Hulud |
 | **Status** | Active (May 11, 2026) |
-| **Scope** | 175 packages · 406 versions · 17 namespaces · 12M+ weekly downloads |
+| **TanStack scope** | 42 packages · 84 versions · 12M+ weekly downloads |
+| **Broader campaign** | 175 packages · 406 versions · 17 namespaces |
 | **Primary targets** | Developer machines, CI/CD runners, cloud workloads |
 
 ---
@@ -97,7 +98,8 @@ Three SQL files for Linux, macOS, and Windows. Each query is a `UNION ALL` acros
 ```
 
 The coverage:
-- 175 packages · 406 compromised versions across 17 namespaces
+- **42 TanStack packages (84 versions)** directly compromised
+- **133 additional packages (322 versions)** from the broader Mini Shai-Hulud campaign — these share the same payload SHA256s, C2 domains, and campaign markers, so the same IoC set detects them
 - `@tanstack/setup` is the forged package — **never legitimate at any version**, flag any installation immediately
 - Payload file paths across all common install locations including NVM
 - Active process check (`router_init.js`, `router_runtime.js`, `tanstack_runner.js` in cmdline)
@@ -199,7 +201,7 @@ All 24 Linux hosts returned exit 0 — CLEAN. Sample output from one host:
 | `@mistralai/mistralai` | 2.2.2, 2.2.3, 2.2.4 |
 | `@opensearch-project/opensearch` | 3.5.3, 3.6.2, 3.7.0, 3.8.0 |
 
-175 packages total — full list in the SQL queries.
+42 TanStack packages directly compromised; the SQL queries also cover the 175-package broader Mini Shai-Hulud campaign since IoCs are shared.
 
 ---
 
