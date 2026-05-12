@@ -254,4 +254,3 @@ All 24 Linux hosts returned exit 0 — CLEAN. Sample output from one host:
 
 ---
 
-*Generated: 2026-05-12. IoC list sourced from Socket.dev feed snapshot 2026-05-12. The campaign is evolving — regenerate queries from the Socket.dev CSV periodically as new packages are confirmed.*
