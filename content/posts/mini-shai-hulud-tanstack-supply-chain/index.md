@@ -54,7 +54,7 @@ The campaign name — Mini Shai-Hulud — is a Dune reference. A small sandworm 
 
 **It targets `.claude/` directories.** The worm specifically writes persistence hooks to `~/.claude/` — the configuration directory used by Claude Code. It also targets `.vscode/`. This is a deliberate choice: developer tooling is where credentials live, and developer machines have access to production environments.
 
-**Campaign markers are embedded for tracking.** Malicious `package.json` files contain a unique PBKDF2 salt (`svksjrhjkcejg`) and the string `IfYouRevokeThisTokenItWillWipeTheComputerOfTheOwner`. This is both a tracking marker and a threat.
+**Campaign markers have been reported by Socket.dev** but are not yet in the official GHSA. Malicious `package.json` files reportedly contain a unique PBKDF2 salt (`svksjrhjkcejg`) and the string `IfYouRevokeThisTokenItWillWipeTheComputerOfTheOwner`. Useful as supplementary indicators for deep detection; treat as unconfirmed pending official advisory update.
 
 ---
 
@@ -118,7 +118,7 @@ Each script runs through seven phases in sequence, with a 300-second timeout:
 | 2 — Payload files | `router_init.js` and `tanstack_runner.js` by SHA256, across all home directories and global npm paths |
 | 3 — Editor hooks | `.claude/router_runtime.js`, `.claude/setup.mjs`, `.vscode/setup.mjs` |
 | 4 — Local npm packages | **All `node_modules/` directories recursively** — this is the layer the SQL queries miss |
-| 5 — Git dead-drop commits | `claude@users.noreply.github.com` spoofed author, `voicproducoes` compromised account, specific malicious commit hash |
+| 5 — Git dead-drop commits | `claude@users.noreply.github.com` spoofed author, `voicproducoes` (reported compromised maintainer account per Socket.dev, not in GHSA), specific malicious commit hash |
 | 6 — Campaign markers | PBKDF2 salt `svksjrhjkcejg`, campaign string in `package.json`, malicious commit reference |
 | 7 — Workflow injection | `.github/workflows/*.yml` scanning for `toJSON(secrets)`, C2 domains, `__DAEMONIZED`, `router_init` |
 
@@ -177,7 +177,8 @@ All 24 Linux hosts returned exit 0 — CLEAN. Sample output from one host:
 | Runner file | `tanstack_runner.js` (SHA256: `2ec78d5...e27fc96`) |
 | Forged package | `@tanstack/setup` — any version is malicious |
 | Active process | `node` process with `router_init.js` in cmdline |
-| C2 egress | `filev2.getsession[.]org`, `api.masscan.cloud` |
+| C2 egress (confirmed) | `filev2.getsession[.]org` |
+| C2 egress (reported) | `api.masscan.cloud`, `litter.catbox.moe` — per Socket.dev, not in official GHSA |
 | Spoofed author | `claude@users.noreply.github.com` |
 
 ### Persistence locations
@@ -216,7 +217,7 @@ All 24 Linux hosts returned exit 0 — CLEAN. Sample output from one host:
 ### Priority 2 — within 1 hour
 
 4. **Deploy the deep scan scripts** via Fleet run-script. The SQL queries check global packages; the scripts check every `node_modules/` directory on disk. You need both.
-5. **Audit git history** in any repository for commits from `claude@users.noreply.github.com` or `voicproducoes`.
+5. **Audit git history** in any repository for commits from `claude@users.noreply.github.com` (confirmed spoofed author) or `voicproducoes` (reported compromised account, per Socket.dev).
 6. **Check CI/CD workflow files** for `toJSON(secrets)`, `getsession.org`, or `router_init`.
 
 ### Priority 3 — within 24 hours
