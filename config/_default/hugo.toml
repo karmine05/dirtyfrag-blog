@@ -1,0 +1,45 @@
+baseURL = "https://karmine05.github.io/dirtyfrag-blog/"
+theme = "blowfish"
+defaultContentLanguage = "en"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = true
+buildExpired = false
+
+enableEmoji = true
+summaryLength = 0
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[imaging]
+  anchor = "Center"
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5
+
+[related]
+  threshold = 0
+  toLower = false
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+
+  [[related.indices]]
+    name = "categories"
+    weight = 100

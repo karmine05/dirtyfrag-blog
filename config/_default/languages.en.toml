@@ -1,0 +1,23 @@
+disabled = false
+locale = "en"
+label = "English"
+weight = 1
+title = "karmine's notes"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+  rtl = false
+  dateFormat = "2 January 2006"
+  description = "Investigator's notes on security operations, fleet management, and detection engineering."
+  copyright = "© 2026 karmine's notes"
+
+[params.author]
+  name = "Dhruv Majumdar"
+  email = "dhruv@fleetdm.com"
+  headline = "Security operations · Fleet Device Management"
+  bio = "Endpoint, osquery, detection engineering. Notes on running security ops at scale — what the vendor said versus what the host actually did."
+  links = [
+    { linkedin = "https://www.linkedin.com/in/neondhruv/" },
+    { github = "https://github.com/karmine05" },
+  ]
