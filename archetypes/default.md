@@ -3,8 +3,11 @@ title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: true
 tags: []
+categories: []
 description: ""
-ShowToc: true
-TocOpen: false
-ShowReadingTime: true
+summary: ""
+showHero: false
+showTableOfContents: true
+showReadingTime: true
+showWordCount: true
 ---

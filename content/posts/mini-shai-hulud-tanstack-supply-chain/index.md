@@ -6,9 +6,9 @@ tags: ["supply-chain", "npm", "fleet", "osquery", "incident-response", "detectio
 categories: ["security-ops"]
 description: "CVE-2026-45321 is an active npm supply chain worm daemonizing on install and harvesting developer credentials across GitHub Actions, AWS, Vault, and Kubernetes. Full IoC set, Fleet detection tooling, and results from scanning 30 hosts — plus the critical gap in Fleet's npm table and why the deep scan scripts exist."
 summary: "An active npm supply chain worm targeting developer credentials dropped on May 11, 2026. 42 TanStack packages (84 versions) directly compromised. The broader Mini Shai-Hulud campaign affects 175 packages across 17 namespaces. This is the detection approach we ran across 30 hosts using Fleet — and the critical caveat about what Fleet's built-in npm table misses."
-ShowToc: true
-TocOpen: false
-ShowReadingTime: true
+showHero: false
+showTableOfContents: true
+showReadingTime: true
 ---
 
 > **CVE-2026-45321 / GHSA-g7cv-rxg3-hmpx.** Active since May 11, 2026. **42 TanStack packages (84 versions) directly compromised**, plus the broader Mini Shai-Hulud campaign affecting 175 packages across 17 namespaces. Daemonizes silently on `npm install`. Harvests GitHub Actions OIDC, AWS, Vault, and Kubernetes credentials. Propagates autonomously. **If you run JavaScript anywhere near a developer machine: stop and read this.**
