@@ -1,0 +1,96 @@
+/*
+ * karmine's notes — typography + cyber-punk accent overrides.
+ * Loaded by Blowfish AFTER theme styles; do not @import theme files here.
+ */
+
+:root {
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-body: "iA Writer Duospace", "iA Writer Duo", ui-monospace, Menlo, Consolas, monospace;
+}
+
+html,
+body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "ss02";
+  font-variant-ligatures: contextual common-ligatures;
+}
+
+article p,
+article li,
+article blockquote,
+article a {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.heading-anchor,
+.font-heading,
+header a,
+nav a,
+.menu a,
+.author-name,
+.author-headline,
+.site-title,
+.brand,
+.button {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-weight: 700; }
+h2 { font-weight: 700; }
+h3 { font-weight: 500; }
+
+code, pre, kbd, samp, tt,
+.code, .highlight, .chroma {
+  font-family: var(--font-mono);
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
+article pre,
+.chroma {
+  border-radius: 6px;
+  font-size: 0.85em;
+  line-height: 1.55;
+}
+
+article :not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Punk accent: keep raw-HTML SVG diagrams visible against dark Congo base. */
+article svg[role="img"] {
+  color: var(--color-primary-300, #c4b5fd);
+}
+
+article figure {
+  margin-block: 1.5rem;
+}
+
+/* Compact comparison tables (raw HTML used in posts) — let prose breathe. */
+article table {
+  font-size: 0.9em;
+}
+article table th,
+article table td {
+  padding: 0.5em 0.75em;
+}
+
+/* Reading meta (date / word count / reading time) stays in mono — engineer signal. */
+.article-meta,
+.article-meta time,
+.article-meta span {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  letter-spacing: 0;
+}
+
+/* TOC headings in mono — TOC body in body font. */
+.toc summary,
+.toc .toc-title {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}

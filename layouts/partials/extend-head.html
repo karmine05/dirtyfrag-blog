@@ -1,0 +1,73 @@
+{{/* Self-hosted fonts: JetBrains Mono (headers + code) + iA Writer Duospace (body). */}}
+{{/* All fingerprinted via Hugo Pipes; preload Regular weights only to keep critical path tight. */}}
+
+{{- $jbmRegular  := resources.Get "fonts/JetBrainsMono-Regular.woff2" | fingerprint "sha512" -}}
+{{- $jbmItalic   := resources.Get "fonts/JetBrainsMono-Italic.woff2"  | fingerprint "sha512" -}}
+{{- $jbmMedium   := resources.Get "fonts/JetBrainsMono-Medium.woff2"  | fingerprint "sha512" -}}
+{{- $jbmBold     := resources.Get "fonts/JetBrainsMono-Bold.woff2"    | fingerprint "sha512" -}}
+{{- $iaRegular   := resources.Get "fonts/iAWriterDuoS-Regular.woff2"  | fingerprint "sha512" -}}
+{{- $iaItalic    := resources.Get "fonts/iAWriterDuoS-Italic.woff2"   | fingerprint "sha512" -}}
+{{- $iaBold      := resources.Get "fonts/iAWriterDuoS-Bold.woff2"     | fingerprint "sha512" -}}
+{{- $iaBoldItal  := resources.Get "fonts/iAWriterDuoS-BoldItalic.woff2" | fingerprint "sha512" -}}
+
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ $iaRegular.RelPermalink }}">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="{{ $jbmRegular.RelPermalink }}">
+
+<style>
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $jbmRegular.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $jbmItalic.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("{{ $jbmMedium.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("{{ $jbmBold.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Duospace";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $iaRegular.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Duospace";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("{{ $iaItalic.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Duospace";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("{{ $iaBold.RelPermalink }}") format("woff2");
+}
+@font-face {
+  font-family: "iA Writer Duospace";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("{{ $iaBoldItal.RelPermalink }}") format("woff2");
+}
+</style>
