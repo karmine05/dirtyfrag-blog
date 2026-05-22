@@ -15,8 +15,8 @@ title = "karmine's notes"
 [params.author]
   name = "Dhruv Majumdar"
   email = "dhruv@fleetdm.com"
-  headline = "Security operations · Fleet Device Management"
-  bio = "Endpoint, osquery, detection engineering. Notes on running security ops at scale — what the vendor said versus what the host actually did."
+  headline = "VP of Security Solutions · MxDR · VMDR · CTI · Red Team"
+  bio = "Two decades at the seam between detection theory and operational reality. Notes on MxDR, VMDR, threat intel, red teaming — what the vendor said versus what the host actually did."
   links = [
     { linkedin = "https://www.linkedin.com/in/neondhruv/" },
     { github = "https://github.com/karmine05" },
