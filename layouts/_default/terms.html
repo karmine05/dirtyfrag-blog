@@ -1,0 +1,44 @@
+{{/*
+  Project-level override of Blowfish terms.html.
+  Replaces the cramped 1/4-width flex grid with a CSS auto-fill grid
+  of chip-style tag cards. Each chip is its own atomic unit, so the
+  tag name + count badge stay together even when the name wraps.
+*/}}
+{{ define "main" }}
+  {{ .Scratch.Set "scope" "terms" }}
+  {{ $showHero := .Params.showHero | default site.Params.taxonomy.showHero | default false }}
+  {{ if $showHero }}
+    {{ $heroStyle := print "hero/" site.Params.taxonomy.heroStyle ".html" }}
+    {{ if templates.Exists ( printf "partials/%s" $heroStyle ) }}
+      {{ partial $heroStyle . }}
+    {{ else }}
+      {{ partial "hero/basic.html" . }}
+    {{ end }}
+  {{- end -}}
+
+  <header class="mt-5">
+    {{ if .Params.showBreadcrumbs | default (site.Params.taxonomy.showBreadcrumbs | default false) }}
+      {{ partial "breadcrumbs.html" . }}
+    {{ end }}
+    <h1 class="mt-5 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ .Title }}</h1>
+    <div class="mt-1 mb-2 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      {{ partial "article-meta/taxonomy.html" (dict "context" . "scope" "single") }}
+    </div>
+  </header>
+
+  {{ if .Content }}
+    <section class="mt-2 mb-6 max-w-prose prose dark:prose-invert">
+      {{ .Content }}
+    </section>
+  {{ end }}
+
+  <section class="tag-grid mt-4">
+    {{ range .Data.Terms.Alphabetical }}
+      <a class="tag-chip" href="{{ .Page.RelPermalink }}" aria-label="{{ .Page.Title }} ({{ .Count }} posts)">
+        <span class="tag-hash" aria-hidden="true">#</span>
+        <span class="tag-name">{{ .Page.Title }}</span>
+        <span class="tag-count">{{ .Count }}</span>
+      </a>
+    {{ end }}
+  </section>
+{{ end }}
