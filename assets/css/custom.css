@@ -94,3 +94,54 @@ article table td {
   font-family: var(--font-mono);
   font-weight: 500;
 }
+
+/*
+ * Force inline TOC at all viewport widths (PaperMod behaviour).
+ * Blowfish hides .toc-inside on lg: screens and shows .toc-right sticky.
+ * On this blog the article column is full-width, so .toc-right can fall
+ * off-screen — show the inline TOC everywhere and suppress the sidebar
+ * variant entirely.
+ */
+.toc-inside {
+  display: block !important;
+  margin-block: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--color-primary-500, #a78bfa);
+  background: rgba(167, 139, 250, 0.05);
+  border-radius: 0 6px 6px 0;
+}
+
+.toc-right {
+  display: none !important;
+}
+
+.toc-inside summary {
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.toc-inside ul,
+.toc-inside ol {
+  margin-block: 0.5rem;
+  padding-inline-start: 1.5rem;
+}
+
+.toc-inside li {
+  margin-block: 0.2rem;
+  font-size: 0.9em;
+}
+
+.toc-inside a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(167, 139, 250, 0.35);
+}
+
+.toc-inside a:hover {
+  color: var(--color-primary-500, #a78bfa);
+  border-bottom-color: currentColor;
+}

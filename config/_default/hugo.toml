@@ -1,4 +1,4 @@
-baseURL = "https://karmine05.github.io/dirtyfrag-blog/"
+baseURL = "https://dirtyfrag-blog.pages.dev/"
 theme = "blowfish"
 defaultContentLanguage = "en"
 
