@@ -17,3 +17,11 @@ Thumbs.db
 .env
 .env.local
 node_modules/
+
+# Planning / agent context (not part of blog content)
+.planning/
+CLAUDE.md
+.claude/
+.claude-flow/
+.mcp.json
+ruvector.db
