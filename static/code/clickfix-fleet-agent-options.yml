@@ -1,0 +1,55 @@
+# ClickFix Fleet/osquery detection bundle — Fleet agent options
+# Companion post: https://karmine05.github.io/dirtyfrag-blog/posts/clickfix-copypaste-fleet-detections/
+#
+# Drop this into your Fleet agent options (or merge with an existing config)
+# before running the queries in clickfix-{windows,macos}-queries.sql.
+#
+# Prerequisites OUTSIDE Fleet:
+#   1. Windows Script Block Logging enabled via Group Policy:
+#      HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+#        \EnableScriptBlockLogging = 1
+#      (without this, powershell_events.script_text is empty).
+#
+#   2. macOS EndpointSecurity entitlement for the osquery binary via MDM,
+#      including Full Disk Access (required for es_process_events).
+#
+#   3. macOS Sysmon/EDR equivalent installed if you want Mimikatz-style
+#      payload detection (out of scope for the ClickFix initial-access set).
+
+command_line_flags:
+  disable_events: false
+
+  # macOS + Linux: file + process + socket events via audit framework
+  enable_file_events: true
+  disable_audit: false
+  audit_allow_process_events: true
+  audit_allow_socket_events: true
+
+  # Windows: ETW + PowerShell + Windows Event Log + NTFS publishers
+  enable_ntfs_event_publisher: true
+  enable_process_etw_events: true
+  enable_powershell_events_subscriber: true
+  enable_windows_events_publisher: true
+
+  # Event retention
+  events_max: 50000
+  events_expiry: 86400
+  events_optimize: true
+
+config:
+  file_paths:
+    # macOS — AppleScript stealer staging
+    macos_staging:
+      - '/tmp/.xdivcmp/**'
+      - '/tmp/*.zip'
+
+    # macOS — LaunchAgents / LaunchDaemons (persistence)
+    macos_launch:
+      - '/Library/LaunchDaemons/**'
+      - '/Library/LaunchAgents/**'
+      - '/Users/*/Library/LaunchAgents/**'
+
+    # Windows — random-folder payload staging (NetSupport's typical home)
+    windows_appdata:
+      - 'C:\Users\*\AppData\Local\**'
+      - 'C:\Users\*\AppData\Roaming\**'
