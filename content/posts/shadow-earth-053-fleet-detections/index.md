@@ -14,7 +14,7 @@ showWordCount: true
 
 ## Executive summary
 
-On 30 April 2026, Trend Micro disclosed a previously unattributed China-aligned cyberespionage cluster designated **SHADOW-EARTH-053**, active since at least December 2024. The cluster gains initial access through N-day exploitation of internet-facing Microsoft Exchange and IIS servers — primarily the ProxyLogon chain (CVE-2021-26855/26857/26858/27065) — drops GODZILLA web shells, then stages ShadowPad implants through DLL sideloading of legitimate signed executables. The encrypted ShadowPad payload is stored in a per-host Windows registry key and executed via `EnumDesktopsA` callback injection, a technique selected to evade behavioural detection at execution time.
+On 30 April 2026, Trend Micro disclosed a previously unattributed China-aligned cyberespionage cluster designated **SHADOW-EARTH-053**, with ProxyLogon-based Exchange compromise activity observed since at least December 2024. The cluster gains initial access through N-day exploitation of internet-facing Microsoft Exchange and IIS servers — primarily the ProxyLogon chain (CVE-2021-26855/26857/26858/27065) — drops GODZILLA web shells, then stages ShadowPad implants through DLL sideloading of legitimate signed executables. The encrypted ShadowPad payload is stored in a per-host Windows registry key and executed via `EnumDesktopsA` callback injection, a technique selected to evade behavioural detection at execution time. A separate Linux delivery path — NOODLERAT samples retrieved via exploitation of CVE-2025-55182 (React2Shell) — was first observed in **December 2025**, a year after the initial Windows activity; Trend Micro attribute these Linux samples to SHADOW-EARTH-053 with **low confidence**.
 
 Observed targeting spans government, defence, critical-infrastructure, and IT-consulting sectors across Pakistan, Thailand, Malaysia, India, Myanmar, Sri Lanka, Taiwan, and one NATO member state (Poland). A companion intrusion set, SHADOW-EARTH-054, shares the same initial-access vector and SHA-256-identical post-exploitation tooling (Evil-CreateDump, IOX) but no observed operational coordination. The two clusters re-exploit the same victims with temporal offsets of up to eight months.
 
@@ -27,7 +27,7 @@ This brief contains: campaign-wide and per-kill-chain-stage Diamond Models; a co
 | | |
 |---|---|
 | **Designation** | SHADOW-EARTH-053 (Trend Micro temporary intrusion set; companion -054 in the same report) |
-| **First observed** | December 2024 |
+| **First observed** | December 2024 (ProxyLogon-based Windows activity). Linux NOODLERAT delivery via CVE-2025-55182 first observed December 2025 — a separate, lower-confidence component, **not** part of the original Windows campaign window. |
 | **Primary report** | [Trend Micro — Lunghi & Silva, 30 Apr 2026](https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html) |
 | **Attribution** | China-aligned (per Trend Micro). No strong overlap with any publicly reported group. Tom Kellermann (TrendAI) drew an editorial parallel to the Typhoon family in [*The Register*](https://www.theregister.com/2026/04/30/chinese_spies_lurking_networks/), but this is framing, not formal attribution. |
 | **Targets — sectors** | Government; defence; IT consultancies holding Ministry-of-Defence contracts; telecoms; transportation |
@@ -137,7 +137,7 @@ Three observed delivery paths.
 
 **Secondary:** AnyDesk used as the delivery channel in at least one intrusion. Trend Micro cannot determine whether this represents an alternative initial-access vector or a handoff from an unobserved prior compromise. The operational signature in either case is the same: a signed, EDR-tolerated remote-access tool used to move ShadowPad onto the target.
 
-**Tertiary, low confidence:** Linux NOODLERAT delivery via CVE-2025-55182 (React2Shell) exploitation, with implants retrieved from `194.38.11.3:1790`. Trend Micro explicitly hedge attribution of this delivery path to SHADOW-EARTH-053.
+**Tertiary, low confidence:** Linux NOODLERAT delivery via CVE-2025-55182 (React2Shell) exploitation, with implants retrieved from `194.38.11.3:1790`. The temporal context matters: Trend Micro first observed this delivery path in **December 2025** — twelve months after the campaign's initial ProxyLogon-based Windows activity began. React2Shell exploitation itself was observed by multiple vendors as part of broader CVE-2025-55182 activity; what Trend Micro hedge with low confidence is the attribution of *these specific Linux samples* to SHADOW-EARTH-053. The link rests on shared staging infrastructure (`194.38.11.3:1790` also hosted ShadowPad samples retrieved by the cluster in mid-December 2025) and registration patterns on the NOODLERAT C2 domain `check.office365-update.com`.
 
 {{< mermaid >}}
 graph LR
@@ -185,7 +185,7 @@ graph LR
 
 Three persistence anchors are layered at every observed victim.
 
-**Web shells.** GODZILLA dropped under Exchange and IIS web roots — `C:\inetpub\wwwroot\aspnet_client\system_web\` and `C:\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\auth\`. Twelve filenames observed: `error.aspx`, `errorFE.aspx`, `signout.aspx`, `warn.aspx`, `data.aspx`, `page.aspx`, `TimeinLogout.aspx`, `timeout.aspx`, `charcode.aspx`, `tunnel.ashx`, `i.aspx`, `2.aspx`. The `.ashx` HTTP-handler variant is new to this cluster.
+**Web shells.** GODZILLA dropped under Exchange and IIS web roots — `C:\inetpub\wwwroot\aspnet_client\system_web\` and `C:\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\auth\`. Twelve filenames observed: `error.aspx`, `errorFE.aspx`, `signout.aspx`, `warn.aspx`, `data.aspx`, `page.aspx`, `TimeinLogout.aspx`, `timeout.aspx`, `charcode.aspx`, `tunnel.ashx`, `i.aspx`, `2.aspx`. The `tunnel.ashx` `.ashx` HTTP-handler variant is new to this cluster — `.ashx` files are uncommon in default Exchange/IIS deployments and effectively never appear in `owa/auth/` or `aspnet_client/system_web/` under legitimate circumstances. Treat any `.ashx` file in those paths as a high-fidelity detection signal, independent of the specific filename match list.
 
 **ShadowPad loader.** A legitimate signed binary (see Stage 2) is staged in `C:\Users\Public` or `C:\ProgramData`, sideloads its malicious DLL, and reads the encrypted shellcode from `HKCU\Software\<ComputerName>\scode`.
 
@@ -216,7 +216,7 @@ Operational redundancy is the load-bearing C2 design. Multiple tunnel tools are 
 
 {{< figure src="images/c2-tunnel-architecture.svg" alt="C2 tunnel architecture diagram showing compromised hosts feeding into layered tunnel tools (IOX, GOST, Wstunnel, tunnel-core) and a parallel AnyDesk lane, all converging on three C2 endpoints" caption="One C2 endpoint, four tunnel implementations. The redundancy itself is the durable signal — block any one tool and the others sustain the channel." >}}
 
-- **IOX proxy.** Local accounts created with `LocalAccountTokenFilterPolicy=1` set to enable Pass-the-Hash from any local administrator account. Trend Micro tie this registry-set to the IOX deployment context specifically; the registry value itself is the generic Microsoft UAC remote-restriction bypass ([KB951016](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/user-account-control-and-remote-restriction)) and is set by many lateral-movement toolkits.
+- **IOX proxy.** Local accounts created with `LocalAccountTokenFilterPolicy=1` set to enable Pass-the-Hash from any local administrator account. The registry value itself is the generic Microsoft UAC remote-restriction bypass ([KB951016](https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/user-account-control-and-remote-restriction)) and is set by many lateral-movement toolkits — it is *not* an IOX-specific indicator on its own. The IOX-specific detection signal is the **combination** of the registry-set with concurrent execution of an IOX binary (typically named `explorer.exe` or `svchost.exe`) staged in `C:\Users\Public` or `C:\ProgramData`. Either signal alone produces noise; the combination is high-fidelity.
 - **GOST** as SOCKS5 + WebSocket tunnels to `96.9.125.227`.
 - **Wstunnel** deployed as `wt.exe`, tunnelling SOCKS5 over HTTPS to the same `96.9.125.227`.
 - **Renamed `tunnel-core.exe` → `code.exe`** invoked with parameter `client.toml`, communicating with `96.9.125.227:8067`. The tool itself was not recovered for analysis.
@@ -253,7 +253,10 @@ Three observed objective categories.
 
 **Mailbox and IP exfiltration.** Iterative Exchange PowerShell — initial `Get-Mailbox` calls failed, prompting the operator to load the snap-in (`Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn`) and refine to `Get-User` with `userAccountControl` and `AccountDisabled` filters to identify high-value active accounts. A custom **`ExchangeExport`** tool then exported high-profile mailboxes via the EWS API; Trend Micro note the operational pattern matches Microsoft's observation of Silk Typhoon (Hafnium). One observed exfiltration produced a password-protected RAR archive containing an executive's PST file.
 
-**Defence evasion.** RingQ packer used to evade signature-based detection. `net.exe` and PowerShell binaries copied into `C:\ProgramData` with randomised `.log` suffixes (pattern: `$<RANDOM>.log` filenames) to defeat process-name-based detection.
+**Defence evasion.** Two distinct techniques observed.
+
+- **RingQ packer.** An open-source binary packer of Chinese origin, available on GitHub, designed to pack malicious binaries so that they evade signature-based antivirus and EDR detection. Trend Micro detected at least one RingQ-packed sample in a SHADOW-EARTH-053 environment. Detection guidance: scan staging directories (`C:\Users\Public`, `C:\ProgramData`) for unusually small executables with high entropy and Chinese-language string artefacts in the unpacker stub.
+- **System-binary masquerading.** `net.exe` and PowerShell binaries copied into `C:\ProgramData` with randomised `.log` suffixes (pattern: `$<RANDOM>.log` filenames, e.g. `$D5PLAA1.log`, `$9XF5WLD.log`, `$C06KCQ2.log`) to defeat process-name-based detection while preserving original signed-binary hashes. This technique specifically targets EDR configurations that rely on filename matching rather than hash verification or behavioural analysis.
 
 {{< mermaid >}}
 graph LR
@@ -278,7 +281,9 @@ graph LR
 
 ## SHADOW-EARTH-053 / -054 temporal overlap
 
-Trend Micro's Figure 1 documents a recurring temporal pattern in which the same victim is compromised first by -054 (late 2024 / early 2025), then by -053 (mid-2025 ShadowPad deployment), and re-exploited again by -054 (early 2026). The two clusters share an SHA-256-identical post-exploitation toolkit (Evil-CreateDump, IOX) and the same ProxyLogon initial-access vector, but no operational coordination was observed.
+Trend Micro's Figure 1 documents a recurring temporal pattern in which the same victim is compromised first by -054 (late 2024 / early 2025), then by -053 (mid-2025 ShadowPad deployment), and re-exploited again by -054 (early 2026) — typically with eight months or more between the initial -054 compromise and the subsequent -053 ShadowPad deployment. The two clusters share an SHA-256-identical post-exploitation toolkit (Evil-CreateDump, IOX) and the same ProxyLogon initial-access vector, but no operational coordination was observed.
+
+Trend Micro categorise this relationship as **"Type A collaboration"** (terminology from their *Premier Pass-as-a-Service* model published the previous year): independent exploitation of the same vulnerabilities by separate intrusion sets, with similar initial-access techniques and overlapping post-exploitation tooling, where any apparent coordination is incidental rather than intentional. Trend Micro explicitly considered and rejected the "same group with two TTPs" hypothesis — in three cases, -054 malware appeared at sites already compromised by -053, with no apparent connection between the two malware families, which would be operationally inconsistent for a single actor.
 
 {{< mermaid >}}
 gantt
