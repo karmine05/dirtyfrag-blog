@@ -79,12 +79,12 @@ Consolidated atomic indicators from across the public reporting. ClickFix infras
 
 | Type | Value | Context |
 |---|---|---|
-| Staging domain | `nobovcs[.]com` (representative) | Hosts second-stage scripts including `bibi.php` for NetSupport RAT install (Simply Secure Group reporting) |
+| Staging domain | `nobovcs[.]com` (representative; reported by [Simply Secure Group, May 2026](https://simplysecuregroup.com/new-clickfix-attack-leverage-windows-run-dialog-box-and-macos-terminal-to-deploy-malware/)) | Hosts second-stage scripts including `bibi.php` for NetSupport RAT install. Treat as **hunting fodder only** — staging domains rotate within days. The behavioural pattern (`*.php` second-stage fetch via PowerShell `DownloadString`) outlives any specific domain. |
 | Lure brand impersonations | Cloudflare CAPTCHA, Google bot-verification, QuickBooks support, Booking.com, Birdeye, fake Apple support panels | Visible verification overlays driving the paste action |
 | Windows payload | NetSupport RAT (commercial RAT abused for C2) | Installed in `%LOCALAPPDATA%/<random-folder>/client32.exe` after stager runs |
 | Windows payload | Lumma stealer, other commodity infostealers | Credentials, browser cookies, crypto wallets |
 | macOS staging dir | `/tmp/.xdivcmp/` (representative path) | AppleScript stealers stage copied `login.keychain-db` and ZIP archives here before exfil (Netskope, SOC Prime) |
-| macOS persistence | `/Library/LaunchDaemons/*.plist` invoking `/bin/bash` with `~/.agent` or similar user-home script | `RunAtLoad = true` + `KeepAlive = true` (Microsoft reporting, May 2026) |
+| macOS persistence | `/Library/LaunchDaemons/*.plist` invoking `/bin/bash` with `~/.agent` or similar user-home script | `RunAtLoad = true` + `KeepAlive = true`. Pattern documented in [Microsoft Threat Intelligence, 6 May 2026](https://www.microsoft.com/en-us/security/blog/2026/05/06/clickfix-campaign-uses-fake-macos-utilities-lures-deliver-infostealers/). |
 | macOS payload | AMOS / MacSync stealer family; AppleScript keychain stealers with repeated password prompts | Browser data, keychain database, crypto wallet keys |
 | Stager pattern | `powershell -nop -w hidden -enc <base64>` | Windows variant — encoded payload, hidden window |
 | Stager pattern | `echo <base64> \| base64 -d \| zsh` | macOS variant — pipe through shell after decode |
@@ -183,6 +183,8 @@ WHERE
 
 Requires `enable_process_events: true` with the audit framework or EndpointSecurity backend (`disable_audit: false` + `audit_allow_process_events: true`). `process_events` is macOS + Linux only — for Windows shell-pipe equivalents see Q1.1/1.2 above and the `process_etw_events` correlation. Schema ref: [`process_events`](https://fleetdm.com/tables/process_events).
 
+**False-positive note.** `curl ... | bash` and `curl ... | zsh` are also the canonical Homebrew installer pattern and the install-script idiom on many legitimate macOS / Linux projects (Rust's rustup, several Node version managers, language toolchain installers). Reduce noise by correlating this query's hits with **either** Q1.4 (`unified_log` confirms `Terminal` as the originating process) **or** Q2.2 (EndpointSecurity confirms a known-good `signing_id` / `team_id` for the parent — e.g. Homebrew's signing identity). Standalone `curl | shell` hits should be treated as "investigate" not "page" until the parent-process or signing context is established.
+
 #### 1.4 Terminal-sourced shell activity via macOS Unified Log
 
 The `unified_log` table is **macOS-only** and exposes OSLog entries. Two operationally important schema rules per Fleet's documentation:
@@ -251,6 +253,8 @@ WHERE
 ```
 
 `es_process_events` provides EndpointSecurity-backed process telemetry richer than the audit-framework `process_events` table — it exposes Apple code-signing metadata (`signing_id`, `team_id`, `platform_binary`, `cdhash`, `codesigning_flags`). Two schema notes worth flagging: the time column is `time` (bigint epoch), not `datetime`; and the parent-process column is `parent` (bigint), not `parent_pid`. Requires the EndpointSecurity entitlement granted to the osquery binary via MDM and Full Disk Access. Schema ref: [`es_process_events`](https://fleetdm.com/tables/es_process_events).
+
+**False-positive note.** This query catches the same `curl ... | shell` idiom legitimate package managers use (Homebrew, rustup, several language toolchains). The EndpointSecurity columns make the disambiguation tractable: filter results in the SIEM by `team_id` and `signing_id` allowlists — Homebrew's CLT, Apple-signed system binaries, and your approved dev tooling all have stable team/signing identities. Anything outside that allowlist running `curl | shell` is the high-fidelity signal.
 
 ### Lens 3 — Persistence and staging artefacts
 
@@ -397,7 +401,8 @@ Recommended actions, ordered by priority and platform applicability.
 
 ### Priority 4 — user-facing controls
 
-10. **Browser policy: block clipboard write from untrusted origins** where the browser supports per-origin permissions (Edge enterprise policy, Chrome enterprise policy `DefaultClipboardSetting`). Reduces the lure's effectiveness.
+10. **Browser policy: block clipboard write from untrusted origins** where the browser supports per-origin permissions (Edge enterprise policy, Chrome enterprise policy `DefaultClipboardSetting`). Reduces the lure's effectiveness at the source.
+11. **Clipboard write monitoring as a complementary control.** Several EDR platforms (CrowdStrike Falcon, SentinelOne, Microsoft Defender for Endpoint) expose clipboard-write events through browser-process telemetry. Build a SIEM rule that fires on browser-process clipboard writes immediately followed by Run-dialog or Terminal.app activity from the same user session within a short window (typically <60 seconds) — that two-event sequence is essentially diagnostic of ClickFix and largely free of legitimate FPs. Where the EDR exposes the *content* of the clipboard write, additional filtering on `powershell`/`base64`/`curl` substrings raises fidelity further. This is a detection-layer complement to the browser-policy preventive control in step 10, not a replacement.
 11. **Targeted user training.** ClickFix's psychological hook is that the user thinks they are passing a CAPTCHA or completing a support step. Training should specifically cover: *no legitimate website ever asks you to paste anything into Run dialog or Terminal*. Treat as a discrete training topic, not generic phishing awareness.
 
 ## Limitations and caveats
