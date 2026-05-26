@@ -46,7 +46,11 @@ WHERE (run_at_load = '1' OR run_at_load = 'true')
 
 -- 3.7  EndpointSecurity-backed process creation events — pivot point for
 --      Office or browser spawning curl / bash / osascript after inbound connections.
-SELECT datetime, parent_pid, pid, path, cmdline, signing_id, team_id
+--      Schema notes:
+--        - time column is 'time' (bigint epoch), NOT 'datetime'
+--        - parent-process column is 'parent' (bigint), NOT 'parent_pid'
+SELECT datetime(time, 'unixepoch') AS event_time,
+       parent, pid, path, cmdline, signing_id, team_id, platform_binary
 FROM es_process_events
 WHERE path LIKE '/usr/bin/curl'
    OR path LIKE '/bin/bash'

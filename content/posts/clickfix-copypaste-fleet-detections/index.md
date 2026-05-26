@@ -241,7 +241,8 @@ WHERE
 
 ```sql
 SELECT
-  datetime, pid, parent_pid, path, cmdline, signing_id, team_id, platform_binary
+  datetime(time, 'unixepoch') AS event_time,
+  pid, parent, path, cmdline, signing_id, team_id, platform_binary
 FROM es_process_events
 WHERE
   path IN ('/bin/zsh','/bin/bash','/bin/sh')
@@ -249,7 +250,7 @@ WHERE
   AND cmdline LIKE '%|%';
 ```
 
-`es_process_events` provides EndpointSecurity-backed process telemetry including signing metadata. Requires the EndpointSecurity entitlement granted to the osquery binary via MDM and Full Disk Access. Schema ref: [`es_process_events`](https://fleetdm.com/tables/es_process_events).
+`es_process_events` provides EndpointSecurity-backed process telemetry richer than the audit-framework `process_events` table — it exposes Apple code-signing metadata (`signing_id`, `team_id`, `platform_binary`, `cdhash`, `codesigning_flags`). Two schema notes worth flagging: the time column is `time` (bigint epoch), not `datetime`; and the parent-process column is `parent` (bigint), not `parent_pid`. Requires the EndpointSecurity entitlement granted to the osquery binary via MDM and Full Disk Access. Schema ref: [`es_process_events`](https://fleetdm.com/tables/es_process_events).
 
 ### Lens 3 — Persistence and staging artefacts
 

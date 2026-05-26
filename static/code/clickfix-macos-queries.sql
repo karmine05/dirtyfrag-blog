@@ -84,8 +84,12 @@ WHERE
 
 -- 2.2  Shells with piped curl via EndpointSecurity (richer than audit-framework
 --      process_events: includes signing_id, team_id, platform_binary).
+--      Schema notes:
+--        - time column is 'time' (bigint epoch), NOT 'datetime'
+--        - parent-process column is 'parent' (bigint), NOT 'parent_pid'
 SELECT
-  datetime, pid, parent_pid, path, cmdline, signing_id, team_id, platform_binary
+  datetime(time, 'unixepoch') AS event_time,
+  pid, parent, path, cmdline, signing_id, team_id, platform_binary
 FROM es_process_events
 WHERE
   path IN ('/bin/zsh','/bin/bash','/bin/sh')
