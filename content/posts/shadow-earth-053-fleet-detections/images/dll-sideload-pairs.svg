@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 540" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 DLL sideload pairs — four legitimate signed binaries paired with malicious DLLs they unwittingly load">
+  <style>
+    .card       { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.25; stroke-width: 1.5; rx: 10; }
+    .legit-box  { fill: #533483; fill-opacity: 0.14; stroke: #533483; stroke-width: 1.5; rx: 6; }
+    .evil-box   { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 1.8; rx: 6; }
+    .signer     { fill: currentColor; fill-opacity: 0.06; stroke: currentColor; stroke-opacity: 0.3; stroke-width: 1; rx: 12; }
+    .title      { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .pair-label { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .filename   { font: 600 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; }
+    .renamed    { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.65; }
+    .signer-txt { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; }
+    .hash       { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.45; }
+    .arrow      { stroke: #e94560; stroke-opacity: 0.7; stroke-width: 1.8; fill: none; }
+    .badge-l    { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .badge-e    { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+
+  <text x="20" y="28" class="title">Four DLL-sideload pairs — trust abused, not broken</text>
+  <text x="20" y="50" class="subtitle">Each row: a legitimate signed binary (left) unwittingly loads a co-located malicious DLL (right). Signing-cert verification passes; the trust is misplaced.</text>
+
+  <defs>
+    <marker id="arr-evil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e94560" fill-opacity="0.7"/>
+    </marker>
+  </defs>
+
+  <!-- Pair 1: GameHook.exe -->
+  <rect class="card" x="20" y="80" width="760" height="92"/>
+  <text x="38" y="104" class="badge-l">Signed loader</text>
+  <rect class="legit-box" x="36" y="115" width="260" height="46"/>
+  <text x="50" y="135" class="filename">GameHook.exe</text>
+  <text x="50" y="152" class="renamed">→ renamed runtimebroker.exe / nvcontainer.exe</text>
+
+  <text x="320" y="104" class="badge-e">Malicious DLL</text>
+  <rect class="evil-box" x="318" y="115" width="240" height="46"/>
+  <text x="332" y="135" class="filename">graphics-hook-filter32.dll</text>
+  <text x="332" y="152" class="hash">SHA-256: 4264cfb3…885f5c8</text>
+
+  <path class="arrow" d="M 298 138 L 318 138" marker-end="url(#arr-evil)"/>
+
+  <rect class="signer" x="580" y="106" width="190" height="60"/>
+  <text x="675" y="124" text-anchor="middle" class="signer-txt">Authenticode signer</text>
+  <text x="675" y="144" text-anchor="middle" class="pair-label">ORANGE VIEW</text>
+  <text x="675" y="158" text-anchor="middle" class="pair-label">LIMITED</text>
+
+  <!-- Pair 2: imecmnt.exe -->
+  <rect class="card" x="20" y="184" width="760" height="92"/>
+  <text x="38" y="208" class="badge-l">Signed loader</text>
+  <rect class="legit-box" x="36" y="219" width="260" height="46"/>
+  <text x="50" y="239" class="filename">imecmnt.exe</text>
+  <text x="50" y="256" class="renamed">→ renamed RuntimeBroker.exe / osppsvc.exe</text>
+
+  <text x="320" y="208" class="badge-e">Malicious DLL</text>
+  <rect class="evil-box" x="318" y="219" width="240" height="46"/>
+  <text x="332" y="239" class="filename">imjp14k.dll</text>
+  <text x="332" y="256" class="hash">SHA-256: 2e8f9fd8…81c04cd2</text>
+
+  <path class="arrow" d="M 298 242 L 318 242" marker-end="url(#arr-evil)"/>
+
+  <rect class="signer" x="580" y="210" width="190" height="60"/>
+  <text x="675" y="228" text-anchor="middle" class="signer-txt">Authenticode signer</text>
+  <text x="675" y="248" text-anchor="middle" class="pair-label">Microsoft</text>
+  <text x="675" y="262" text-anchor="middle" class="pair-label">Corporation</text>
+
+  <!-- Pair 3: xReport.exe -->
+  <rect class="card" x="20" y="288" width="760" height="92"/>
+  <text x="38" y="312" class="badge-l">Signed loader</text>
+  <rect class="legit-box" x="36" y="323" width="260" height="46"/>
+  <text x="50" y="343" class="filename">xReport.exe</text>
+  <text x="50" y="360" class="renamed">→ used as-is (no rename observed)</text>
+
+  <text x="320" y="312" class="badge-e">Malicious DLL</text>
+  <rect class="evil-box" x="318" y="323" width="240" height="46"/>
+  <text x="332" y="343" class="filename">Uxtheme.dll</text>
+  <text x="332" y="360" class="hash">SHA-256: 8d9433e9…4de733c78</text>
+
+  <path class="arrow" d="M 298 346 L 318 346" marker-end="url(#arr-evil)"/>
+
+  <rect class="signer" x="580" y="314" width="190" height="60"/>
+  <text x="675" y="332" text-anchor="middle" class="signer-txt">Authenticode signer</text>
+  <text x="675" y="352" text-anchor="middle" class="pair-label">Mainline Net</text>
+  <text x="675" y="366" text-anchor="middle" class="pair-label">Holdings Ltd.</text>
+
+  <!-- Pair 4: LUManager.EXE -->
+  <rect class="card" x="20" y="392" width="760" height="92"/>
+  <text x="38" y="416" class="badge-l">Signed loader</text>
+  <rect class="legit-box" x="36" y="427" width="260" height="46"/>
+  <text x="50" y="447" class="filename">LUManager.EXE</text>
+  <text x="50" y="464" class="renamed">→ renamed RAVCpl64.exe</text>
+
+  <text x="320" y="416" class="badge-e">Malicious DLL</text>
+  <rect class="evil-box" x="318" y="427" width="240" height="46"/>
+  <text x="332" y="447" class="filename">MPS.dll</text>
+  <text x="332" y="464" class="hash">SHA-256: d67197bf…65cf429b3</text>
+
+  <path class="arrow" d="M 298 450 L 318 450" marker-end="url(#arr-evil)"/>
+
+  <rect class="signer" x="580" y="418" width="190" height="60"/>
+  <text x="675" y="436" text-anchor="middle" class="signer-txt">Authenticode signer</text>
+  <text x="675" y="456" text-anchor="middle" class="pair-label">Samsung Electronics</text>
+  <text x="675" y="470" text-anchor="middle" class="pair-label">CO., LTD.</text>
+
+  <!-- Footer note -->
+  <text x="400" y="514" text-anchor="middle" class="subtitle">Plus a Toshiba-signed binary renamed CIATosBtKbd.exe sideloading TosBtKbd.dll — reads ShadowPad shellcode from HKCU\Software\&lt;ComputerName&gt;\scode.</text>
+</svg>

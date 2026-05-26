@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 C2 tunnel architecture — three lanes from compromised hosts through layered redundant tunnels to common C2 infrastructure">
+  <style>
+    .lane       { fill: none; stroke: currentColor; stroke-opacity: 0.18; stroke-width: 1.5; stroke-dasharray: 5 4; rx: 10; }
+    .node       { fill: currentColor; fill-opacity: 0.05; stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; rx: 8; }
+    .tunnel     { fill: #0f3460; fill-opacity: 0.18; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .c2         { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.5; rx: 8; }
+    .legit      { fill: #533483; fill-opacity: 0.18; stroke: #533483; stroke-width: 1.5; rx: 8; }
+    .title      { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .label      { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .body       { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .mono       { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; }
+    .ioc        { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e94560; }
+    .lane-title { font: 600 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+    .flow       { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.6; fill: none; }
+    .flow-red   { stroke: #e94560; stroke-opacity: 0.7; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <text x="20" y="28" class="title">Layered tunnel redundancy → common C2</text>
+  <text x="20" y="50" class="subtitle">Multiple tunnel tools deployed in a single environment; if one is detected and blocked, the others sustain the channel.</text>
+
+  <!-- Lane labels -->
+  <text x="100" y="92" text-anchor="middle" class="lane-title">Compromised host</text>
+  <text x="400" y="92" text-anchor="middle" class="lane-title">Tunnel layer (rotating)</text>
+  <text x="700" y="92" text-anchor="middle" class="lane-title">C2 / staging</text>
+
+  <!-- Lane outlines -->
+  <rect class="lane" x="40" y="105" width="160" height="280"/>
+  <rect class="lane" x="240" y="105" width="320" height="280"/>
+  <rect class="lane" x="600" y="105" width="160" height="280"/>
+
+  <!-- Compromised host nodes -->
+  <rect class="node" x="60" y="125" width="120" height="64"/>
+  <text x="120" y="148" text-anchor="middle" class="label">Exchange / IIS</text>
+  <text x="120" y="166" text-anchor="middle" class="body">w3wp.exe shell</text>
+  <text x="120" y="182" text-anchor="middle" class="body">+ ShadowPad</text>
+
+  <rect class="node" x="60" y="207" width="120" height="64"/>
+  <text x="120" y="230" text-anchor="middle" class="label">Domain hosts</text>
+  <text x="120" y="248" text-anchor="middle" class="body">via Sharp-SMBExec</text>
+  <text x="120" y="264" text-anchor="middle" class="body">+ smss.exe RDP</text>
+
+  <rect class="node" x="60" y="289" width="120" height="64"/>
+  <text x="120" y="312" text-anchor="middle" class="label">Linux web tier</text>
+  <text x="120" y="330" text-anchor="middle" class="body">React2Shell</text>
+  <text x="120" y="346" text-anchor="middle" class="body">+ NOODLERAT</text>
+
+  <!-- Tunnel layer nodes (stacked) -->
+  <rect class="tunnel" x="260" y="125" width="130" height="50"/>
+  <text x="325" y="146" text-anchor="middle" class="label">IOX proxy</text>
+  <text x="325" y="164" text-anchor="middle" class="body">+ UAC bypass set</text>
+
+  <rect class="tunnel" x="260" y="187" width="130" height="50"/>
+  <text x="325" y="208" text-anchor="middle" class="label">GOST</text>
+  <text x="325" y="226" text-anchor="middle" class="body">SOCKS5 + WS</text>
+
+  <rect class="tunnel" x="260" y="249" width="130" height="50"/>
+  <text x="325" y="270" text-anchor="middle" class="label">Wstunnel (wt.exe)</text>
+  <text x="325" y="288" text-anchor="middle" class="body">SOCKS5 / HTTPS</text>
+
+  <rect class="tunnel" x="260" y="311" width="130" height="50"/>
+  <text x="325" y="332" text-anchor="middle" class="label">tunnel-core</text>
+  <text x="325" y="350" text-anchor="middle" class="body">code.exe + client.toml</text>
+
+  <!-- Living-off-the-land lane (AnyDesk) -->
+  <rect class="legit" x="410" y="125" width="140" height="86"/>
+  <text x="480" y="148" text-anchor="middle" class="label">AnyDesk (LotL)</text>
+  <text x="480" y="170" text-anchor="middle" class="body">Signed binary,</text>
+  <text x="480" y="188" text-anchor="middle" class="body">EDR-tolerated.</text>
+  <text x="480" y="204" text-anchor="middle" class="body">Used once for delivery.</text>
+
+  <rect class="legit" x="410" y="227" width="140" height="86"/>
+  <text x="480" y="250" text-anchor="middle" class="label">mdync.exe</text>
+  <text x="480" y="272" text-anchor="middle" class="body">Post-loader</text>
+  <text x="480" y="290" text-anchor="middle" class="body">beaconer,</text>
+  <text x="480" y="306" text-anchor="middle" class="body">dropped by TosBtKbd.</text>
+
+  <!-- C2 nodes -->
+  <rect class="c2" x="620" y="125" width="120" height="64"/>
+  <text x="680" y="148" text-anchor="middle" class="label">GOST + Wstunnel</text>
+  <text x="680" y="168" text-anchor="middle" class="ioc">96.9.125.227</text>
+  <text x="680" y="184" text-anchor="middle" class="body">:8067</text>
+
+  <rect class="c2" x="620" y="207" width="120" height="64"/>
+  <text x="680" y="230" text-anchor="middle" class="label">mdync beacon</text>
+  <text x="680" y="250" text-anchor="middle" class="ioc">141.164.46.77</text>
+  <text x="680" y="266" text-anchor="middle" class="body">post-loader C2</text>
+
+  <rect class="c2" x="620" y="289" width="120" height="64"/>
+  <text x="680" y="312" text-anchor="middle" class="label">NOODLERAT (Linux)</text>
+  <text x="680" y="332" text-anchor="middle" class="ioc">194.38.11.3</text>
+  <text x="680" y="348" text-anchor="middle" class="body">:1790  (low conf.)</text>
+
+  <!-- Flow arrows: host -> tunnel -->
+  <defs>
+    <marker id="arrh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.5"/>
+    </marker>
+    <marker id="arrr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e94560" fill-opacity="0.7"/>
+    </marker>
+  </defs>
+
+  <path class="flow" d="M 180 157 C 215 157, 230 150, 260 150" marker-end="url(#arrh)"/>
+  <path class="flow" d="M 180 239 C 215 239, 230 212, 260 212" marker-end="url(#arrh)"/>
+  <path class="flow" d="M 180 321 C 215 321, 230 274, 260 274" marker-end="url(#arrh)"/>
+  <path class="flow" d="M 180 157 C 215 157, 230 168, 260 336" marker-end="url(#arrh)"/>
+
+  <!-- Tunnel -> C2 -->
+  <path class="flow-red" d="M 390 150 C 460 150, 540 157, 620 157" marker-end="url(#arrr)"/>
+  <path class="flow-red" d="M 390 212 C 460 212, 540 157, 620 157" marker-end="url(#arrr)"/>
+  <path class="flow-red" d="M 390 274 C 460 274, 540 157, 620 157" marker-end="url(#arrr)"/>
+  <path class="flow-red" d="M 390 336 C 460 336, 540 157, 620 157" marker-end="url(#arrr)"/>
+  <path class="flow-red" d="M 550 168 C 580 168, 600 239, 620 239" marker-end="url(#arrr)"/>
+  <path class="flow-red" d="M 390 336 C 460 336, 540 321, 620 321" marker-end="url(#arrr)"/>
+
+  <!-- Footer callout -->
+  <text x="400" y="408" text-anchor="middle" class="subtitle">All four tunnel tools share the same C2 endpoint — operational redundancy, not separate infrastructure.</text>
+</svg>

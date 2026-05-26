@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 540" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 victimology — eight country footprint across South, East and Southeast Asia plus Poland (NATO)">
+  <style>
+    .tile      { stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; fill: currentColor; fill-opacity: 0.06; rx: 6; }
+    .tile-hit  { stroke: #e94560; stroke-width: 2; fill: #e94560; fill-opacity: 0.16; rx: 6; }
+    .tile-nato { stroke: #533483; stroke-width: 2; fill: #533483; fill-opacity: 0.18; rx: 6; stroke-dasharray: 4 3; }
+    .label     { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sector    { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
+    .pin       { fill: #e94560; }
+    .pin-nato  { fill: #533483; }
+    .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .legend    { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .ocean     { fill: currentColor; fill-opacity: 0.03; rx: 10; }
+    .divider   { stroke: currentColor; stroke-opacity: 0.2; stroke-width: 1.5; stroke-dasharray: 6 4; }
+  </style>
+
+  <text x="20" y="28" class="title">SHADOW-EARTH-053 — eight-country footprint</text>
+  <text x="20" y="50" class="subtitle">Government, defence, IT consulting (MoD-adjacent), telecom, transportation. Active since Dec 2024.</text>
+
+  <!-- Asia region container -->
+  <rect class="ocean" x="20" y="70" width="540" height="420"/>
+  <text x="40" y="92" class="label">South + East + Southeast Asia</text>
+
+  <!-- Pakistan -->
+  <rect class="tile-hit" x="40" y="110" width="120" height="64"/>
+  <circle class="pin" cx="55" cy="125" r="4"/>
+  <text x="68" y="129" class="label">Pakistan</text>
+  <text x="50" y="148" class="sector">Government</text>
+  <text x="50" y="163" class="sector">Defence</text>
+
+  <!-- India -->
+  <rect class="tile-hit" x="170" y="110" width="120" height="64"/>
+  <circle class="pin" cx="185" cy="125" r="4"/>
+  <text x="198" y="129" class="label">India</text>
+  <text x="180" y="148" class="sector">Government</text>
+  <text x="180" y="163" class="sector">IT consulting (MoD)</text>
+
+  <!-- Myanmar -->
+  <rect class="tile-hit" x="300" y="110" width="120" height="64"/>
+  <circle class="pin" cx="315" cy="125" r="4"/>
+  <text x="328" y="129" class="label">Myanmar</text>
+  <text x="310" y="148" class="sector">Government</text>
+  <text x="310" y="163" class="sector">Shared w/ -054</text>
+
+  <!-- Sri Lanka -->
+  <rect class="tile-hit" x="430" y="110" width="120" height="64"/>
+  <circle class="pin" cx="445" cy="125" r="4"/>
+  <text x="458" y="129" class="label">Sri Lanka</text>
+  <text x="440" y="148" class="sector">Government</text>
+  <text x="440" y="163" class="sector">Shared w/ -054</text>
+
+  <!-- Thailand -->
+  <rect class="tile-hit" x="40" y="200" width="120" height="64"/>
+  <circle class="pin" cx="55" cy="215" r="4"/>
+  <text x="68" y="219" class="label">Thailand</text>
+  <text x="50" y="238" class="sector">Government</text>
+  <text x="50" y="253" class="sector">Transportation</text>
+
+  <!-- Malaysia -->
+  <rect class="tile-hit" x="170" y="200" width="120" height="64"/>
+  <circle class="pin" cx="185" cy="215" r="4"/>
+  <text x="198" y="219" class="label">Malaysia</text>
+  <text x="180" y="238" class="sector">Government</text>
+  <text x="180" y="253" class="sector">Shared w/ -054</text>
+
+  <!-- Taiwan -->
+  <rect class="tile-hit" x="300" y="200" width="120" height="64"/>
+  <circle class="pin" cx="315" cy="215" r="4"/>
+  <text x="328" y="219" class="label">Taiwan</text>
+  <text x="310" y="238" class="sector">Government</text>
+  <text x="310" y="253" class="sector">Defence-adjacent</text>
+
+  <!-- SEA transport callout -->
+  <rect class="tile" x="430" y="200" width="120" height="64"/>
+  <text x="440" y="219" class="label">SEA transport</text>
+  <text x="440" y="238" class="sector">Limited victims</text>
+  <text x="440" y="253" class="sector">Sector pivot</text>
+
+  <!-- Strategic context band -->
+  <rect class="tile" x="40" y="290" width="510" height="86"/>
+  <text x="56" y="312" class="label">Strategic interest band</text>
+  <text x="56" y="332" class="sector">Operators target governments aligned with US-and-pro-Taiwan posture; IT consultancies are used as supply-chain</text>
+  <text x="56" y="350" class="sector">pivots toward Ministries of Defence (Trend Micro observed one MoD-webmail probe from a tech customer in SEA).</text>
+  <text x="56" y="368" class="sector">Tom Kellermann (TrendAI): &#x201C;island-hopping through defence ministries.&#x201D;</text>
+
+  <!-- IT consulting note -->
+  <text x="40" y="408" class="legend"><tspan font-weight="600">+</tspan> IT consultancies in ≥2 of these countries had Ministry of Defence as a customer.</text>
+  <text x="40" y="428" class="legend"><tspan font-weight="600">+</tspan> Re-exploitation observed in early 2026 by SHADOW-EARTH-054 at SHADOW-EARTH-053 victims.</text>
+  <text x="40" y="448" class="legend"><tspan font-weight="600">+</tspan> SHA-256-identical Evil-CreateDump + IOX binaries shared between -053 and -054 sets.</text>
+
+  <!-- Vertical divider -->
+  <line class="divider" x1="580" y1="80" x2="580" y2="490"/>
+
+  <!-- NATO inset -->
+  <rect class="ocean" x="600" y="70" width="180" height="420"/>
+  <text x="620" y="92" class="label">Europe (NATO)</text>
+
+  <rect class="tile-nato" x="620" y="110" width="140" height="120"/>
+  <circle class="pin-nato" cx="640" cy="130" r="5"/>
+  <text x="654" y="134" class="label">Poland</text>
+  <text x="630" y="156" class="sector">Defence sector</text>
+  <text x="630" y="174" class="sector">Single confirmed</text>
+  <text x="630" y="192" class="sector">NATO target.</text>
+  <text x="630" y="216" class="sector">Geographic outlier;</text>
+  <text x="630" y="232" class="sector">strategic intent.</text>
+
+  <text x="620" y="270" class="legend"><tspan font-weight="600">Why one?</tspan></text>
+  <text x="620" y="290" class="sector">Trend Micro frames this</text>
+  <text x="620" y="306" class="sector">as opportunistic — broader</text>
+  <text x="620" y="322" class="sector">scope rather than focus.</text>
+  <text x="620" y="346" class="sector">Read it as: the operator</text>
+  <text x="620" y="362" class="sector">scanned for ProxyLogon-</text>
+  <text x="620" y="378" class="sector">vulnerable Exchange, and</text>
+  <text x="620" y="394" class="sector">Poland MoD was on the list.</text>
+
+  <!-- Legend -->
+  <text x="20" y="520" class="legend"><tspan class="pin" font-size="14">●</tspan>  Asia target (7)    <tspan class="pin-nato" font-size="14">●</tspan>  NATO target (1)</text>
+</svg>
