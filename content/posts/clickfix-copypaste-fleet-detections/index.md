@@ -185,20 +185,39 @@ Requires `enable_process_events: true` with the audit framework or EndpointSecur
 
 #### 1.4 Terminal-sourced shell activity via macOS Unified Log
 
+The `unified_log` table is **macOS-only** and exposes OSLog entries. Two operationally important schema rules per Fleet's documentation:
+
+- **A `timestamp` constraint is required** for any reasonable performance — `timestamp > <epoch>` or the magic value `timestamp > -1` (pagination mode, below). Without it, the OSLog query is unbounded and may time out or silently truncate.
+- **Use only `AND` and `=` constraints** in the WHERE clause to avoid multiple table invocations. `OR`-chained `LIKE` predicates trigger the table to be invoked once per branch, and because `unified_log` maintains a global pagination counter, multiple invocations within a single query produce inconsistent row sets. Where multiple `LIKE` patterns are needed, schedule one query per pattern rather than ORing them together.
+
+**One-shot hunt — bounded 24-hour window, single LIKE pattern:**
+
 ```sql
 SELECT
   datetime(timestamp, 'unixepoch') AS log_time,
-  process,
-  subsystem,
-  category,
-  message
+  process, subsystem, category, message
 FROM unified_log
 WHERE
-  process = 'Terminal'
-  AND (message LIKE '%curl %' OR message LIKE '%base64%' OR message LIKE '%wget %');
+  timestamp > (strftime('%s','now') - 86400)
+  AND process = 'Terminal'
+  AND message LIKE '%curl %';
 ```
 
-The `unified_log` table is macOS-only and exposes OSLog entries. Provides corroborating evidence that the suspicious shell command originated from Terminal (vs. a daemon or other parent). Schema ref: [`unified_log`](https://fleetdm.com/tables/unified_log).
+Run a sibling scheduled query with `message LIKE '%base64%'` and another with `message LIKE '%wget %'` in your Fleet pack — three small queries with `AND`-only WHERE clauses, not one query with `OR` between them.
+
+**SIEM streaming mode — stateful pagination via `timestamp > -1`:**
+
+```sql
+SELECT
+  datetime(timestamp, 'unixepoch') AS log_time,
+  process, subsystem, category, message
+FROM unified_log
+WHERE
+  timestamp > -1
+  AND process = 'Terminal';
+```
+
+The `timestamp > -1` form triggers Fleet's pagination idiom: each invocation of the query returns the next batch of unread entries and updates a global pagination counter. Use this when feeding `unified_log` into a SIEM continuously rather than running ad-hoc hunts. Schema ref: [`unified_log`](https://fleetdm.com/tables/unified_log).
 
 ### Lens 2 — Run dialog / Terminal as process parent
 

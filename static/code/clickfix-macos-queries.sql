@@ -28,13 +28,55 @@ WHERE
 
 -- 1.4  Terminal-sourced activity via macOS Unified Log.
 --      Corroborates that the shell command originated from Terminal.app.
+--      Two schema rules from https://fleetdm.com/tables/unified_log:
+--        (a) timestamp constraint REQUIRED for performance (use > or >= against
+--            an epoch, or "timestamp > -1" to trigger pagination mode).
+--        (b) WHERE clause must use only AND/= constraints — OR-chained LIKE
+--            predicates trigger multiple table invocations and the global
+--            pagination counter produces inconsistent row sets.
+--      Run one query per LIKE pattern; do NOT OR them together.
+
+-- 1.4a  One-shot hunt for Terminal sessions running curl in the last 24h.
 SELECT
   datetime(timestamp, 'unixepoch') AS log_time,
   process, subsystem, category, message
 FROM unified_log
 WHERE
-  process = 'Terminal'
-  AND (message LIKE '%curl %' OR message LIKE '%base64%' OR message LIKE '%wget %');
+  timestamp > (strftime('%s','now') - 86400)
+  AND process = 'Terminal'
+  AND message LIKE '%curl %';
+
+-- 1.4b  One-shot hunt for Terminal sessions involving base64 in the last 24h.
+SELECT
+  datetime(timestamp, 'unixepoch') AS log_time,
+  process, subsystem, category, message
+FROM unified_log
+WHERE
+  timestamp > (strftime('%s','now') - 86400)
+  AND process = 'Terminal'
+  AND message LIKE '%base64%';
+
+-- 1.4c  One-shot hunt for Terminal sessions running wget in the last 24h.
+SELECT
+  datetime(timestamp, 'unixepoch') AS log_time,
+  process, subsystem, category, message
+FROM unified_log
+WHERE
+  timestamp > (strftime('%s','now') - 86400)
+  AND process = 'Terminal'
+  AND message LIKE '%wget %';
+
+-- 1.4d  SIEM streaming mode — stateful pagination via "timestamp > -1".
+--       Each invocation returns the next batch of unread entries since the
+--       previous invocation. Use for continuous Terminal-log ingest into
+--       a SIEM, NOT for ad-hoc hunting.
+SELECT
+  datetime(timestamp, 'unixepoch') AS log_time,
+  process, subsystem, category, message
+FROM unified_log
+WHERE
+  timestamp > -1
+  AND process = 'Terminal';
 
 -- =============================================================================
 -- Lens 2: Terminal as process parent (EndpointSecurity)
