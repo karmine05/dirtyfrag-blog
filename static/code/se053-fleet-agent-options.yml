@@ -1,0 +1,47 @@
+# SHADOW-EARTH-053 Fleet/osquery detection bundle — Fleet agent options
+# Source: https://www.trendmicro.com/en_us/research/26/d/inside-shadow-earth-053.html
+# Companion post: https://karmine05.github.io/dirtyfrag-blog/posts/shadow-earth-053-fleet-detections/
+#
+# Drop this into your Fleet agent options (or merge with an existing config)
+# before running the queries in se053-{windows,linux,macos}-queries.sql.
+#
+# Soft prerequisites that live OUTSIDE Fleet:
+#   1. Sysmon installed on every Windows host you care about, with a
+#      Mimikatz-aware config (swiftonsecurity / olafhartong baselines work).
+#   2. PowerShell Script Block Logging enabled via GPO:
+#      HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging\EnableScriptBlockLogging = 1
+
+command_line_flags:
+  disable_events: false
+
+  # macOS + Linux: file integrity + process/socket via the audit framework.
+  enable_file_events: true
+  disable_audit: false
+  audit_allow_process_events: true
+  audit_allow_socket_events: true
+
+  # Windows: NTFS file events, ETW process events, PowerShell, Windows Event Log.
+  enable_ntfs_event_publisher: true
+  enable_process_etw_events: true
+  enable_powershell_events_subscriber: true
+  enable_windows_events_publisher: true
+
+  # Retention sized for a busy Exchange / DC host.
+  events_max: 50000
+  events_expiry: 86400
+  events_optimize: true
+
+config:
+  file_paths:
+    exchange_webroot:
+      - 'C:\inetpub\wwwroot\**'
+      - 'C:\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\**'
+    iis_webroot:
+      - 'C:\inetpub\wwwroot\**'
+    windows_temp:
+      - 'C:\Windows\Temp\**'
+      - 'C:\Users\*\AppData\Local\Temp\**'
+    linux_webroot:
+      - '/var/www/**'
+      - '/srv/www/**'
+      - '/usr/share/nginx/html/**'
