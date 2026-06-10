@@ -1,0 +1,30 @@
+policies:
+  - name: "Notepad++ patched against CVE-2026-48800 bypass (GHSA-p58x-r3c9-x9p6)"
+    platform: windows
+    description: "Fails if Notepad++ <= 8.9.6.1 (or unreadable version) is installed or present as a portable copy. Advisory has no CVE; tracked by version."
+    resolution: "Update Notepad++ to v8.9.6.2+. Remove portable copies below that version."
+    query: |
+      SELECT 1 WHERE
+      NOT EXISTS (
+        SELECT 1 FROM programs
+        WHERE name LIKE 'Notepad++%'
+          AND ( CAST(split(version,'.',0) AS INTEGER)*1000000000
+              + CAST(split(version,'.',1) AS INTEGER)*1000000
+              + CAST(split(version,'.',2) AS INTEGER)*1000
+              + CAST(split(version,'.',3) AS INTEGER) ) < 8009006002
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM file
+        WHERE ( path LIKE 'C:\Program Files\Notepad++\notepad++.exe'
+             OR path LIKE 'C:\Program Files (x86)\Notepad++\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Downloads\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Downloads\%\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Desktop\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Desktop\%\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Documents\notepad++.exe'
+             OR path LIKE 'C:\Users\%\Documents\%\notepad++.exe' )
+          AND ( CAST(split(file_version,'.',0) AS INTEGER)*1000000000
+              + CAST(split(file_version,'.',1) AS INTEGER)*1000000
+              + CAST(split(file_version,'.',2) AS INTEGER)*1000
+              + CAST(split(file_version,'.',3) AS INTEGER) ) < 8009006002
+      );
