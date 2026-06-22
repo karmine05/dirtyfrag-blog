@@ -46,9 +46,9 @@ None of this is hypothetical. These configurations exist on developer endpoints 
 
 `agentic-detector` adds one table to osquery: `ai_tools`. Every row is an AI tool — presence in the table is the signal, not a column called `is_ai`.
 
-A `kind` column separates the six row types:
+A `type` column separates the six row types:
 
-| `kind` | What the row represents |
+| `type` | What the row represents |
 |---|---|
 | `mcp_server` | An MCP server declared in any client config (Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, Zed, Cline, Roo, Continue) and/or a running MCP server process |
 | `ide_plugins` | An installed AI editor plugin (VS Code family incl. Cursor/Windsurf/VSCodium, JetBrains, Zed, Sublime, Neovim/Vim, Emacs) |
@@ -59,9 +59,9 @@ A `kind` column separates the six row types:
 
 {{< figure src="images/ai-tools-inventory.png" alt="osqueryi result: SELECT type, name, category, running FROM ai_tools LIMIT 20 — showing sockets (bun, nfs, Ollama, Claude Helper), mcp_server rows (fleet-mcp, 21st-dev-magic, claude-flow, ruflo, docker-mcp, context7, deepwiki, playwright), and an ide_plugins row for Cline" caption="Twenty rows from a live host: sockets, MCP servers across multiple clients, and an IDE plugin — all from one table." >}}
 
-The full column set: `kind, name, identifier, category, location, source, version, path, endpoint, running, pid, port, risk_flags, sha256, uid, username, detail`.
+The full column set: `type, name, identifier, category, location, source, version, path, endpoint, running, pid, port, risk_flags, sha256, uid, username, detail`.
 
-The `detail` column is compact JSON carrying kind-specific extras: `transport`, `args`, `env_keys` (names only — never values), `capabilities`, `launch_hash`, `permission_mode`, `markers`, and others depending on kind.
+The `detail` column is compact JSON carrying type-specific extras: `transport`, `args`, `env_keys` (names only — never values), `capabilities`, `launch_hash`, `permission_mode`, `markers`, and others depending on type.
 
 One design choice worth calling out: the extension enumerates **all home directories** on the host (`/Users/*`, `/home/*`, `/root`, `C:\Users\*`) — not just the daemon account. When Fleet's `fleetd` runs it as root, you see the full multi-user picture. Running unprivileged gives you partial rows on homes you can't read, rather than a silent miss.
 
@@ -95,20 +95,20 @@ Capability inference is static. The extension reads the known-server knowledge b
 
 ## Example queries
 
-These run in the Fleet live query console or in a local `osquery>` shell. Filtering on `kind` is cheap — constraint pushdown means only the relevant collectors run.
+These run in the Fleet live query console or in a local `osquery>` shell. Filtering on `type` is cheap — constraint pushdown means only the relevant collectors run.
 
 **Full AI inventory on a host:**
 ```sql
-SELECT kind, name, category, running, risk_flags
+SELECT type, name, category, running, risk_flags
 FROM ai_tools
-ORDER BY kind, name;
+ORDER BY type, name;
 ```
 
 **Remote MCP servers only (the highest-risk surface):**
 ```sql
 SELECT name, source, endpoint, risk_flags
 FROM ai_tools
-WHERE kind = 'mcp_server'
+WHERE type = 'mcp_server'
   AND location = 'remote';
 ```
 
@@ -116,7 +116,7 @@ WHERE kind = 'mcp_server'
 ```sql
 SELECT name, path, risk_flags
 FROM ai_tools
-WHERE kind = 'mcp_server'
+WHERE type = 'mcp_server'
   AND risk_flags LIKE '%remote_fetch_exec%';
 ```
 
@@ -124,7 +124,7 @@ WHERE kind = 'mcp_server'
 ```sql
 SELECT name, pid, path, risk_flags
 FROM ai_tools
-WHERE kind = 'agents'
+WHERE type = 'agents'
   AND (
     risk_flags LIKE '%bypass_permissions%'
     OR risk_flags LIKE '%skip_permissions_runtime%'
@@ -136,7 +136,7 @@ WHERE kind = 'agents'
 ```sql
 SELECT name, path, username, risk_flags, sha256
 FROM ai_tools
-WHERE kind = 'agent_instruction'
+WHERE type = 'agent_instruction'
   AND (
     risk_flags LIKE '%injection_markers%'
     OR risk_flags LIKE '%hidden_unicode%'
@@ -147,14 +147,14 @@ WHERE kind = 'agent_instruction'
 ```sql
 SELECT name, category, endpoint, port, pid
 FROM ai_tools
-WHERE kind = 'sockets';
+WHERE type = 'sockets';
 ```
 
-**Row count by kind — quick inventory shape:**
+**Row count by type — quick inventory shape:**
 ```sql
-SELECT kind, count(*) AS count
+SELECT type, count(*) AS count
 FROM ai_tools
-GROUP BY kind;
+GROUP BY type;
 ```
 
 {{< figure src="images/unpinned-deps-injection.png" alt="Two osqueryi results: first shows ruflo and claude-flow both launched via npx with @latest (unpinned_dependency); second shows CLAUDE.md at /Users/dhruv/.claude/CLAUDE.md flagged with injection_markers, detail.markers = sh" caption="Top: two MCP servers fetching ruflo@latest and claude-flow@latest from npm at every start — the package that runs tomorrow is not necessarily the one that ran today. Bottom: CLAUDE.md flagged for injection markers; the markers field names the specific pattern matched." >}}
@@ -167,7 +167,7 @@ There are four mechanisms running together each time a query hits the table.
 
 **Config parsing.** The extension reads every known MCP client config format — JSON for Claude Desktop/Code, YAML and JSON for VS Code, Cursor, Windsurf, Zed, Cline, Roo, and Continue. It handles VS Code's `servers` key separately from everyone else's `mcpServers`, Zed's nested command object, and per-project configs in `.mcp.json`, `.cursor`, `.vscode`, and `.roo` directories via a bounded walk of common dev roots.
 
-**Process and connection snapshot.** One `gopsutil` snapshot per query feeds liveness data (`running`, `pid`), fills listening port fields, and generates the `sockets` kind rows. The snapshot is shared across all collectors in a single query — it doesn't run once per kind.
+**Process and connection snapshot.** One `gopsutil` snapshot per query feeds liveness data (`running`, `pid`), fills listening port fields, and generates the `sockets` type rows. The snapshot is shared across all collectors in a single query — it doesn't run once per type.
 
 **Classification knowledge base.** `internal/classify/kb.json` (embedded at build time) maps known extension IDs, process command-line markers, inference ports, and MCP server capability tags to categories. Egress attribution is process-first: if the process owning a connection is an AI or agent tool, the socket is attributed as AI traffic regardless of destination IP. No hostname allowlists, no brittle IP matching.
 
@@ -192,7 +192,7 @@ osqueryi --allow_unsafe \
   --extension "$PWD/agentic_detector_macos.ext" \
   --extensions_require=agentic_detector \
   --extensions_timeout=10 \
-  "SELECT kind, count(*) FROM ai_tools GROUP BY kind"
+  "SELECT type, count(*) FROM ai_tools GROUP BY type"
 ```
 
 `--extensions_require` is important for one-shot queries — without it, `osqueryi` exits before the extension finishes registering and you get `no such table: ai_tools`. In an interactive `osquery>` session it's not needed.
