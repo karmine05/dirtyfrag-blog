@@ -17,7 +17,7 @@ showWordCount: true
 | | |
 |---|---|
 | **What it is** | A cross-platform osquery extension (Go) that exposes AI tooling as a queryable table |
-| **What it detects** | MCP servers, agent CLIs, AI desktop apps, IDE plugins, live AI/MCP network sockets, agent instruction files |
+| **What it detects** | MCP servers, agent CLIs, AI desktop apps, IDE plugins, AI browser extensions, live AI/MCP network sockets, agent instruction files |
 | **How it surfaces risk** | SHA-256 fingerprints + `risk_flags` covering supply-chain exposure, inferred capabilities, plaintext secrets, agent autonomy posture, prompt injection |
 | **What it won't do** | Execute discovered binaries, connect to MCP servers, emit secret values, or take any remediation action |
 | **Deploy path** | Fleet Premium (fleetd/orbit auto-distribution) or local `osqueryi` in under five minutes |
@@ -56,6 +56,7 @@ A `type` column separates the six row types:
 | `apps` | An installed AI desktop app (Claude Desktop, ChatGPT, Ollama, LM Studio, Jan, Perplexity, Cursor, Windsurf, and others) |
 | `sockets` | A live AI/MCP network socket — local inference/MCP listener or outbound AI/MCP egress |
 | `agent_instruction` | An agent instruction file the AI auto-loads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursorrules`, `.github/copilot-instructions.md`, Cursor `.mdc` rules) |
+| `browser_extension` | An AI extension installed in a Chromium-family browser (Chrome, Edge, Brave, Arc, Opera, Vivaldi, Comet, Dia) or a Gecko-family browser (Firefox, Zen, LibreWolf, Waterfox) — AI-native browsers like Comet and Dia also appear as `apps` rows |
 
 {{< figure src="images/ai-tools-inventory.png" alt="osqueryi result: SELECT type, name, category, running FROM ai_tools LIMIT 20 — showing sockets (bun, nfs, Ollama, Claude Helper), mcp_server rows (fleet-mcp, 21st-dev-magic, claude-flow, ruflo, docker-mcp, context7, deepwiki, playwright), and an ide_plugins row for Cline" caption="Twenty rows from a live host: sockets, MCP servers across multiple clients, and an IDE plugin — all from one table." >}}
 
@@ -86,6 +87,8 @@ Every row carries a `risk_flags` column — a comma-separated set of tokens that
 | `injection_markers` | `agent_instruction` | File contains prompt-injection or exfiltration phrases — see `detail.markers` |
 | `hidden_unicode` | `agent_instruction` | Zero-width or Unicode-tag characters present — used to smuggle hidden instructions |
 | `world_writable` | `agent_instruction` | File is world-writable — any local user can modify what the agent is told to do |
+| `broad_host_permissions` | `browser_extension` | Manifest grants `<all_urls>` / `*://*/*` host access — the extension can read and modify every site the user visits (AI data exfiltration surface) |
+| `sideloaded_unverified` | `browser_extension` | Installed outside the browser store — Chromium: not `from_webstore`, unpacked, or policy-forced; Gecko: unsigned, temporary, or `foreignInstall` — no store review occurred |
 
 {{< figure src="images/risk-flags-live.png" alt="osqueryi result: SELECT name, source AS browser, risk_flags FROM ai_tools WHERE risk_flags != '' — showing CLAUDE.md with injection_markers, claude-flow with remote_fetch_exec, ruflo with remote_fetch_exec and unpinned_dependency, docker-mcp and fleet-mcp with world_readable_config, and others" caption="Every row here is a configuration that warrants a second look — from an instruction file flagged for injection markers to MCP servers fetching unpinned remote code at every launch." >}}
 
@@ -150,6 +153,26 @@ FROM ai_tools
 WHERE type = 'sockets';
 ```
 
+**AI browser extensions — inventory by browser and profile:**
+```sql
+SELECT name, source AS browser, category,
+  json_extract(detail, '$.engine') AS engine,
+  json_extract(detail, '$.profile') AS profile,
+  version
+FROM ai_tools
+WHERE type = 'browser_extension';
+```
+
+**Browser extensions with risky permissions or installed outside the store:**
+```sql
+SELECT name, source AS browser, risk_flags,
+  json_extract(detail, '$.from_webstore') AS from_webstore,
+  json_extract(detail, '$.signed_state') AS signed_state
+FROM ai_tools
+WHERE type = 'browser_extension'
+  AND risk_flags != '';
+```
+
 **Row count by type — quick inventory shape:**
 ```sql
 SELECT type, count(*) AS count
@@ -164,6 +187,8 @@ GROUP BY type;
 ## How detection works under the hood
 
 There are four mechanisms running together each time a query hits the table.
+
+**Browser extensions.** Per-profile enumeration across Chromium (`Extensions/<id>/<version>/manifest.json` cross-referenced with the profile's `Preferences`/`Secure Preferences` for install provenance) and Gecko (`extensions.json` plus the `.xpi` archive). Localized extension names (`__MSG_*` i18n keys) are resolved from `_locales`. Capability and permission risk is read statically from the manifest — no extension is loaded or executed.
 
 **Config parsing.** The extension reads every known MCP client config format — JSON for Claude Desktop/Code, YAML and JSON for VS Code, Cursor, Windsurf, Zed, Cline, Roo, and Continue. It handles VS Code's `servers` key separately from everyone else's `mcpServers`, Zed's nested command object, and per-project configs in `.mcp.json`, `.cursor`, `.vscode`, and `.roo` directories via a bounded walk of common dev roots.
 
@@ -212,6 +237,8 @@ An AI agent CLI installed via `pip install --user` lands in `~/.local/bin`. It's
 A `CLAUDE.md` in a project directory with world-writable permissions is a hijack surface — any user on the system can modify what Claude is told to do in that project. No existing tool looks for this. `ai_tools` surfaces it as `world_writable` on an `agent_instruction` row.
 
 An agent running with `--dangerously-skip-permissions` in its process flags is operating in a mode where it won't ask the user before executing code or writing files. That runtime posture shows up as `skip_permissions_runtime` in `risk_flags` and the process is live in `running = '1'`.
+
+An AI browser extension installed outside the Chrome Web Store — sideloaded by a developer, pushed via enterprise policy, or dropped by an installer — carries no store review guarantee. It may also declare `<all_urls>` host permissions, meaning it can read and modify every page the user visits. Neither of these facts appears in MDM inventory. `ai_tools` surfaces both as `sideloaded_unverified` and `broad_host_permissions` on a `browser_extension` row, with the profile path so you know exactly where it lives.
 
 ---
 
