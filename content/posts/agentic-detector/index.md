@@ -46,23 +46,60 @@ None of this is hypothetical. These configurations exist on developer endpoints 
 
 `agentic-detector` adds one table to osquery: `ai_tools`. Every row is an AI tool — presence in the table is the signal, not a column called `is_ai`.
 
-A `type` column separates the six row types:
+A `type` column separates the seven row types:
 
 | `type` | What the row represents |
 |---|---|
 | `mcp_server` | An MCP server declared in any client config (Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, Zed, Cline, Roo, Continue) and/or a running MCP server process |
-| `ide_plugins` | An installed AI editor plugin (VS Code family incl. Cursor/Windsurf/VSCodium, JetBrains, Zed, Sublime, Neovim/Vim, Emacs) |
-| `agents` | An installed AI agent CLI (Claude Code, Gemini CLI, Codex, aider, goose, opencode, Cline, Amazon Q/Kiro) |
-| `apps` | An installed AI desktop app (Claude Desktop, ChatGPT, Ollama, LM Studio, Jan, Perplexity, Cursor, Windsurf, and others) |
+| `ide_plugins` | An installed AI editor plugin (VS Code family incl. Cursor/Windsurf/VSCodium/Trae/Antigravity/code-server, JetBrains, Zed, Sublime, Neovim/Vim, Emacs) |
+| `agents` | An AI agent CLI or harness. Catalog tools (Claude Code, Gemini CLI, Codex, Grok, aider, goose, opencode, Cline, Continue, cursor-agent, Amazon Q/Kiro) always emit; unknown CLIs, harnesses, and custom agents (e.g. Hermes, OpenClaw-class) can still surface through multi-signal `confidence`/`evidence` scoring — see below |
+| `apps` | An installed AI desktop app (Claude Desktop, ChatGPT, Ollama, LM Studio, Jan, GPT4All, Msty, AnythingLLM, Perplexity, Cursor, Windsurf, Antigravity) |
 | `sockets` | A live AI/MCP network socket — local inference/MCP listener or outbound AI/MCP egress |
 | `agent_instruction` | An agent instruction file the AI auto-loads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursorrules`, `.github/copilot-instructions.md`, Cursor `.mdc` rules) |
-| `browser_extension` | An AI extension installed in a Chromium-family browser (Chrome, Edge, Brave, Arc, Opera, Vivaldi, Comet, Dia) or a Gecko-family browser (Firefox, Zen, LibreWolf, Waterfox) — AI-native browsers like Comet and Dia also appear as `apps` rows |
+| `browser_extension` | An AI extension installed in a Chromium-family browser (Chrome, Edge, Brave, Arc, Opera, Vivaldi, Chromium, Comet, Dia) or a Gecko-family browser (Firefox, Zen, LibreWolf, Waterfox) — AI-native browsers like Comet and Dia also appear as `apps` rows |
 
 {{< figure src="images/ai-tools-inventory.png" alt="osqueryi result: SELECT type, name, category, running FROM ai_tools LIMIT 20 — showing sockets (bun, nfs, Ollama, Claude Helper), mcp_server rows (fleet-mcp, 21st-dev-magic, claude-flow, ruflo, docker-mcp, context7, deepwiki, playwright), and an ide_plugins row for Cline" caption="Twenty rows from a live host: sockets, MCP servers across multiple clients, and an IDE plugin — all from one table." >}}
 
-The full column set: `type, name, identifier, category, location, source, version, path, endpoint, running, pid, port, risk_flags, sha256, uid, username, detail`.
+The full column set: `type, name, identifier, category, location, source, version, path, endpoint, running, pid, port, risk_flags, sha256, confidence, evidence, uid, username, detail`.
 
 The `detail` column is compact JSON carrying type-specific extras: `transport`, `args`, `env_keys` (names only — never values), `capabilities`, `launch_hash`, `permission_mode`, `markers`, and others depending on type.
+
+Common columns are shared field slots, but only some are populated per `type` — the rest are empty for that row:
+
+| Column | `mcp_server` | `ide_plugins` | `agents` | `apps` | `agent_instruction` | `browser_extension` | `sockets` |
+|---|---|---|---|---|---|---|---|
+| `name` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `identifier` | server name | plugin id | binary | bundle id | tool | extension id | service |
+| `category` | `mcp-server` | AI category | agent category | — | `agent-instruction` | ✓ | ✓ |
+| `location` | local/remote | `local` | `local` | `local` | `local` | `local` | local/remote |
+| `source` | client | editor | install method | platform source | tool | browser | direction |
+| `version` | — | ✓ | ✓ | ✓ | — | ✓ | — |
+| `path` | config path | install path | ✓ | ✓ | ✓ | ✓ | process path |
+| `endpoint` | remote URL | — | — | — | — | — | remote `addr:port` |
+| `running`, `pid` | ✓ | — | ✓ | ✓ | — | — | ✓ |
+| `port` | listening port | — | — | API port | — | — | local port |
+| `risk_flags` | ✓ | — | ✓ | — | ✓ | ✓ | — |
+| `sha256` | ✓ | — | ✓ | ✓ | ✓ | ✓ | — |
+| `confidence`, `evidence` | — | — | ✓ | — | — | — | — |
+| `uid`, `username` | ✓ | ✓ | ✓ | — | ✓ | ✓ | username only |
+
+### Multi-signal agent detection
+
+`agents` is the one type that isn't purely name-match. A shared evidence engine fuses tool homes (`~/.grok`, `~/.hermes`), binaries, package/framework fingerprints, workspace shape (skills + MCP + instruction packs), and live processes. Known catalog CLIs always emit a row at `confidence = 100`. Unknown CLIs, harnesses, and custom agents can still surface if enough independent signals line up — with a `confidence` score (0–100) and an `evidence` CSV (e.g. `catalog,binary,running,tool_home`) explaining why.
+
+| Band | Range | Meaning |
+|---|---|---|
+| Known | 100 | Catalog / allowlisted agent CLI |
+| High | 70–99 | Multi-signal (e.g. tool home + binary + running) |
+| Medium | 40–69 | Strong workspace shape offline, or framework fingerprint alone |
+| Low (still emitted) | 30–39 | Borderline multi-signal |
+| Not emitted | — | Name-only, or a single weak marker (e.g. only `AGENTS.md`) |
+
+Name matching alone never creates a row — that's what keeps this from turning into a keyword-matching false-positive machine. For a strict inventory of high-trust rows only:
+
+```sql
+SELECT name, type, confidence, evidence FROM ai_tools WHERE confidence >= 80;
+```
 
 One design choice worth calling out: the extension enumerates **all home directories** on the host (`/Users/*`, `/home/*`, `/root`, `C:\Users\*`) — not just the daemon account. When Fleet's `fleetd` runs it as root, you see the full multi-user picture. Running unprivileged gives you partial rows on homes you can't read, rather than a silent miss.
 
@@ -74,7 +111,7 @@ Every row carries a `risk_flags` column — a comma-separated set of tokens that
 
 | Flag | Kind | What it means |
 |---|---|---|
-| `remote_fetch_exec` | `mcp_server` | Server is launched via `npx`/`uvx`/`bunx` — fetches and executes remote code at every start |
+| `remote_fetch_exec` | `mcp_server` | Server is launched via `npx`/`uvx`/`bunx`/`pnpx` — fetches and executes remote code at every start |
 | `unpinned_dependency` | `mcp_server` | That fetched package is unpinned or `@latest` — mutable supply chain |
 | `mcp_shell_exec` | `mcp_server` | Inferred capability: this server can run shell commands |
 | `mcp_fs_write` | `mcp_server` | Inferred capability: this server can write to the filesystem |
@@ -133,6 +170,22 @@ WHERE type = 'agents'
     OR risk_flags LIKE '%skip_permissions_runtime%'
   )
   AND running = '1';
+```
+
+**Agent CLIs with multi-signal confidence, highest first:**
+```sql
+SELECT name, category, confidence, evidence, running, pid, path
+FROM ai_tools
+WHERE type = 'agents'
+ORDER BY confidence DESC;
+```
+
+**Candidate agents only — shadow IT, custom harnesses, not in the known catalog:**
+```sql
+SELECT name, path, confidence, evidence
+FROM ai_tools
+WHERE type = 'agents'
+  AND confidence < 100;
 ```
 
 **Agent instruction files with injection markers or hidden unicode:**
@@ -208,7 +261,7 @@ If you want to run it against your own machine before deploying, you need `osque
 
 ```bash
 # Download and clear quarantine (binary is unsigned)
-gh release download v0.2.0 -R karmine05/agentic-detector \
+gh release download v0.3.0 -R karmine05/agentic-detector \
   -p 'agentic_detector_macos.ext'
 xattr -d com.apple.quarantine agentic_detector_macos.ext
 
@@ -254,7 +307,7 @@ That constraint matters operationally: if you're running this as root via fleetd
 
 Repo: [github.com/karmine05/agentic-detector](https://github.com/karmine05/agentic-detector)
 
-The repo is public. Prebuilt binaries for macOS (universal), Linux (amd64), and Windows (amd64) are attached to the [v0.2.0 release](https://github.com/karmine05/agentic-detector/releases/tag/v0.2.0) with SHA256SUMS for integrity verification.
+The repo is public. Prebuilt binaries for macOS (universal), Linux (amd64), and Windows (amd64) are attached to the [v0.3.0 release](https://github.com/karmine05/agentic-detector/releases/tag/v0.3.0) with SHA256SUMS for integrity verification.
 
 Build from source: `make build-all` produces Fleet-named binaries in `./build/`. The extension is written in Go, passes `govulncheck` and `gosec` clean, and uses a pinned toolchain (`go 1.26.4`).
 
