@@ -1,0 +1,385 @@
+# ATC ClickFix triage bundle — Fleet agent options
+# Companion post: https://karmine05.github.io/dirtyfrag-blog/posts/atc-clickfix-mcp-triage/
+#
+# Drop this into your Fleet agent options (or merge with an existing config)
+# before running the queries in atc-clickfix-ocsf-queries.md.
+#
+# What it turns on:
+#   - auto_table_construction (ATC) for chrome_url_history, chrome_download_history,
+#     firefox_url_history, chrome_login_keychain and quarantine_items on darwin;
+#     edge_* and chrome_* equivalents on windows.
+#   - chrome_download_history exposes the full downloads column set plus the final
+#     downloads_url_chains URL, so downloads can be time-bounded and attributed.
+#   - EndpointSecurity process events with events_expiry 86400 / events_max 250000,
+#     so es_process_events survives longer than a ten-minute investigation window.
+#
+# Prerequisites OUTSIDE Fleet:
+#   1. macOS: Full Disk Access + the EndpointSecurity entitlement granted to the
+#      osquery binary via MDM. `disable_endpointsecurity: false` declares intent,
+#      not consent — without the grant, es_process_events is empty.
+#   2. Schedule a query against es_process_events. Live queries only ever see the
+#      current in-memory buffer; retrospective hunting needs the events logged at
+#      the time they occurred.
+#   3. Timestamped shell history on detonation hosts (`setopt EXTENDED_HISTORY`,
+#      `setopt INC_APPEND_HISTORY`). Neither setting backfills.
+#
+config:
+  options:
+    pack_delimiter: /
+    logger_tls_period: 60
+    distributed_plugin: tls
+    disable_distributed: false
+    logger_tls_endpoint: /api/osquery/log
+    distributed_interval: 60
+    distributed_tls_max_attempts: 3
+  decorators:
+    load:
+      - SELECT uuid AS host_uuid FROM system_info;
+      - SELECT hostname AS hostname FROM system_info;
+overrides:
+  platforms:
+    darwin:
+      yara:
+        file_paths:
+          Mac_Yara_File_Path:
+            - sig_group_1
+        signatures:
+          sig_group_1: []
+        signature_urls:
+          - >-
+            https://raw.githubusercontent.com/Neo23x0/signature-base/master/yara/generic_anomalies.yar
+      options:
+        pack_delimiter: /
+        logger_tls_period: 60
+        distributed_plugin: tls
+        disable_distributed: false
+        logger_tls_endpoint: /api/osquery/log
+        distributed_interval: 60
+        distributed_tls_max_attempts: 3
+      decorators:
+        load:
+          - SELECT uuid AS host_uuid FROM system_info;
+          - SELECT hostname AS hostname FROM system_info;
+      file_paths:
+        Mac_Yara_File_Path:
+          - /Users/%%/Desktop/%%
+          - /Users/%%/Downloads/%%
+          - /Users/%%/Documents/%%
+      auto_table_construction:
+        quarantine_items:
+          path: >-
+            /Users/%%/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2
+          query: >-
+            SELECT LSQuarantineEventIdentifier as id, LSQuarantineAgentName as
+            agent_name, LSQuarantineAgentBundleIdentifier as
+            agent_bundle_identifier, LSQuarantineTypeNumber as type,
+            LSQuarantineDataURLString as data_url,LSQuarantineOriginURLString as
+            origin_url, LSQuarantineSenderName as sender_name,
+            LSQuarantineSenderAddress as sender_address, LSQuarantineTimeStamp
+            as timestamp from LSQuarantineEvent
+          columns:
+            - id
+            - type
+            - agent_name
+            - agent_bundle_identifier
+            - timestamp
+            - sender_name
+            - sender_address
+            - origin_url
+            - data_url
+        chrome_url_history:
+          path: /Users/%%/Library/Application Support/Google/Chrome/%%/History
+          query: >-
+            SELECT urls.id id, visits.id visit_id, urls.url url, urls.title
+            title, urls.visit_count visit_count, urls.typed_count typed_count,
+            urls.last_visit_time last_visit_time, urls.hidden hidden,
+            visits.visit_time visit_time, visits.from_visit from_visit,
+            visits.visit_duration visit_duration, visits.transition transition,
+            visit_source.source source FROM urls JOIN visits ON urls.id =
+            visits.url LEFT JOIN visit_source ON visits.id = visit_source.id
+          columns:
+            - id
+            - visit_id
+            - url
+            - title
+            - visit_count
+            - typed_count
+            - last_visit_time
+            - hidden
+            - visit_time
+            - from_visit
+            - visit_duration
+            - transition
+            - source
+        firefox_url_history:
+          path: >-
+            /Users/%%/Library/Application
+            Support/Firefox/Profiles/%%/places.sqlite
+          query: |-
+            SELECT guid, url, title, visit_count, last_visit_date, hidden 
+            FROM moz_places
+          columns:
+            - guid
+            - url
+            - title
+            - visit_count
+            - last_visit_date
+            - hidden
+        chrome_login_keychain:
+          path: >-
+            /Users/%%/Library/Application Support/Google/Chrome/Default/Login
+            Data
+          query: >-
+            SELECT origin_url, action_url, username_value, password_element FROM
+            logins
+          columns:
+            - origin_url
+            - action_url
+            - username_value
+            - password_element
+        chrome_download_history:
+          path: /Users/%%/Library/Application Support/Google/Chrome/%%/History
+          query: >-
+            SELECT d.id id, d.guid guid, d.current_path current_path,
+            d.target_path target_path, d.start_time start_time, d.end_time
+            end_time, d.received_bytes received_bytes, d.total_bytes
+            total_bytes, d.state state, d.danger_type danger_type,
+            d.interrupt_reason interrupt_reason, d.opened opened, d.mime_type
+            mime_type, d.referrer referrer, d.tab_url tab_url,
+            d.tab_referrer_url tab_referrer_url, d.by_ext_name by_ext_name,
+            c.url download_url FROM downloads d LEFT JOIN downloads_url_chains c
+            ON c.id = d.id AND c.chain_index = (SELECT MAX(chain_index) FROM
+            downloads_url_chains WHERE id = d.id)
+          columns:
+            - id
+            - guid
+            - current_path
+            - target_path
+            - start_time
+            - end_time
+            - received_bytes
+            - total_bytes
+            - state
+            - danger_type
+            - interrupt_reason
+            - opened
+            - mime_type
+            - referrer
+            - tab_url
+            - tab_referrer_url
+            - by_ext_name
+            - download_url
+    ubuntu:
+      yara:
+        file_paths:
+          ubuntu_file_events:
+            - sig_group_1
+        signatures:
+          sig_group_1:
+            - /etc/fleetdm/yara/malware_rules.yar
+        signature_urls:
+          - https://raw.githubusercontent.com/Yara-Rules/rules/master/index.yar
+          - >-
+            https://raw.githubusercontent.com/Neo23x0/signature-base/master/yara/generic_anomalies.yar
+      options:
+        pack_delimiter: /
+        logger_tls_period: 60
+        distributed_plugin: tls
+        disable_distributed: false
+        logger_tls_endpoint: /api/osquery/log
+        distributed_interval: 60
+        yara_sigurl_authenticate: false
+        distributed_tls_max_attempts: 3
+      decorators:
+        load:
+          - SELECT uuid AS host_uuid FROM system_info;
+          - SELECT hostname AS hostname FROM system_info;
+      file_paths:
+        ubuntu_file_events:
+          - /home/ubuntu/%
+          - /home/ubuntu/%%
+          - /etc/%%
+          - /tmp/%%
+          - /var/tmp/%%
+    windows:
+      yara:
+        signatures:
+          yara_rules: []
+        signature_urls:
+          - >-
+            https://raw.githubusercontent.com/chronicle/GCTI/main/YARA/CobaltStrike/cs_beacon_dll.yar
+      options:
+        pack_delimiter: /
+        logger_tls_period: 60
+        distributed_plugin: tls
+        disable_distributed: false
+        logger_tls_endpoint: /api/osquery/log
+        distributed_interval: 60
+        yara_sigurl_authenticate: false
+        distributed_tls_max_attempts: 3
+      decorators:
+        load:
+          - SELECT uuid AS host_uuid FROM system_info;
+          - SELECT hostname AS hostname FROM system_info;
+      file_paths:
+        Win_Yara_File_Path:
+          - c:\\Users\\%%\\Desktop\\%%
+          - c:\\Users\\%%\\Downloads\\%%
+          - c:\\Users\\%%\\Documents\\%%
+      auto_table_construction:
+        edge_url_history:
+          path: >-
+            C:\\Users\\%%\\AppData\\Local\\Microsoft\\Edge\\User
+            Data\\%%\\History
+          query: >-
+            SELECT urls.id id, visits.id visit_id, urls.url url, urls.title
+            title, urls.visit_count visit_count, urls.typed_count typed_count,
+            urls.last_visit_time last_visit_time, urls.hidden hidden,
+            visits.visit_time visit_time, visits.from_visit from_visit,
+            visits.visit_duration visit_duration, visits.transition transition,
+            visit_source.source source FROM urls JOIN visits ON urls.id =
+            visits.url LEFT JOIN visit_source ON visits.id = visit_source.id
+          columns:
+            - id
+            - visit_id
+            - url
+            - title
+            - visit_count
+            - typed_count
+            - last_visit_time
+            - hidden
+            - visit_time
+            - from_visit
+            - visit_duration
+            - transition
+            - source
+        edge_download_history:
+          path: >-
+            C:\\Users\\%%\\AppData\\Local\\Microsoft\\Edge\\User
+            Data\\%%\\History
+          query: >-
+            SELECT d.id id, d.guid guid, d.current_path current_path,
+            d.target_path target_path, d.start_time start_time, d.end_time
+            end_time, d.received_bytes received_bytes, d.total_bytes
+            total_bytes, d.state state, d.danger_type danger_type,
+            d.interrupt_reason interrupt_reason, d.opened opened, d.mime_type
+            mime_type, d.referrer referrer, d.tab_url tab_url,
+            d.tab_referrer_url tab_referrer_url, d.by_ext_name by_ext_name,
+            c.url download_url FROM downloads d LEFT JOIN downloads_url_chains c
+            ON c.id = d.id AND c.chain_index = (SELECT MAX(chain_index) FROM
+            downloads_url_chains WHERE id = d.id)
+          columns:
+            - id
+            - guid
+            - current_path
+            - target_path
+            - start_time
+            - end_time
+            - received_bytes
+            - total_bytes
+            - state
+            - danger_type
+            - interrupt_reason
+            - opened
+            - mime_type
+            - referrer
+            - tab_url
+            - tab_referrer_url
+            - by_ext_name
+            - download_url
+        chrome_url_history:
+          path: >-
+            C:\\Users\\%%\\AppData\\Local\\Google\\Chrome\\User
+            Data\\%%\\History
+          query: >-
+            SELECT urls.id id, visits.id visit_id, urls.url url, urls.title
+            title, urls.visit_count visit_count, urls.typed_count typed_count,
+            urls.last_visit_time last_visit_time, urls.hidden hidden,
+            visits.visit_time visit_time, visits.from_visit from_visit,
+            visits.visit_duration visit_duration, visits.transition transition,
+            visit_source.source source FROM urls JOIN visits ON urls.id =
+            visits.url LEFT JOIN visit_source ON visits.id = visit_source.id
+          columns:
+            - id
+            - visit_id
+            - url
+            - title
+            - visit_count
+            - typed_count
+            - last_visit_time
+            - hidden
+            - visit_time
+            - from_visit
+            - visit_duration
+            - transition
+            - source
+        firefox_url_history:
+          path: >-
+            C:\\Users\\%%\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\%%\\places.sqlite
+          query: |-
+            SELECT guid, url, title, visit_count, last_visit_date, hidden 
+            FROM moz_places
+          columns:
+            - guid
+            - url
+            - title
+            - visit_count
+            - last_visit_date
+            - hidden
+        chrome_download_history:
+          path: >-
+            C:\\Users\\%%\\AppData\\Local\\Google\\Chrome\\User
+            Data\\%%\\History
+          query: >-
+            SELECT d.id id, d.guid guid, d.current_path current_path,
+            d.target_path target_path, d.start_time start_time, d.end_time
+            end_time, d.received_bytes received_bytes, d.total_bytes
+            total_bytes, d.state state, d.danger_type danger_type,
+            d.interrupt_reason interrupt_reason, d.opened opened, d.mime_type
+            mime_type, d.referrer referrer, d.tab_url tab_url,
+            d.tab_referrer_url tab_referrer_url, d.by_ext_name by_ext_name,
+            c.url download_url FROM downloads d LEFT JOIN downloads_url_chains c
+            ON c.id = d.id AND c.chain_index = (SELECT MAX(chain_index) FROM
+            downloads_url_chains WHERE id = d.id)
+          columns:
+            - id
+            - guid
+            - current_path
+            - target_path
+            - start_time
+            - end_time
+            - received_bytes
+            - total_bytes
+            - state
+            - danger_type
+            - interrupt_reason
+            - opened
+            - mime_type
+            - referrer
+            - tab_url
+            - tab_referrer_url
+            - by_ext_name
+            - download_url
+command_line_flags:
+  verbose: false
+  events_max: 250000
+  events_expiry: 86400
+  logger_plugin: tls
+  disable_events: false
+  watchdog_delay: 120
+  disable_watchdog: true
+  enable_bpf_events: true
+  enable_file_events: true
+  watchdog_memory_limit: 600
+  watchdog_latency_limit: 0
+  windows_event_channels: Security,Application,System,Microsoft-Windows-PowerShell/Operational
+  disable_endpointsecurity: false
+  enable_dns_lookup_events: true
+  yara_sigurl_authenticate: false
+  enable_process_etw_events: true
+  watchdog_utilization_limit: 130
+  enable_ntfs_event_publisher: true
+  disable_endpointsecurity_fim: false
+  enable_windows_events_publisher: true
+  enable_windows_events_subscriber: true
+  enable_powershell_events_subscriber: true
