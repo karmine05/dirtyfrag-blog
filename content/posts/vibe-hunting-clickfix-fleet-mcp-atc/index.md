@@ -166,6 +166,8 @@ The agent also reads provenance straight off the file. Every browser download ca
 
 ### Move 4—one timeline
 
+{{< figure src="images/epoch-fusion.svg" alt="Three evidence views of the disk fuse and reconcile across three epochs: Chrome microseconds since 1601, LaunchServices seconds since 2001, filesystem Unix epoch, producing one ordered OCSF timeline from redirect hops through the osascript dialog" caption="Move 2 fuses the three views; move 4 reconciles the clock each one keeps. The join is a statement, not a hunch: a file that lands in no browser view arrived outside the browser." >}}
+
 The stages stitch into a single ordered view: the redirect hops into the lure, the deliberate click, the form submission, the file landing in a staging directory, the command that put it there. Reconciling Chrome's microseconds-since-1601, LaunchServices' seconds-since-2001 and the filesystem's Unix epoch is exactly the bookkeeping an agent should carry so a hunter never does it by hand again.
 
 OCSF is what makes the result portable. Navigation maps to HTTP Activity, downloads to Network File Activity (OCSF 4010, since superseded by File Hosting Activity), execution to Process Activity, each with decoded fields and a severity. The same output reads as a plain-language verdict to the analyst and ships to the SIEM unmodified.
@@ -174,7 +176,9 @@ OCSF is what makes the result portable. Navigation maps to HTTP Activity, downlo
 
 ## Autonomy: the hunt as a loop
 
-Four moves, six live queries, one verdict column. Nothing in that needs a human until the verdict—so wrap it in a harness and let it run. Any agent runtime does: a scheduled cloud agent, an SDK loop, a `/loop` in your terminal, a SOAR step that calls an MCP client.
+Four moves, six live queries, one verdict column. Nothing in that needs a human until the verdict, so wrap it in a harness and let it run. Any agent runtime does: a scheduled cloud agent, an SDK loop, a `/loop` in your terminal, a SOAR step that calls an MCP client.
+
+{{< figure src="images/hunt-loop.svg" alt="The ClickFix hunt loop: a trigger resolves the host, four moves run in sequence (navigation, disk fusion, execution, verdict), and the verdict column branches into labels, a cohort hunt, volatile capture, and a paged OCSF timeline" caption="The harness, shaped as a loop. Most triggers exit after move 1, cheaply. A confirmed hit labels the host, hunts the cohort that touched the same lure domain, and pages a human with a decoded, SIEM-ready timeline." >}}
 
 ```text
 on trigger (IOC feed hit | DNS lookup to lure domain | EDR alert | scheduled sweep | hunter's sentence):

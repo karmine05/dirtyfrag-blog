@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Fusing three views of the disk and reconciling three epochs: Chrome microseconds since 1601, LaunchServices seconds since 2001, and the filesystem Unix epoch land in one ordered OCSF timeline">
+  <style>
+    .src-chrome { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .src-quo    { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
+    .src-fs     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .fuse       { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 1.8; }
+    .timeline   { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; }
+    .tick       { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.2; }
+    .t-dot      { fill: #e94560; }
+    .t-dot-b    { fill: #533483; }
+    .t-dot-o    { fill: #fb923c; }
+    .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .stage-num { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
+    .stage-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .stage-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
+    .mono      { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .arrow     { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
+    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .danger    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+  </style>
+
+  <text x="20" y="28" class="title">One timeline, three epochs</text>
+  <text x="20" y="50" class="subtitle">Move 2 fuses three views of the disk; move 4 reconciles the clock each one keeps.</text>
+  <text x="20" y="66" class="subtitle">A file that lands in no browser view arrived outside the browser. The join is a statement, not a hunch.</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.55"/>
+    </marker>
+  </defs>
+  <!-- Source 1: Chrome -->
+  <rect class="src-chrome" x="20" y="76" width="230" height="70"/>
+  <text x="32" y="96" class="stage-num">S1</text>
+  <text x="135" y="96" text-anchor="middle" class="trust">Browser view</text>
+  <text x="135" y="116" text-anchor="middle" class="stage-body">chrome_download_history + xattrs</text>
+  <text x="135" y="132" text-anchor="middle" class="mono">epoch: microseconds since 1601</text>
+
+  <!-- Source 2: LaunchServices -->
+  <rect class="src-quo" x="20" y="158" width="230" height="70"/>
+  <text x="32" y="178" class="stage-num">S2</text>
+  <text x="135" y="178" text-anchor="middle" class="trust" style="fill:#fb923c">OS view</text>
+  <text x="135" y="198" text-anchor="middle" class="stage-body">quarantine_items (LaunchServices)</text>
+  <text x="135" y="214" text-anchor="middle" class="mono">epoch: seconds since 2001</text>
+
+  <!-- Source 3: filesystem -->
+  <rect class="src-fs" x="20" y="240" width="230" height="70"/>
+  <text x="32" y="260" class="stage-num">S3</text>
+  <text x="135" y="260" text-anchor="middle" class="trust" style="fill:#0f3460">Disk view</text>
+  <text x="135" y="280" text-anchor="middle" class="stage-body">filesystem scan of staging dirs</text>
+  <text x="135" y="296" text-anchor="middle" class="mono">epoch: Unix / btime, mtime</text>
+
+  <!-- Arrows into fuse -->
+  <path class="arrow" d="M 252 111 C 292 111, 300 168, 330 180" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 252 193 L 330 193" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 252 275 C 292 275, 300 218, 330 206" marker-end="url(#arr)"/>
+
+  <!-- Fuse -->
+  <rect class="fuse" x="334" y="150" width="180" height="92"/>
+  <text x="346" y="172" class="stage-num">FUSE</text>
+  <text x="424" y="172" text-anchor="middle" class="danger">The join</text>
+  <text x="424" y="194" text-anchor="middle" class="stage-body">same file, same moment,</text>
+  <text x="424" y="208" text-anchor="middle" class="stage-body">three sources agree:</text>
+  <text x="424" y="226" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">provenance with a chain</text>
+  <text x="424" y="236" text-anchor="middle" class="stage-body" style="fill-opacity:0.55">of custody</text>
+
+  <!-- Arrow to timeline -->
+  <path class="arrow" d="M 516 196 L 548 196" marker-end="url(#arr)"/>
+
+  <!-- Timeline panel -->
+  <rect class="timeline" x="552" y="76" width="228" height="234"/>
+  <text x="564" y="96" class="stage-num">OUT</text>
+  <text x="666" y="96" text-anchor="middle" class="stage-lbl">Ordered OCSF timeline</text>
+  <path class="tick" d="M 572 112 L 572 288"/>
+  <text x="582" y="126" class="mono">09:41:02  sharepoint redirect...</text>
+  <circle class="t-dot-b" cx="572" cy="122" r="3.5"/>
+  <text x="582" y="152" class="mono">09:41:07  teams_error redirect...</text>
+  <circle class="t-dot-b" cx="572" cy="148" r="3.5"/>
+  <text x="582" y="178" class="mono">09:41:31  form_submitted</text>
+  <circle class="t-dot" cx="572" cy="174" r="3.5"/>
+  <text x="582" y="204" class="mono">09:41:33  quarantine write</text>
+  <circle class="t-dot-o" cx="572" cy="200" r="3.5"/>
+  <text x="582" y="230" class="mono">09:41:33  fs staging dir</text>
+  <circle class="t-dot" cx="572" cy="226" r="3.5"/>
+  <text x="582" y="256" class="mono">09:42:10  osascript dialog</text>
+  <circle class="t-dot" cx="572" cy="252" r="3.5"/>
+  <text x="582" y="282" class="mono">09:42:11  applescript_exec</text>
+  <circle class="t-dot" cx="572" cy="278" r="3.5"/>
+
+  <!-- Footer -->
+  <text x="400" y="335" text-anchor="middle" class="subtitle">/1000000 - 11644473600 for Chrome · + 978307200 for LaunchServices · as-is for the filesystem.</text>
+  <text x="400" y="350" text-anchor="middle" class="subtitle">The sequence reads in order without a hunter doing the bookkeeping.</text>
+  <text x="400" y="368" text-anchor="middle" class="subtitle">Every row keeps its evidence_source tag, so any auditor can see which view each fact came from.</text>
+</svg>
