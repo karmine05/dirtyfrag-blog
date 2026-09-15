@@ -49,7 +49,7 @@ showTableOfContents: true
 | **The hands**       | fleet-mcp — resolve hosts, read schemas, run live queries, label, run scripts, all as typed tools an agent calls         |
 | **The autonomy**    | A loop: trigger fires, agent composes the SQL, fuses browser + filesystem + kernel evidence, reaches a verdict, acts     |
 | **The output**      | OCSF event classes with decoded fields — reads as a verdict to the analyst, ships to the SIEM unchanged                  |
-| **The vibe**        | You describe the hunt. The agent writes the SQL. You review the verdict, not the console tabs                            |
+| **The artifacts**   | One agent options file that creates the tables, one query pack that turns them into verdicts                              |
 
 ## Vibe Hunting
 
@@ -100,10 +100,10 @@ That is the unlock, and it is bigger than one browser. Anything an application p
 | `chrome_download_history`| Download records with start time, referrer, originating tab, Safe Browsing verdict    |
 | `quarantine_items`       | LaunchServices quarantine events — what the OS tagged as coming from outside          |
 | `firefox_url_history`    | Same hunt, second browser, no new query logic                                         |
-| `edge_url_history`       | Same again on Windows — one config, both platforms covered                            |
+| `edge_url_history`       | Same again on Windows (Edge for macOS was discontinued in April 2024)               |
 | `chrome_login_keychain`  | Which sites have stored credentials, for blast-radius questions after a stealer hit   |
 
-The bundled config at the bottom of this post ships all of those for macOS and Windows. Extending it is a config change, not an engineering project: point at the file, write the `SELECT`, name the columns. Messaging app stores, editor state, VPN clients, endpoint agent databases — if it is SQLite, it is one YAML block away from being huntable.
+The bundled config at the bottom of this post ships the Chrome and Firefox tables for macOS and Windows, and the Edge tables for Windows. Extending it is a config change, not an engineering project: point at the file, write the `SELECT`, name the columns. Messaging app stores, editor state, VPN clients, endpoint agent databases — if it is SQLite, it is one YAML block away from being huntable.
 
 The built-in catalog is a floor, not a ceiling. Most teams never find that out.
 
@@ -154,7 +154,7 @@ Fusing them is the move. A file that shows up in the filesystem scan with a matc
 
 The agent also reads provenance straight off the file. Every browser download carries `com.apple.metadata:kMDItemWhereFroms` (download URL and referrer) and a `com.apple.quarantine` xattr whose trailing field is the quarantine event UUID. Fleet's agent parses both, so the join from file to event to originating URL is one query — full chain of custody, from the page that served it to the bytes on disk.
 
-{{< figure src="fig3-filesystem-scan.png" alt="Fleet report titled Filesystem scan of download and staging directories, one Network File Activity row for clickfix_campaign_TestCampaign_20260914.csv with evidence_source filesystem_artifact" caption="The filesystem scan, shaped to OCSF 4010 — the source that sees clipboard-delivered payloads, tagged with `evidence_source` so the fusion step knows where each row came from." >}}
+{{< figure src="fig3-filesystem-scan.png" alt="Fleet report titled Filesystem scan of download and staging directories, one Network File Activity row for clickfix_campaign_TestCampaign_20260914.csv with evidence_source filesystem_artifact" caption="The filesystem scan, shaped to OCSF 4010 (since superseded by File Hosting Activity) — the source that sees clipboard-delivered payloads, tagged with `evidence_source` so the fusion step knows where each row came from." >}}
 
 ### Move 3 — what executed
 
@@ -168,13 +168,13 @@ The agent also reads provenance straight off the file. Every browser download ca
 
 The stages stitch into a single ordered view: the redirect hops into the lure, the deliberate click, the form submission, the file landing in a staging directory, the command that put it there. Reconciling Chrome's microseconds-since-1601, LaunchServices' seconds-since-2001 and the filesystem's Unix epoch is exactly the bookkeeping an agent should carry so a hunter never does it by hand again.
 
-OCSF is what makes the result portable. Navigation maps to HTTP Activity, downloads to Network File Activity, execution to Process Activity, each with decoded fields and a severity. The same output reads as a plain-language verdict to the analyst and ships to the SIEM unmodified.
+OCSF is what makes the result portable. Navigation maps to HTTP Activity, downloads to Network File Activity (OCSF 4010, since superseded by File Hosting Activity), execution to Process Activity, each with decoded fields and a severity. The same output reads as a plain-language verdict to the analyst and ships to the SIEM unmodified.
 
 {{< figure src="fig5-timeline.png" alt="Fleet report titled DEMO - Did the User actually get Phished, 45 rows of an ordered browser timeline showing the lure chain from sharepoint_document and teams_error redirects through admin form_submitted actions" caption="The whole chain in one ordered view: redirect hops into the lure, the deliberate clicks, the `form_submitted` actions — reconciled across three epochs so the sequence reads in order." >}}
 
 ## Autonomy: the hunt as a loop
 
-Four moves, six parameterized queries, one verdict column. Nothing in that needs a human until the verdict — so wrap it in a harness and let it run. Any agent runtime does: a scheduled cloud agent, an SDK loop, a `/loop` in your terminal, a SOAR step that calls an MCP client.
+Four moves, six live queries, one verdict column. Nothing in that needs a human until the verdict — so wrap it in a harness and let it run. Any agent runtime does: a scheduled cloud agent, an SDK loop, a `/loop` in your terminal, a SOAR step that calls an MCP client.
 
 ```text
 on trigger (IOC feed hit | DNS lookup to lure domain | EDR alert | scheduled sweep | hunter's sentence):
@@ -226,9 +226,9 @@ The same loop generalizes past ClickFix with no new machinery:
 
 ## Read this part twice, depending on who you are
 
-**If you are a CISO:** the number that moves is time-to-verdict. The first ten minutes of a phishing investigation are gathering, not judgment, and gathering is the part that scales to zero marginal cost here. What you are buying is not a robot analyst — it is a tier-2 investigation that starts in seconds, runs identically at 3am and 3pm, produces the same evidence package every time, and stops at the boundary you set. Autonomy is graduated on purpose: label and collect unattended, escalate one-way actions to a human. The coverage question — *how many of our endpoints could we actually answer this question on right now?* — becomes a query against your own fleet instead of a vendor's claim.
+**If you are a CISO:** the number that moves is time-to-verdict. The first ten minutes of a phishing investigation are gathering, not judgment, and gathering is the part that scales to zero marginal cost here. What you are buying is not a robot analyst — it is a tier-2 investigation that starts in seconds, runs identically at 3 AM and 3 PM, produces the same evidence package every time, and stops at the boundary you set. Autonomy is graduated on purpose: label and collect unattended, escalate one-way actions to a human. The coverage question — *how many of our endpoints could we actually answer this question on right now?* — becomes a query against your own fleet instead of a vendor's claim.
 
-**If you build security products:** the interesting part is the composition, not the demo. ATC is a config-defined table. fleet-mcp is a typed tool catalog. OCSF is the wire format. None of the three knows about ClickFix — the technique-specific part is six SQL queries and a verdict function, which is the smallest possible surface for a new detection. That is what a platform looks like when the primitives are right: new technique, new queries, same substrate, same tools, same output schema, no new integration.
+**If you build security products:** the interesting part is the composition, not the demo. ATC is a config-defined table. fleet-mcp is a typed tool catalog. OCSF is the wire format. None of the three knows about ClickFix — the technique-specific part is these six queries and a verdict function, which is the smallest possible surface for a new detection. That is what a platform looks like when the primitives are right: new technique, new queries, same substrate, same tools, same output schema, no new integration.
 
 **If you hunt:** your job moves up a level. The SQL is still yours — you review it, you own the decode logic, you decide what `severity_id` 5 means — but you stop being the transport layer between the question and the answer. Point the loop at an intel feed and let it bring you the verdicts. Then spend the reclaimed hours on the hunts nobody has written a query for yet. That is the vibe.
 
