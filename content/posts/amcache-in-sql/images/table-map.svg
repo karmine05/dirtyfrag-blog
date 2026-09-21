@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Map of the seven amcache SQL tables served from one in-place parse of Amcache.hve: three executable tables joined on program_id, two driver tables, two device tables joined on container_id, plus joins into the rest of osquery on path, image and program_id">
+  <style>
+    .hive    { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 2; }
+    .exe     { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .drv     { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
+    .dev     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .ext     { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; }
+    .title    { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .tbl      { font: 600 9.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; }
+    .key      { font: 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.55; }
+    .hive-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .mono     { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .tag-e    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-d    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #fb923c; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-v    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-h    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+    .join     { font: 700 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .arrow    { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
+    .joinline { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.2; }
+  </style>
+
+  <text x="20" y="28" class="title">Seven tables, one parse</text>
+  <text x="20" y="50" class="subtitle">One hive, read in place, served as SQL. Three families: what ran, what loaded into the kernel, what was ever plugged in.</text>
+  <text x="20" y="66" class="subtitle">The joins are the point.</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.55"/>
+    </marker>
+  </defs>
+
+  <!-- Group tags -->
+  <text x="122" y="76" text-anchor="middle" class="tag-e">Executables</text>
+  <text x="662" y="76" text-anchor="middle" class="tag-d">Drivers</text>
+  <text x="662" y="206" text-anchor="middle" class="tag-v">Devices</text>
+
+  <!-- Executable family (left) -->
+  <rect class="exe" x="30" y="82" width="185" height="44"/>
+  <text x="122" y="101" text-anchor="middle" class="tbl">amcache_application_files</text>
+  <text x="122" y="115" text-anchor="middle" class="key">path · sha1 · program_id</text>
+
+  <path class="joinline" d="M 122 126 L 122 144"/>
+  <text x="132" y="139" class="join">program_id</text>
+
+  <rect class="exe" x="30" y="144" width="185" height="44"/>
+  <text x="122" y="163" text-anchor="middle" class="tbl">amcache_applications</text>
+  <text x="122" y="177" text-anchor="middle" class="key">program_id · name · publisher</text>
+
+  <rect class="exe" x="30" y="206" width="185" height="44"/>
+  <text x="122" y="225" text-anchor="middle" class="tbl">amcache_application_shortcuts</text>
+  <text x="122" y="239" text-anchor="middle" class="key">path · target_path · program_id</text>
+
+  <!-- Driver family (top right) -->
+  <rect class="drv" x="570" y="82" width="185" height="44"/>
+  <text x="662" y="101" text-anchor="middle" class="tbl">amcache_driver_binaries</text>
+  <text x="662" y="115" text-anchor="middle" class="key">path · sha1 · service · inf</text>
+
+  <rect class="drv" x="570" y="144" width="185" height="44"/>
+  <text x="662" y="163" text-anchor="middle" class="tbl">amcache_driver_packages</text>
+  <text x="662" y="177" text-anchor="middle" class="key">inf · provider · class</text>
+
+  <!-- Device family (bottom right) -->
+  <rect class="dev" x="570" y="212" width="185" height="44"/>
+  <text x="662" y="231" text-anchor="middle" class="tbl">amcache_device_pnp</text>
+  <text x="662" y="245" text-anchor="middle" class="key">instance_id · container_id · sha1</text>
+
+  <path class="joinline" d="M 662 256 L 662 274"/>
+  <text x="672" y="269" class="join">container_id</text>
+
+  <rect class="dev" x="570" y="274" width="185" height="44"/>
+  <text x="662" y="293" text-anchor="middle" class="tbl">amcache_device_containers</text>
+  <text x="662" y="307" text-anchor="middle" class="key">container_id · friendly_name</text>
+
+  <!-- sha1 cross-join: pnp to driver binaries, routed on the outer right -->
+  <path class="joinline" d="M 755 234 C 782 234, 782 104, 755 104"/>
+  <text x="779" y="172" text-anchor="middle" class="join" style="writing-mode: vertical-rl;">sha1</text>
+
+  <!-- Hive (center) -->
+  <rect class="hive" x="320" y="150" width="160" height="80"/>
+  <text x="400" y="172" text-anchor="middle" class="tag-h">In place</text>
+  <text x="400" y="194" text-anchor="middle" class="hive-lbl">Amcache.hve</text>
+  <text x="400" y="212" text-anchor="middle" class="mono">parsed once</text>
+  <text x="400" y="224" text-anchor="middle" class="mono">cached 5 min</text>
+
+  <!-- Hive to tables -->
+  <path class="arrow" d="M 320 160 L 219 104" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 320 190 L 219 166" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 320 216 L 219 228" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 480 160 L 566 104" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 480 180 L 566 166" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 480 200 L 566 234" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 480 216 L 566 296" marker-end="url(#arr)"/>
+
+  <!-- External osquery tables -->
+  <rect class="ext" x="250" y="270" width="300" height="44"/>
+  <text x="400" y="289" text-anchor="middle" class="mono" style="font-size:9px">rest of osquery: authenticode · hash · drivers</text>
+  <text x="400" y="304" text-anchor="middle" class="key">join on path · image · program_id</text>
+  <path class="arrow" d="M 400 230 L 400 266" marker-end="url(#arr)"/>
+
+  <!-- Footer -->
+  <text x="400" y="336" text-anchor="middle" class="subtitle">program_id ties the executable trio · container_id folds PnP rows into one device · sha1 resolves a device to its driver.</text>
+  <text x="400" y="352" text-anchor="middle" class="subtitle">One query can cross all three families: the parse happens once, not seven times.</text>
+  <text x="400" y="368" text-anchor="middle" class="subtitle">Uninstalled programs leave the applications table while their files stay in application_files. That asymmetry is a detection.</text>
+</svg>

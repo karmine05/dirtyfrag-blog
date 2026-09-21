@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Hero: The Amcache gap, closed. Seven SQL tables for live Windows DFIR.">
+  <defs>
+    <style>
+      .bg      { fill: #0d1117; }
+      .grid    { stroke: #1b2129; stroke-width: 1; }
+      .kicker  { fill: #8b949e; font: 500 24px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 7px; }
+      .h1      { fill: #f0f6fc; font: 700 56px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .h1acc   { fill: #a78bfa; font: 700 56px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub     { fill: #8b949e; font: 400 24px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .mono    { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+      .hubname { fill: #f0f6fc; font: 600 30px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .hubkey  { fill: #8b949e; font: 400 17px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag     { font: 700 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .cnt     { fill: #c9d1d9; font: 600 24px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .joinkey { fill: #8b949e; font: 400 20px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .statnum { fill: #f0f6fc; font: 700 46px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .statlbl { fill: #6e7681; font: 500 20px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .foot    { fill: #6e7681; font: 400 22px -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .footmono{ fill: #6e7681; font: 400 22px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="1200" height="675"/>
+  <g class="grid">
+    <line x1="0" y1="118" x2="1200" y2="118"/>
+    <line x1="0" y1="588" x2="1200" y2="588"/>
+    <line x1="812" y1="118" x2="812" y2="560"/>
+  </g>
+
+  <!-- LEFT: title block -->
+  <text x="72" y="152" class="kicker">THE AMCACHE GAP, CLOSED</text>
+  <text x="72" y="224" class="h1">Seven <tspan class="h1acc">SQL tables</tspan></text>
+  <text x="72" y="290" class="h1">for live Windows DFIR</text>
+  <text x="72" y="340" class="sub">The appraiser&#8217;s hive, read while locked, parsed once.</text>
+
+  <!-- LEFT: grounded stat row (real results from a live Win11 Pro box) -->
+  <g>
+    <text x="72"  y="470" class="statnum">1,215</text>
+    <text x="72"  y="500" class="statlbl">application_files rows</text>
+
+    <text x="372" y="470" class="statnum">2</text>
+    <text x="372" y="500" class="statlbl">untrusted binaries</text>
+
+    <text x="640" y="470" class="statnum">20</text>
+    <text x="640" y="500" class="statlbl">ghost drivers</text>
+  </g>
+
+  <!-- RIGHT: hub + family cards -->
+  <!-- Hub -->
+  <rect x="850" y="150" width="288" height="112" rx="10" fill="#161b22" stroke="#f472b6" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="994" y="188" text-anchor="middle" class="tag" fill="#f472b6">IN PLACE</text>
+  <text x="994" y="224" text-anchor="middle" class="hubname">Amcache.hve</text>
+  <text x="994" y="250" text-anchor="middle" class="hubkey">parsed once, 5-min cache</text>
+
+  <!-- Executables -->
+  <rect x="850" y="280" width="288" height="72" rx="10" fill="#161b22" stroke="#a78bfa" stroke-opacity="0.5"/>
+  <text x="874" y="314" class="tag" fill="#a78bfa">EXEC</text>
+  <text x="1114" y="314" text-anchor="end" class="cnt">3 tables</text>
+  <text x="874" y="340" class="joinkey">join &#183; program_id</text>
+
+  <!-- Drivers -->
+  <rect x="850" y="370" width="288" height="72" rx="10" fill="#161b22" stroke="#f0883e" stroke-opacity="0.5"/>
+  <text x="874" y="404" class="tag" fill="#f0883e">DRV</text>
+  <text x="1114" y="404" text-anchor="end" class="cnt">2 tables</text>
+  <text x="874" y="430" class="joinkey">join &#183; inf</text>
+
+  <!-- Devices -->
+  <rect x="850" y="460" width="288" height="72" rx="10" fill="#161b22" stroke="#58a6ff" stroke-opacity="0.5"/>
+  <text x="874" y="494" class="tag" fill="#58a6ff">DEV</text>
+  <text x="1114" y="494" text-anchor="end" class="cnt">2 tables</text>
+  <text x="874" y="520" class="joinkey">join &#183; container_id</text>
+
+  <!-- Join gradient accent -->
+  <rect x="72" y="556" width="1066" height="3" fill="url(#glow)"/>
+
+  <!-- Footer -->
+  <text x="72" y="622" class="foot">read while locked, served as SQL</text>
+  <text x="1138" y="622" text-anchor="end" class="footmono">karmine&#8217;s notes &#183; 2026-09-21</text>
+</svg>

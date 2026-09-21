@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="The 02:00 IOC question against three answer sources: processes only sees what is running now and misses the target, shimcache holds the answer but writes it only at reboot which costs days and destroys volatile evidence, and the new amcache tables are written continuously and read in place while locked, answering in seconds across the whole fleet">
+  <style>
+    .trigger { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .old1    { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .old2    { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
+    .new     { fill: #e94560; fill-opacity: 0.16; stroke: #e94560; stroke-width: 2; }
+    .title    { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .step-num { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
+    .lane-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .lane-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
+    .mono     { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .tag-s    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-1    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-2    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #fb923c; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-n    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+    .verdict-d{ font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e94560; }
+    .verdict-o{ font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb923c; }
+    .verdict-n{ font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e94560; }
+    .arrow    { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
+  </style>
+
+  <text x="20" y="28" class="title">The 02:00 question, three answer sources</text>
+  <text x="20" y="50" class="subtitle">An intel feed flags a hash at 02:00. The question is which of twelve thousand endpoints has ever run it,</text>
+  <text x="20" y="66" class="subtitle">and you want the answer before the operator at each desk wakes up and keeps working.</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.55"/>
+    </marker>
+  </defs>
+
+  <!-- Trigger bar -->
+  <rect class="trigger" x="20" y="84" width="760" height="52"/>
+  <text x="400" y="106" text-anchor="middle" class="lane-lbl">IOC hit: hash <tspan class="mono">2fd4e1c67a2d28fc…</tspan> flagged by the feed an hour ago</text>
+  <text x="400" y="124" text-anchor="middle" class="lane-body">Which machines in the fleet have ever run it? Answer needed before 07:00, on a fleet that stays up.</text>
+
+  <!-- Arrows from trigger to lanes -->
+  <path class="arrow" d="M 140 138 L 140 156" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 400 138 L 400 156" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 660 138 L 660 156" marker-end="url(#arr)"/>
+
+  <!-- Lane 1: processes -->
+  <rect class="old1" x="20" y="160" width="240" height="150"/>
+  <text x="32" y="182" class="step-num">01</text>
+  <text x="140" y="182" text-anchor="middle" class="tag-1">Sees now only</text>
+  <text x="140" y="208" text-anchor="middle" class="mono" style="font-size:12px">processes</text>
+  <text x="140" y="232" text-anchor="middle" class="lane-body">what is running right now.</text>
+  <text x="140" y="246" text-anchor="middle" class="lane-body">the target exited weeks ago.</text>
+  <text x="140" y="288" text-anchor="middle" class="verdict-d">MISS</text>
+
+  <!-- Lane 2: shimcache -->
+  <rect class="old2" x="280" y="160" width="240" height="150"/>
+  <text x="292" y="182" class="step-num">02</text>
+  <text x="400" y="182" text-anchor="middle" class="tag-2">Answers at reboot</text>
+  <text x="400" y="208" text-anchor="middle" class="mono" style="font-size:12px">shimcache</text>
+  <text x="400" y="232" text-anchor="middle" class="lane-body">holds the answer, but flushes</text>
+  <text x="400" y="246" text-anchor="middle" class="lane-body">to disk on the next reboot only.</text>
+  <text x="400" y="288" text-anchor="middle" class="verdict-o">DAYS LATE</text>
+
+  <!-- Lane 3: amcache -->
+  <rect class="new" x="540" y="160" width="240" height="150"/>
+  <text x="552" y="182" class="step-num">03</text>
+  <text x="660" y="182" text-anchor="middle" class="tag-n">Answers now</text>
+  <text x="660" y="208" text-anchor="middle" class="mono" style="font-size:12px">amcache_*</text>
+  <text x="660" y="232" text-anchor="middle" class="lane-body">written continuously by the</text>
+  <text x="660" y="246" text-anchor="middle" class="lane-body">appraiser, read in place while locked.</text>
+  <text x="660" y="288" text-anchor="middle" class="verdict-n">SECONDS, FLEET-WIDE</text>
+
+  <!-- Footer -->
+  <text x="400" y="336" text-anchor="middle" class="subtitle">Rebooting the fleet to answer one question destroys the volatile evidence you would want if any host comes back positive.</text>
+  <text x="400" y="352" text-anchor="middle" class="subtitle">The request sat open in osquery since 2020 and in Fleet since 2025. The file with the answer was never the problem.</text>
+  <text x="400" y="368" text-anchor="middle" class="subtitle">The reader was.</text>
+</svg>

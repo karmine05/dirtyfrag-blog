@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Read path for a locked Amcache.hve: an ordinary open first, a read-only raw NTFS read of the volume when the appraiser holds the hive open, in-memory replay of LOG1 and LOG2 when the hive is mid-write, a single parse of the modern hive format that fails at thirty seconds instead of hanging, and seven SQL tables cached for five minutes so repeat queries do no I/O">
+  <style>
+    .step1 { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .step2 { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
+    .step3 { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .step4 { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .step5 { fill: #e94560; fill-opacity: 0.16; stroke: #e94560; stroke-width: 2; }
+    .title    { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .subtitle { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .step-num { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
+    .step-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .step-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
+    .mono     { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
+    .tag-1    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-2    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #fb923c; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-3    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-5    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
+    .arrow    { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
+  </style>
+
+  <text x="20" y="28" class="title">How it reads a hive that is in use</text>
+  <text x="20" y="50" class="subtitle">The appraiser usually holds Amcache.hve open, often mid-write. Each fallback fires only when the step before it cannot.</text>
+  <text x="20" y="66" class="subtitle">Nothing is copied, nothing is written, nothing is rebooted.</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.55"/>
+    </marker>
+  </defs>
+
+  <!-- Step 1 -->
+  <rect class="step1" x="20" y="120" width="140" height="120"/>
+  <text x="32" y="142" class="step-num">01</text>
+  <text x="90" y="142" text-anchor="middle" class="tag-1">First try</text>
+  <text x="90" y="168" text-anchor="middle" class="mono" style="font-size:12px">open()</text>
+  <text x="90" y="192" text-anchor="middle" class="step-body">Amcache.hve</text>
+  <text x="90" y="206" text-anchor="middle" class="step-body">direct file read</text>
+
+  <!-- Step 2 -->
+  <rect class="step2" x="175" y="120" width="140" height="120"/>
+  <text x="187" y="142" class="step-num">02</text>
+  <text x="245" y="142" text-anchor="middle" class="tag-2">Sharing violation</text>
+  <text x="245" y="168" text-anchor="middle" class="mono" style="font-size:12px">\\.\C:</text>
+  <text x="245" y="192" text-anchor="middle" class="step-body">raw NTFS read,</text>
+  <text x="245" y="206" text-anchor="middle" class="step-body">read-only, SYSTEM</text>
+
+  <!-- Step 3 -->
+  <rect class="step3" x="330" y="120" width="140" height="120"/>
+  <text x="342" y="142" class="step-num">03</text>
+  <text x="400" y="142" text-anchor="middle" class="tag-3">Mid-write</text>
+  <text x="400" y="168" text-anchor="middle" class="mono" style="font-size:12px">LOG1 + LOG2</text>
+  <text x="400" y="192" text-anchor="middle" class="step-body">replayed in memory</text>
+  <text x="400" y="206" text-anchor="middle" class="step-body">over the base hive</text>
+
+  <!-- Step 4 -->
+  <rect class="step4" x="485" y="120" width="140" height="120"/>
+  <text x="497" y="142" class="step-num">04</text>
+  <text x="555" y="142" text-anchor="middle" class="tag-1">Always</text>
+  <text x="555" y="168" text-anchor="middle" class="mono" style="font-size:12px">parse once</text>
+  <text x="555" y="192" text-anchor="middle" class="step-body">modern hive only,</text>
+  <text x="555" y="206" text-anchor="middle" class="step-body">fail at 30 s, no hang</text>
+
+  <!-- Step 5 -->
+  <rect class="step5" x="640" y="120" width="140" height="120"/>
+  <text x="652" y="142" class="step-num">05</text>
+  <text x="710" y="142" text-anchor="middle" class="tag-5">Serve</text>
+  <text x="710" y="168" text-anchor="middle" class="mono" style="font-size:12px">7 SQL tables</text>
+  <text x="710" y="192" text-anchor="middle" class="step-body">cache 5 min,</text>
+  <text x="710" y="206" text-anchor="middle" class="step-body">repeats: no I/O</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M 160 180 L 172 180" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 315 180 L 327 180" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 470 180 L 482 180" marker-end="url(#arr)"/>
+  <path class="arrow" d="M 625 180 L 637 180" marker-end="url(#arr)"/>
+
+  <!-- Footer -->
+  <text x="400" y="298" text-anchor="middle" class="subtitle">A join across the seven tables inside the cache window is one read and one parse; a repeat query does no I/O.</text>
+  <text x="400" y="324" text-anchor="middle" class="subtitle">The raw path opens \\.C: read-only and touches exactly one path. EDR products flag it; allow-list by the release SHA-256.</text>
+  <text x="400" y="350" text-anchor="middle" class="subtitle">Never writes, never shells out, never opens a socket, creates no temp files. Admin to read; SYSTEM for the raw fallback.</text>
+</svg>
