@@ -69,6 +69,6 @@
 
   <!-- Footer -->
   <text x="400" y="336" text-anchor="middle" class="subtitle">Rebooting the fleet to answer one question destroys the volatile evidence you would want if any host comes back positive.</text>
-  <text x="400" y="352" text-anchor="middle" class="subtitle">The request sat open in osquery since 2020 and in Fleet since 2025. The file with the answer was never the problem.</text>
+  <text x="400" y="352" text-anchor="middle" class="subtitle">The file with the answer was never the problem.</text>
   <text x="400" y="368" text-anchor="middle" class="subtitle">The reader was.</text>
 </svg>
