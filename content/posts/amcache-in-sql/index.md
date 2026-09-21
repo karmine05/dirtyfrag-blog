@@ -4,10 +4,10 @@ meta-article:modified_time: "2026-09-21T09:45:00-04:00"
 meta-article:published_time: "2026-09-21T09:45:00-04:00"
 meta-article:section: posts
 meta-article:tag: Security-Ops
-meta-author: Dhruv Majumdar
-meta-description: "osquery has had no Amcache table since 2020. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
+meta-author: karmine
+meta-description: "osquery gained its first Amcache table. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
 meta-keywords: amcache,amcache.hve,osquery,fleet,windows,dfir,incident-response,threat-hunting,shimcache,byovd,usb-forensics,registry-hive,security-ops
-meta-og:description: "osquery has had no Amcache table since 2020. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
+meta-og:description: "osquery gained its first Amcache table. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
 meta-og:locale: en
 meta-og:site_name: "karmine's notes"
 meta-og:title: "The Amcache gap, closed: seven SQL tables for live Windows DFIR"
@@ -36,14 +36,14 @@ tags:
 showTableOfContents: true
 ---
 
-> **One sentence:** Windows writes a rolling inventory of every executable, driver and device it has ever seen, osquery could not read that inventory until this week, and seven new SQL tables turn it into a live DFIR surface.
+> **One sentence:** Windows writes a rolling inventory of every executable, driver and device it has ever seen, osquery had no way to read that history until now, and seven new SQL tables turn it into a live DFIR surface.
 
 |                  |                                                                                                                                     |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | **The gap**      | Amcache.hve holds executable, driver and device history that only becomes readable at reboot (shimcache) or after imaging (forensics) |
 | **The fix**      | A Fleet/osquery extension that parses the hive in place, while locked, and serves seven SQL tables                                    |
 | **The surface**  | Executables, installed programs, shortcuts, driver binaries, driver packages, PnP devices, device containers                          |
-| **The proof**    | Seven live queries on a Windows 11 Pro workstation, 2026-09-21 09:45 local, hive parsed in the same second as each query             |
+| **The proof** | Seven live queries on a Windows 11 Pro workstation, the hive parsed in the same second as each query |
 | **The caveat**   | Amcache records that the appraiser *saw* a file. It is not proof of execution, and Windows 11 fills in half of every record          |
 
 ## The gap, in one incident
@@ -52,7 +52,7 @@ showTableOfContents: true
 
 `processes` returns what is running right now. The thing you are hunting exited weeks ago. `shimcache`, the long-standing fallback, holds the answer but flushes it to disk only on reboot, and rebooting twelve thousand machines to answer one question destroys the volatile evidence you would want if any of them comes back positive. The honest options were: wait for the next reboot cycle and hope, or pick the handful of hosts you can justify pulling offline, image them, and run a forensics tool over the hive by hand. Both answer the question days late, and the second answers it for a handful of machines instead of the fleet.
 
-The file with the answer sat on every one of those machines the entire time: `C:\Windows\AppCompat\Programs\Amcache.hve`. The request for an osquery table has been open since 2020 ([osquery/osquery#6639](https://github.com/osquery/osquery/issues/6639)), asked again in 2025 ([fleetdm/fleet#31103](https://github.com/fleetdm/fleet/issues/31103)), and until now the answer on Windows was shimcache or nothing.
+The file with the answer sat on every one of those machines the entire time: `C:\Windows\AppCompat\Programs\Amcache.hve`. Until now, the answer on Windows was shimcache or nothing.
 
 {{< figure src="images/gap-0200.svg" nozoom="true" alt="The 02:00 IOC question against three answer sources: processes only sees what is running now and misses the target, shimcache holds the answer but writes it only at reboot which costs days, and the new amcache tables are written continuously and read in place while locked, answering in seconds across the whole fleet" caption="The 02:00 question, three answer sources. `processes` misses because the target exited weeks ago. `shimcache` answers days late, at reboot, and rebooting the fleet destroys the volatile evidence you would want if any host comes back positive. The amcache tables answer in seconds, fleet-wide, on hosts that stay up." >}}
 
@@ -62,7 +62,7 @@ The Microsoft Compatibility Appraiser keeps an inventory of the machine: SHA-1 a
 
 The file was unreadable for years for three specific reasons, and the extension's design is a direct answer to each:
 
-1. **It is a registry hive, not a registry key.** osquery's `registry` table reads keys from the live tree. It cannot open an arbitrary hive file at all, so the appraiser's inventory was outside osquery's reach by construction.
+1. **It is a registry hive, not a registry key.** The registry tables read the loaded tree. A standalone hive file on disk was never in that surface, so the appraiser's inventory was readable only offline — with a copy and a forensics tool.
 2. **The appraiser holds the hive open, often mid-write.** A plain `open()` fails with a sharing violation. The extension falls back to a raw, read-only read of the NTFS volume (`\\.C:`), and when the hive is mid-transaction it replays `Amcache.hve.LOG1` and `.LOG2` in memory.
 3. **Forensics tooling expects an offline copy.** Everything else on the market copies the file or reboots the machine first. The extension never writes, never shells out, never opens a socket, and creates no temporary files.
 
@@ -98,7 +98,7 @@ Two semantics worth knowing before you read the results below. The `sha1` column
 
 ## One machine, seven questions
 
-The extension ran on a Windows 11 Pro workstation (a Micro-Star Aegis desktop, i9-14900F) under a plain `osqueryi` with the extension loaded directly: no Fleet, no daemon, no agent options. Each query below is a one-liner from that session, and each result is the real output, trimmed. The hive parsed in the same second as each query, and the appraiser was not holding it open, so this run did not exercise the raw-volume fallback:
+The extension ran on a Windows 11 Pro workstation under a plain `osqueryi` with the extension loaded directly: no Fleet, no daemon, no agent options. Each query below is a one-liner from that session, and each result is the real output, trimmed. The hive parsed in the same second as each query, and the appraiser was not holding it open, so this run did not exercise the raw-volume fallback:
 
 ```text
 2026/09/21 09:45:16 amcache: hive parsed (raw volume read: false, transaction logs replayed: false)
@@ -117,14 +117,13 @@ WHERE a.result != 'trusted'
 ```
 
 ```text
-| path                                                                              | sha1                             | result  |
-+-----------------------------------------------------------------------------------+----------------------------------+---------+
-| c:\program files\7-zip\7z.exe                                                     |                                  | missing |
-| c:\users\dhruv\anaconda3\library\bin\adig.exe                                     |                                  | missing |
-| c:\users\dhruv\downloads\ultimate_ai_influencer_comfyui_installer-08-06-25\...    |                                  |         |
-|   comfyui\venv\scripts\accelerate.exe                                             | bcb1662a55d1aaa6ca5d790b4446d5c31fd9d4fd | missing |
-| c:\program files\git\usr\bin\bash.exe                                             | 948a5dd008e75bef11bbe75509bfc86a009da857 | untrusted |
-| c:\program files\git\usr\bin\sh.exe                                               |                                  | untrusted |
+| path                                                                   | sha1                             | result  |
++------------------------------------------------------------------------+----------------------------------+---------+
+| c:\program files\7-zip\7z.exe                                          |                                  | missing |
+| c:\users\user\anaconda3\library\bin\adig.exe                           |                                  | missing |
+| c:\users\user\downloads\<installer>\<tool>\venv\scripts\accelerate.exe | bcb1662a55d1aaa6ca5d790b4446d5c31fd9d4fd | missing |
+| c:\program files\git\usr\bin\bash.exe                                  | 948a5dd008e75bef11bbe75509bfc86a009da857 | untrusted |
+| c:\program files\git\usr\bin\sh.exe                                    |                                  | untrusted |
 ... 1205 more rows ...
 1215 rows: 1213 missing, 2 untrusted
 ```
@@ -133,7 +132,7 @@ Read it in four passes.
 
 The two `untrusted` rows are Git for Windows' own `bash.exe` and `sh.exe`. That is baseline, not an incident: Git ships its own copies, and Authenticode does not trust them. A query this broad always returns a baseline on every machine, and the value of running it is that your fleet's baseline becomes a measured thing you can diff against.
 
-The ComfyUI rows are the interesting shape. A downloaded installer under `c:\users\dhruv\downloads` unpacked a Python venv, and every script in it is unsigned, but every row also carries a real SHA-1 that can go straight into an intel feed. Forty-plus executable scripts from one download, each addressable by hash, on a machine that is still powered on.
+The downloaded-installer rows are the interesting shape. A single installer under `c:\users\user\downloads` unpacked a Python venv, and every script in it is unsigned, but every row also carries a real SHA-1 that can go straight into an intel feed. Forty-plus executable scripts from one download, each addressable by hash, on a machine that is still powered on.
 
 The empty `sha1` cells are Windows 11, not the extension: 934 of the 1,215 rows here carry a path and no hash. Windows 10 and Server populate both fields on every record, and the README's rule of thumb for Win11 is three in four rows are hash-only stubs. A hash sweep returns rows with empty paths, and a path lookup returns rows with an empty hash. Build your detections around that, not around it.
 
@@ -165,19 +164,19 @@ WHERE b.inbox = 0 AND b.kernel_mode = 1 AND d.image IS NULL;
 ```
 
 ```text
-| path                                                                                  | sha1                             |
-+---------------------------------------------------------------------------------------+----------------------------------+
-| c:\program files (x86)\msi\msi center\lib\sys\ntiolib_x64.sys                         | 716c97782fe4ca706df00edb1552e42fd0d8fa49 |
-| c:\program files (x86)\msi\msi center\mystic light\lib\ntiolib_x64.sys                | 8dcab06248f8d5565b14ff30abbeadcd07944c2b |
-| c:\program files\corsair\corsair device control service\bin\corsairllaccess64.sys     | b7626e7e4281e95153024222503742684b765786 |
-| c:\windows\system32\drivers\veracrypt.sys                                             | 0b27ee5e4fc40e76ab159a6f4561b0d2209401a2 |
-| c:\windows\system32\driverstore\filerepository\gameflt.inf_amd64_4a86850bc3d081d9\gameflt.sys | 2c2e3c4a4ceee73592335c4df535b9030ce21aff |
-| c:\windows\system32\driverstore\filerepository\xvdd.inf_amd64_2050d7d784794b4c\xvdd.sys | 275e0224e51f2aac9529cb12e3814aeb238a2966 |
+| path                                                                     | sha1                             |
++--------------------------------------------------------------------------+----------------------------------+
+| c:\program files (x86)\<oem-utility>\lib\sys\<driver1>.sys               | 716c97782fe4ca706df00edb1552e42fd0d8fa49 |
+| c:\program files (x86)\<oem-utility>\lib\sys\<driver2>.sys               | 8dcab06248f8d5565b14ff30abbeadcd07944c2b |
+| c:\program files\<utility-suite>\bin\<access-driver>.sys                 | b7626e7e4281e95153024222503742684b765786 |
+| c:\windows\system32\drivers\veracrypt.sys                                | 0b27ee5e4fc40e76ab159a6f4561b0d2209401a2 |
+| c:\windows\system32\driverstore\filerepository\gameflt.inf_amd64_...\gameflt.sys | 2c2e3c4a4ceee73592335c4df535b9030ce21aff |
+| c:\windows\system32\driverstore\filerepository\xvdd.inf_amd64_...\xvdd.sys       | 275e0224e51f2aac9529cb12e3814aeb238a2966 |
 ... 14 more rows (btfilter, mlx4, winverbs, wdboot, ...) ...
 20 rows
 ```
 
-Twenty kernel drivers the live driver list no longer reports. Two of them are worth a second look even on a box you know well. `veracrypt.sys` means someone had an encrypted volume on this machine, and the application is gone while the driver is not. `xvdd.sys` is VirtualBox's shared-graphics driver, same story. The three `ntiolib_x64.sys` copies under MSI Center are the OEM utility residue you expect on a gaming desktop. The point is not that this machine is compromised. The point is that the question *which non-inbox kernel drivers does this machine carry that it no longer reports?* is now an eight-line query you can run mid-incident, on the live host, against the whole fleet.
+Twenty kernel drivers the live driver list no longer reports. Two of them are worth a second look even on a box you know well. `veracrypt.sys` means someone had an encrypted volume on this machine, and the application is gone while the driver is not. `xvdd.sys` is VirtualBox's shared-graphics driver, same story. The remaining rows are OEM-utility residue. The point is not that this machine is compromised. The point is that the question *which non-inbox kernel drivers does this machine carry that it no longer reports?* is now an eight-line query you can run mid-incident, on the live host, against the whole fleet.
 
 ### Q4: what removable storage has ever been plugged in
 
@@ -203,17 +202,17 @@ Provably nothing. No USB mass-storage device has ever been enumerated on this wo
 The same join, without the `USBSTOR` filter, returns every device the machine has ever enumerated: 147 rows.
 
 ```text
-| friendly_name             | manufacturer                     | model_name       | first_install_time |
-+---------------------------+----------------------------------+------------------+--------------------+
-| WRK-AI                    | Micro-Star International Co., Ltd. | US Desktop Aegis R | 1733443200 (2024-12-05) |  <- 134 of 147 rows
-| (Intel PCIe device)       |                                  |                  | 1757980800 (2025-09-15) |
-| (Realtek 2.5G + 10G NICs, audio) |                            |                  | 1761868800 (2025-10-30) |
-| (MSI HID peripheral)      |                                  |                  | 1771372800 (2026-02-17) |
-| Generic Monitor (S22D390) |                                  | S22D390          | 1781049600 (2026-06-09) |
-| (DAF audio endpoint)      |                                  |                  | 1783468800 (2026-07-07) |
+| friendly_name                | first_install_time |
++------------------------------+--------------------+
+| 134 rows (one build event)   | 1733443200 (2024-12-05) |
+| (Intel PCIe device)          | 1757980800 (2025-09-15) |
+| (NICs, audio)                | 1761868800 (2025-10-30) |
+| (HID peripheral)             | 1771372800 (2026-02-17) |
+| (monitor)                    | 1781049600 (2026-06-09) |
+| (audio endpoint)             | 1783468800 (2026-07-07) |
 ```
 
-`first_install_time` is the first time Windows enumerated that specific device. Read across the 147 rows and you have a twenty-month hardware timeline for the box with no event log touched: 134 devices at the 2024-12-05 build, a PCIe add-in in September 2025, NICs and audio in late October 2025, an MSI peripheral in February 2026, a Samsung monitor in June 2026. The machine's birth date comes for free, and a host that claims to be "freshly deployed" while carrying a 2024 device timeline stops being a claim.
+`first_install_time` is the first time Windows enumerated that specific device. Read across the 147 rows and you have a twenty-month hardware timeline for the box with no event log touched: 134 devices at the 2024-12-05 build, a PCIe add-in in September 2025, NICs and audio in late October 2025, a HID peripheral in February 2026, a monitor in June 2026. The machine's birth date comes for free, and a host that claims to be "freshly deployed" while carrying a 2024 device timeline stops being a claim.
 
 One honest decode failure in the table: `driver_ver_time` had 9 non-empty values the extension could not decode, and it reported them as empty with a log line rather than inventing epochs. Same behavior as `link_time` below.
 
@@ -247,11 +246,11 @@ LEFT JOIN amcache_driver_binaries b ON p.sha1 = b.sha1;
 ```
 
 ```text
-| description              | class     | driver_path                                                                     | signed | inbox |
-+--------------------------+-----------+---------------------------------------------------------------------------------+--------+-------+
-| ACPI Processor Aggregator| system    | c:\windows\system32\driverstore\filerepository\acpipagr.inf_amd64_... \acpipagr.sys | 1    | 1     |
-| Intel(R) Core(TM) i9-14900F | processor | c:\windows\system32\drivers\intelppm.sys                                     | 1      | 1     |
-| ACPI Fixed Feature Button| system    | (no driver recorded)                                                            |        |       |
+| description               | class     | driver_path                                                                          | signed | inbox |
++---------------------------+-----------+--------------------------------------------------------------------------------------+--------+-------+
+| ACPI Processor Aggregator | system    | c:\windows\system32\driverstore\filerepository\acpipagr.inf_amd64_...\acpipagr.sys   | 1      | 1     |
+| Intel(R) Core(TM) i7      | processor | c:\windows\system32\drivers\intelppm.sys                                             | 1      | 1     |
+| ACPI Fixed Feature Button | system    | (no driver recorded)                                                                 |        |       |
 ... 144 more rows ...
 147 rows
 ```
