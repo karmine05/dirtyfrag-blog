@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Live verification: 24 of 25 Linux hosts running 6.8.0-142-generic, uptime about 23.6 hours; ad-guard-home is an LXC on the Proxmox guest kernel 5.15.158-2-pve">
+  <style>
+    .tt { font: 600 15px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .bb { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; }
+    .mm { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.55; }
+    .ok { fill: #22c55e; fill-opacity: 0.18; stroke: #22c55e; stroke-opacity: 0.6; }
+    .out { fill: #f59e0b; fill-opacity: 0.14; stroke: #f59e0b; stroke-opacity: 0.6; }
+    .bar { fill: currentColor; fill-opacity: 0.5; }
+    .barm { fill: #f59e0b; fill-opacity: 0.55; }
+  </style>
+
+  <text x="20" y="34" class="tt">Live kernel check, 25/25 hosts responded</text>
+
+  <rect class="ok" x="20" y="56" width="760" height="86" rx="8"/>
+  <text x="44" y="86" class="bb">24/25  running_kernel = 6.8.0-142-generic</text>
+  <text x="44" y="112" class="mm">fleetdm-server, indexer-master1/2/3, indexer-data1/2/3/4/5, lb, dashboard,</text>
+  <text x="44" y="130" class="mm">manager-master/worker1/worker2, docker-manager-01/02/03, docker-worker-01..06, automater</text>
+
+  <rect class="out" x="20" y="158" width="760" height="70" rx="8"/>
+  <text x="44" y="186" class="bb">1/25  ad-guard-home = 5.15.158-2-pve  (LXC on Proxmox)</text>
+  <text x="44" y="210" class="mm">guest kernel, not a noble point release. Out of the Ubuntu upgrade wave by design.</text>
+
+  <text x="20" y="258" class="mm">Uptime on the 23 swarm + wazuh nodes: 85,078s to 87,471s (~23.6 hours), one tight reboot window.</text>
+  <text x="20" y="276" class="mm">automater, the 24th, sits at 345,911s (~4 days) on its last natural boot - patched, reboot queued.</text>
+</svg>
