@@ -1,19 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 victimology — eight country footprint across South, East and Southeast Asia plus Poland (NATO)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="SHADOW-EARTH-053 victimology — eight country footprint across South, East and Southeast Asia plus Poland (NATO)">
   <style>
     .tile      { stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; fill: currentColor; fill-opacity: 0.06; rx: 6; }
     .tile-hit  { stroke: #e94560; stroke-width: 2; fill: #e94560; fill-opacity: 0.16; rx: 6; }
-    .tile-nato { stroke: #533483; stroke-width: 2; fill: #533483; fill-opacity: 0.18; rx: 6; stroke-dasharray: 4 3; }
+    .tile-nato { stroke: #a78bfa; stroke-width: 2; fill: #a78bfa; fill-opacity: 0.18; rx: 6; stroke-dasharray: 4 3; }
     .lane-bg   { fill: currentColor; fill-opacity: 0.03; rx: 10; }
     .label     { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .sector    { font: 10.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; }
     .pin       { fill: #e94560; }
-    .pin-nato  { fill: #533483; }
+    .pin-nato  { fill: #a78bfa; }
     .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
     .body      { font: 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.78; }
     .strong    { font: 600 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .divider   { stroke: currentColor; stroke-opacity: 0.2; stroke-width: 1.5; stroke-dasharray: 6 4; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="560" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">SHADOW-EARTH-053 — eight-country footprint</text>
   <text x="20" y="50" class="subtitle">Government, defence, IT consulting (MoD-adjacent), telecom, transportation. Active since Dec 2024.</text>
@@ -98,7 +99,7 @@
   <rect class="lane-bg" x="600" y="70" width="180" height="460"/>
   <text x="620" y="92" class="label">Europe (NATO)</text>
 
-  <rect class="tile-nato" x="620" y="110" width="140" height="120"/>
+  <rect class="tile-nato" x="620" y="110" width="140" height="132"/>
   <circle class="pin-nato" cx="640" cy="130" r="5"/>
   <text x="654" y="134" class="label">Poland</text>
   <text x="630" y="156" class="sector">Defence sector</text>

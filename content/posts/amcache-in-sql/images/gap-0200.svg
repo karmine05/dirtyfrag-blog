@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="The 02:00 IOC question against three answer sources: processes only sees what is running now and misses the target, shimcache holds the answer but writes it only at reboot which costs days and destroys volatile evidence, and the new amcache tables are written continuously and read in place while locked, answering in seconds across the whole fleet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="The 02:00 IOC question against three answer sources: processes only sees what is running now and misses the target, shimcache holds the answer but writes it only at reboot which costs days and destroys volatile evidence, and the new amcache tables are written continuously and read in place while locked, answering in seconds across the whole fleet">
   <style>
-    .trigger { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
-    .old1    { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .trigger { fill: #60a5fa; fill-opacity: 0.20; stroke: #60a5fa; stroke-width: 1.5; }
+    .old1    { fill: #a78bfa; fill-opacity: 0.15; stroke: #a78bfa; stroke-width: 1.5; }
     .old2    { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
     .new     { fill: #e94560; fill-opacity: 0.16; stroke: #e94560; stroke-width: 2; }
     .title    { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
@@ -10,8 +10,8 @@
     .lane-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .lane-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
     .mono     { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
-    .tag-s    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
-    .tag-1    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-s    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-1    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .tag-2    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #fb923c; text-transform: uppercase; letter-spacing: 0.06em; }
     .tag-n    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
     .verdict-d{ font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e94560; }
@@ -19,6 +19,7 @@
     .verdict-n{ font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e94560; }
     .arrow    { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">The 02:00 question, three answer sources</text>
   <text x="20" y="50" class="subtitle">An intel feed flags a hash at 02:00. The question is which of twelve thousand endpoints has ever run it,</text>

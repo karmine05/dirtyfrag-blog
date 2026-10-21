@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="The ClickFix hunt loop: trigger resolves the host, four moves run in sequence, the verdict branches into labels, cohort hunt, volatile capture, and a paged OCSF timeline">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="The ClickFix hunt loop: trigger resolves the host, four moves run in sequence, the verdict branches into labels, cohort hunt, volatile capture, and a paged OCSF timeline">
   <style>
     .stage     { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; fill: currentColor; fill-opacity: 0.05; }
-    .trigger   { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
-    .move      { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .trigger   { fill: #60a5fa; fill-opacity: 0.20; stroke: #60a5fa; stroke-width: 1.5; }
+    .move      { fill: #a78bfa; fill-opacity: 0.15; stroke: #a78bfa; stroke-width: 1.5; }
     .verdict   { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 2; }
-    .safe      { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
+    .safe      { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em; }
     .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
     .stage-num { font: 700 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
@@ -12,9 +12,10 @@
     .stage-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
     .mono      { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
     .arrow     { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
-    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .danger    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">The hunt, run as a loop</text>
   <text x="20" y="50" class="subtitle">One trigger in. Four moves. The verdict is a value in a column, so the harness can branch on it.</text>

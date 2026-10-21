@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Architecture: local LLM agent connected to Fleet via MCP, querying 35 hosts, with the harness around it">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Architecture: local LLM agent connected to Fleet via MCP, querying 35 hosts, with the harness around it">
   <style>
     .box { fill: none; stroke: currentColor; stroke-opacity: 0.3; stroke-width: 1.5; }
     .t { font: 600 14px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
@@ -7,6 +7,7 @@
     .ar { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1.5; fill: none; }
     .acc { fill: #6366f1; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
   <defs>
     <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.45"/>
