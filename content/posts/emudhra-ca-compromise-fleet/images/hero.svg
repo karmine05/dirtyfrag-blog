@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="eMudhra CA compromise in three steps: eight intermediate CA keys were generated as tiny numbers, anyone can recompute them and forge certificates for any site, and only clients with a stale CA copy still believe them">
+  <style>
+    .title { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sub   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
+    .num   { font: 700 13px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
+    .lbl   { font: 600 14px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .body  { font: 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.8; }
+    .mono  { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.85; }
+    .tag   { font: 700 10px ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.06em; }
+    .weak  { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 1.5; }
+    .forge { fill: #fb923c; fill-opacity: 0.14; stroke: #fb923c; stroke-width: 1.5; }
+    .who   { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; }
+    .ok    { fill: #22c55e; fill-opacity: 0.14; stroke: #22c55e; stroke-width: 1.2; }
+    .bad   { fill: #e94560; fill-opacity: 0.16; stroke: #e94560; stroke-width: 1.2; }
+    .arrow { stroke: currentColor; stroke-opacity: 0.55; stroke-width: 2; fill: none; }
+    .foot  { font: 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; }
+  </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="400" rx="10" fill="#111827"/>
+  <defs>
+    <marker id="h-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" fill-opacity="0.6"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="30" class="title">eMudhra CA compromise: one guessable key, many believers</text>
+  <text x="20" y="50" class="sub">Eight intermediate CA keys were generated as tiny numbers. Anyone can recompute them</text>
+  <text x="20" y="66" class="sub">and mint certificates that chain to roots your devices already trust.</text>
+
+  <!-- 1 Weak key -->
+  <rect class="weak" x="20" y="88" width="220" height="230" rx="8"/>
+  <text x="34" y="110" class="num">01</text>
+  <text x="130" y="110" text-anchor="middle" class="tag" style="fill:#e94560">ROOT CAUSE</text>
+  <text x="130" y="136" text-anchor="middle" class="lbl">Weak keys</text>
+  <text x="130" y="162" text-anchor="middle" class="body">April 2025 key ceremony</text>
+  <text x="130" y="180" text-anchor="middle" class="body">8 intermediate CAs, P-384</text>
+  <text x="130" y="206" text-anchor="middle" class="mono">private key &lt; 256</text>
+  <text x="130" y="224" text-anchor="middle" class="body">a number you can guess</text>
+  <text x="130" y="250" text-anchor="middle" class="body">6 for TLS (DV, OV, EV)</text>
+  <text x="130" y="268" text-anchor="middle" class="body">2 for code signing</text>
+  <text x="130" y="296" text-anchor="middle" class="body" style="fill-opacity:0.6">Revoked 2026-10-18</text>
+
+  <path class="arrow" d="M 246 203 L 284 203" marker-end="url(#h-arr)"/>
+
+  <!-- 2 Forge -->
+  <rect class="forge" x="290" y="88" width="220" height="230" rx="8"/>
+  <text x="304" y="110" class="num">02</text>
+  <text x="400" y="110" text-anchor="middle" class="tag" style="fill:#fb923c">ATTACK</text>
+  <text x="400" y="136" text-anchor="middle" class="lbl">Forge anything</text>
+  <text x="400" y="162" text-anchor="middle" class="body">Recompute the key, then sign</text>
+  <text x="400" y="180" text-anchor="middle" class="body">a certificate for any name:</text>
+  <text x="400" y="206" text-anchor="middle" class="mono">bank.example</text>
+  <text x="400" y="224" text-anchor="middle" class="mono">api.github.com</text>
+  <text x="400" y="242" text-anchor="middle" class="mono">your-fleet.example</text>
+  <text x="400" y="268" text-anchor="middle" class="body">or sign Windows malware</text>
+  <text x="400" y="296" text-anchor="middle" class="body" style="fill-opacity:0.6">Needs a spot on the network path</text>
+
+  <path class="arrow" d="M 516 203 L 554 203" marker-end="url(#h-arr)"/>
+
+  <!-- 3 Who believes it -->
+  <rect class="who" x="560" y="88" width="220" height="234" rx="8"/>
+  <text x="574" y="110" class="num">03</text>
+  <text x="670" y="110" text-anchor="middle" class="tag" style="fill:currentColor;fill-opacity:0.6">IMPACT</text>
+  <text x="670" y="136" text-anchor="middle" class="lbl">Who believes it?</text>
+  <rect class="ok" x="574" y="148" width="192" height="64" rx="6"/>
+  <text x="670" y="166" text-anchor="middle" class="tag" style="fill:#22c55e">BLOCKED, AUTO-UPDATED</text>
+  <text x="670" y="184" text-anchor="middle" class="body">Chrome, Firefox, Safari, Edge</text>
+  <text x="670" y="201" text-anchor="middle" class="body">macOS, Windows, Android</text>
+  <rect class="bad" x="574" y="220" width="192" height="92" rx="6"/>
+  <text x="670" y="238" text-anchor="middle" class="tag" style="fill:#e94560">STILL TRUSTING</text>
+  <text x="670" y="256" text-anchor="middle" class="body">Linux ca-certificates</text>
+  <text x="670" y="272" text-anchor="middle" class="body">macOS /etc/ssl/cert.pem</text>
+  <text x="670" y="288" text-anchor="middle" class="body">Node.js, Python certifi</text>
+  <text x="670" y="304" text-anchor="middle" class="body">fleetd osquery bundle</text>
+
+  <text x="20" y="352" class="foot">No forged TLS certificate was seen in Certificate Transparency logs before the block.</text>
+  <text x="20" y="370" class="foot">The risk is every client that keeps its own CA copy and never checks revocation.</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 585" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Before and after on an unpatched Ubuntu 22.04 host: curl to the eMudhra test hosts returns hello and HTTP 200 before the fix; the remediation script distrusts the roots and cleans the fleetd bundle; afterwards curl fails with SSL certificate problem error 60 while github.com still returns 200">
+  <style>
+    .title { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sub   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
+    .tag   { font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; }
+    .tagd  { font: 11px ui-sans-serif, system-ui, sans-serif; fill: #94a3b8; }
+    .cmd   { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #93c5fd; }
+    .out   { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e2e8f0; }
+    .ok    { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #4ade80; }
+    .bad   { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #f87171; }
+    .note  { font: italic 10.5px ui-sans-serif, system-ui, sans-serif; }
+    .foot  { font: 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.7; }
+  </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="585" rx="10" fill="#111827"/>
+  <text x="20" y="30" class="title">Before and after: the same curl, one script apart</text>
+  <text x="20" y="50" class="sub">Real output from an unpatched Ubuntu 22.04 host. The test hosts serve certificates from the compromised intermediates.</text>
+  <rect x="20" y="72" width="760" height="144" rx="8" fill="#0b1020" stroke="#e94560" stroke-opacity="0.55" stroke-width="1.2"/>
+  <rect x="20" y="72" width="4" height="144" rx="2" fill="#e94560"/>
+  <text x="36" y="92" class="tag" style="fill:#e94560">BEFORE</text>
+  <text x="96" y="92" class="tagd">stale CA bundle</text>
+  <text x="36" y="112" class="cmd">$ curl -sS https://dv-g3b-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="129" class="out">&lt;h1&gt;hello&lt;/h1&gt;</text>
+  <text x="764" y="129" text-anchor="end" class="note" style="fill:#e94560">forged chain accepted</text>
+  <text x="36" y="146" class="cmd">$ curl -sS -o /dev/null -w &#x27;%{http_code}\n&#x27; https://dv-g3b-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="163" class="out">200</text>
+  <text x="36" y="180" class="cmd">$ curl -sS https://dv-g3b-aaa-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="197" class="out">&lt;h1&gt;hello&lt;/h1&gt;</text>
+  <text x="764" y="197" text-anchor="end" class="note" style="fill:#e94560">Sectigo cross-sign path too</text>
+  <rect x="20" y="228" width="760" height="127" rx="8" fill="#0b1020" stroke="#fb923c" stroke-opacity="0.55" stroke-width="1.2"/>
+  <rect x="20" y="228" width="4" height="127" rx="2" fill="#fb923c"/>
+  <text x="36" y="248" class="tag" style="fill:#fb923c">FIX</text>
+  <text x="72" y="248" class="tagd">one Fleet script</text>
+  <text x="36" y="268" class="cmd">$ sudo bash emudhra-remediate-linux.sh</text>
+  <text x="36" y="285" class="out">BUNDLE: /etc/ssl/certs/ca-certificates.crt still trusts: d1eb23a4... 3043fa4f...</text>
+  <text x="36" y="302" class="out">DISTRUST: marked roots with ! in /etc/ca-certificates.conf</text>
+  <text x="36" y="319" class="ok">BUNDLE: /etc/ssl/certs/ca-certificates.crt PROTECTED</text>
+  <text x="36" y="336" class="ok">FLEETD: removed 2 root(s) from /opt/orbit/certs.pem</text>
+  <rect x="20" y="367" width="760" height="178" rx="8" fill="#0b1020" stroke="#22c55e" stroke-opacity="0.55" stroke-width="1.2"/>
+  <rect x="20" y="367" width="4" height="178" rx="2" fill="#22c55e"/>
+  <text x="36" y="387" class="tag" style="fill:#22c55e">AFTER</text>
+  <text x="88" y="387" class="tagd">forged chains refused</text>
+  <text x="36" y="407" class="cmd">$ curl -sS https://dv-g3b-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="424" class="bad">curl: (60) SSL certificate problem: unable to get local issuer certificate</text>
+  <text x="36" y="441" class="cmd">$ curl -sS -o /dev/null -w &#x27;%{http_code}\n&#x27; https://dv-g3b-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="458" class="bad">000</text>
+  <text x="36" y="475" class="cmd">$ curl -sS https://dv-g3b-aaa-emudhra.we-have-a-problem.com/</text>
+  <text x="36" y="492" class="bad">curl: (60) SSL certificate problem: unable to get local issuer certificate</text>
+  <text x="36" y="509" class="cmd">$ curl -sS -o /dev/null -w &#x27;%{http_code}\n&#x27; https://github.com/</text>
+  <text x="36" y="526" class="ok">200</text>
+  <text x="764" y="526" text-anchor="end" class="note" style="fill:#22c55e">normal sites still work</text>
+  <text x="20" y="567" class="foot">Same on macOS: Apple's /usr/bin/curl returns the page until /etc/ssl/cert.pem is cleaned.</text>
+</svg>

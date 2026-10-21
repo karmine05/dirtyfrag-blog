@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Fleet results across a lab fleet: Windows 6 hosts with 0 exposed through the OS, macOS 1 host with an exposed CLI trust bundle, Linux 24 hosts with 9 unpatched CA bundles, plus an anonymized excerpt of the exported report rows">
+  <style>
+    .title { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sub   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
+    .os    { font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.1em; fill: currentColor; fill-opacity: 0.7; }
+    .hosts { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.55; }
+    .big   { font: 700 40px ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .bigl  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.8; }
+    .li    { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.78; }
+    .card  { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.25; stroke-width: 1; }
+    .term  { fill: #0b1020; stroke: currentColor; stroke-opacity: 0.25; stroke-width: 1; }
+    .bar   { fill: currentColor; fill-opacity: 0.08; }
+    .tt    { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #cbd5e1; }
+    .th    { font: 700 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #94a3b8; }
+    .td    { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #e2e8f0; }
+  </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="560" rx="10" fill="#111827"/>
+  <text x="20" y="30" class="title">What the three queries found on a 31-host lab fleet</text>
+  <text x="20" y="50" class="sub">Hostnames anonymized. Rows come from the exported Fleet reports, long status text shortened.</text>
+  <rect class="card" x="20" y="66" width="240" height="190" rx="8"/>
+  <rect x="20" y="66" width="240" height="4" rx="2" fill="#22c55e"/>
+  <text x="36" y="94" class="os">WINDOWS</text>
+  <text x="244" y="94" text-anchor="end" class="hosts">6 hosts</text>
+  <text x="36" y="144" class="big" style="fill:#22c55e">0</text>
+  <text x="71" y="140" class="bigl">exposed through the OS</text>
+  <text x="36" y="172" class="li">Microsoft block synced on 6 of 6</text>
+  <text x="36" y="192" class="li">1 cached AAA root (expected)</text>
+  <text x="36" y="212" class="li">1 Node.js 24.21.0 to update</text>
+  <text x="36" y="232" class="li">0 compromised certs found</text>
+  <rect class="card" x="280" y="66" width="240" height="190" rx="8"/>
+  <rect x="280" y="66" width="240" height="4" rx="2" fill="#fb923c"/>
+  <text x="296" y="94" class="os">MACOS</text>
+  <text x="504" y="94" text-anchor="end" class="hosts">1 host</text>
+  <text x="296" y="144" class="big" style="fill:#fb923c">1</text>
+  <text x="331" y="140" class="bigl">CLI trust bundle exposed</text>
+  <text x="296" y="172" class="li">Apple trustd block applied</text>
+  <text x="296" y="192" class="li">/etc/ssl/cert.pem: both roots</text>
+  <text x="296" y="212" class="li">certifi 2026.7.22 in 5 Pythons</text>
+  <text x="296" y="232" class="li">Homebrew ca-certificates stale</text>
+  <rect class="card" x="540" y="66" width="240" height="190" rx="8"/>
+  <rect x="540" y="66" width="240" height="4" rx="2" fill="#e94560"/>
+  <text x="556" y="94" class="os">LINUX</text>
+  <text x="764" y="94" text-anchor="end" class="hosts">24 hosts</text>
+  <text x="556" y="144" class="big" style="fill:#e94560">9</text>
+  <text x="591" y="140" class="bigl">unpatched CA bundles</text>
+  <text x="556" y="172" class="li">15 already on the fixed package</text>
+  <text x="556" y="192" class="li">9 still trust emSign ECC G3</text>
+  <text x="556" y="212" class="li">certifi rows were false alarms</text>
+  <text x="556" y="232" class="li">0 compromised certs found</text>
+  <rect class="term" x="20" y="276" width="760" height="264" rx="8"/>
+  <circle cx="38" cy="292" r="5" fill="#e94560"/><circle cx="54" cy="292" r="5" fill="#fb923c"/><circle cx="70" cy="292" r="5" fill="#22c55e"/>
+  <text x="90" y="296" class="tt">fleet report export - emudhra-{windows,macos,linux}.sql</text>
+  <text x="36" y="322" class="th">host</text>
+  <text x="110" y="322" class="th">finding</text>
+  <text x="280" y="322" class="th">item</text>
+  <text x="456" y="322" class="th">status</text>
+  <rect class="bar" x="30" y="337" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="337" width="3" height="20" fill="#22c55e"/>
+  <text x="36" y="352" class="td">win-ws-03</text>
+  <text x="110" y="352" class="td">disallowed_ctl_sync</text>
+  <text x="280" y="352" class="td">DisallowedCertLastSyncTime</text>
+  <text x="456" y="352" class="td" style="fill:#22c55e">OK_AUTOUPDATE_KEY_WRITTEN_SINCE_2026-10-20</text>
+  <rect class="bar" x="30" y="359" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="359" width="3" height="20" fill="#fb923c"/>
+  <text x="36" y="374" class="td">win-ws-03</text>
+  <text x="110" y="374" class="td">toolchain</text>
+  <text x="280" y="374" class="td">Node.js 24.21.0</text>
+  <text x="456" y="374" class="td" style="fill:#fb923c">REVIEW Node&gt;=24.22.1</text>
+  <rect class="bar" x="30" y="381" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="381" width="3" height="20" fill="#22c55e"/>
+  <text x="36" y="396" class="td">mac-01</text>
+  <text x="110" y="396" class="td">apple_block_applied</text>
+  <text x="280" y="396" class="td">trustd valid.sqlite3</text>
+  <text x="456" y="396" class="td" style="fill:#22c55e">OK_VALID_DB_UPDATED_SINCE_2026-10-19</text>
+  <rect class="bar" x="30" y="403" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="403" width="3" height="20" fill="#e94560"/>
+  <text x="36" y="418" class="td">mac-01</text>
+  <text x="110" y="418" class="td">root_in_pem_bundle</text>
+  <text x="280" y="418" class="td">emSign ECC Root CA - G3</text>
+  <text x="456" y="418" class="td" style="fill:#e94560">CLI_TOOLS_STILL_TRUST</text>
+  <rect class="bar" x="30" y="425" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="425" width="3" height="20" fill="#fb923c"/>
+  <text x="36" y="440" class="td">mac-01</text>
+  <text x="110" y="440" class="td">python_certifi</text>
+  <text x="280" y="440" class="td">certifi 2026.7.22</text>
+  <text x="456" y="440" class="td" style="fill:#fb923c">UPDATE certifi&gt;=2026.10.19</text>
+  <rect class="bar" x="30" y="447" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="447" width="3" height="20" fill="#fb923c"/>
+  <text x="36" y="462" class="td">lnx-07</text>
+  <text x="110" y="462" class="td">ca_certificates_pkg</text>
+  <text x="280" y="462" class="td">20260601~24.04.1</text>
+  <text x="456" y="462" class="td" style="fill:#fb923c">COMPARE (older than the fix)</text>
+  <rect class="bar" x="30" y="469" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="469" width="3" height="20" fill="#e94560"/>
+  <text x="36" y="484" class="td">lnx-07</text>
+  <text x="110" y="484" class="td">root_in_ca_bundle</text>
+  <text x="280" y="484" class="td">emSign ECC Root CA - G3</text>
+  <text x="456" y="484" class="td" style="fill:#e94560">UNPATCHED still trusted</text>
+  <rect class="bar" x="30" y="491" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="491" width="3" height="20" fill="#22c55e"/>
+  <text x="36" y="506" class="td">lnx-12</text>
+  <text x="110" y="506" class="td">ca_certificates_pkg</text>
+  <text x="280" y="506" class="td">20260816ubuntu0.24.04.1</text>
+  <text x="456" y="506" class="td" style="fill:#22c55e">COMPARE (fixed version)</text>
+  <rect class="bar" x="30" y="513" width="740" height="20" rx="3" style="fill:#ffffff;fill-opacity:0.03"/>
+  <rect x="30" y="513" width="3" height="20" fill="#e94560"/>
+  <text x="36" y="528" class="td">mac-lab</text>
+  <text x="110" y="528" class="td">fleetd_osquery_ca_bundle</text>
+  <text x="280" y="528" class="td">emSign ECC Root CA - G3</text>
+  <text x="456" y="528" class="td" style="fill:#e94560">EXPOSED osqueryd-to-Fleet TLS</text>
+</svg>
