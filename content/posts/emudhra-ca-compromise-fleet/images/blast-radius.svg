@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Blast radius ladder: browsers and OS trust stores are blocked, Go programs depend on platform, system CA files, runtimes with their own CA copy, and the Fleet agent bundle stay exposed until patched, with the worst case for each">
+  <style>
+    .title { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sub   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
+    .name  { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .who   { font: 10.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .pill  { font: 700 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.04em; }
+    .body  { font: 11.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.82; }
+    .row   { fill: currentColor; fill-opacity: 0.035; }
+    .head  { font: 700 10px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.5; letter-spacing: 0.08em; }
+  </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="450" rx="10" fill="#111827"/>
+  <text x="20" y="30" class="title">Blast radius: who still trusts a forged certificate?</text>
+  <text x="20" y="50" class="sub">Ordered from safest to most exposed. The bottom three need you to act.</text>
+  <text x="32" y="78" class="head">TRUST PATH</text>
+  <text x="252" y="78" class="head">STATUS</text>
+  <text x="372" y="78" class="head">WHY, AND THE WORST CASE IF UNPATCHED</text>
+  <rect class="row" x="20" y="90" width="760" height="54" rx="6"/>
+  <rect x="20" y="90" width="4" height="54" rx="2" fill="#22c55e"/>
+  <text x="32" y="112" class="name">Browsers</text>
+  <text x="32" y="130" class="who">Chrome, Firefox, Safari, Edge</text>
+  <rect x="250" y="105" width="96" height="24" rx="12" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-width="1"/>
+  <text x="298" y="121" text-anchor="middle" class="pill" style="fill:#22c55e">BLOCKED</text>
+  <text x="372" y="112" class="body">Pushed blocklists plus Certificate Transparency checks.</text>
+  <text x="372" y="130" class="body">A forged certificate is refused. Nothing to do.</text>
+  <rect class="row" x="20" y="150" width="760" height="54" rx="6"/>
+  <rect x="20" y="150" width="4" height="54" rx="2" fill="#22c55e"/>
+  <text x="32" y="172" class="name">OS trust stores</text>
+  <text x="32" y="190" class="who">macOS trustd, Windows CryptoAPI</text>
+  <rect x="250" y="165" width="96" height="24" rx="12" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-width="1"/>
+  <text x="298" y="181" text-anchor="middle" class="pill" style="fill:#22c55e">BLOCKED*</text>
+  <text x="372" y="172" class="body">Apple 2026-10-19, Microsoft 2026-10-20, automatic.</text>
+  <text x="372" y="190" class="body">*Offline or policy-locked hosts never get it.</text>
+  <rect class="row" x="20" y="210" width="760" height="54" rx="6"/>
+  <rect x="20" y="210" width="4" height="54" rx="2" fill="#fb923c"/>
+  <text x="32" y="232" class="name">Go programs</text>
+  <text x="32" y="250" class="who">kubectl, terraform, agents, orbit</text>
+  <rect x="250" y="225" width="96" height="24" rx="12" fill="#fb923c" fill-opacity="0.16" stroke="#fb923c" stroke-width="1"/>
+  <text x="298" y="241" text-anchor="middle" class="pill" style="fill:#fb923c">DEPENDS</text>
+  <text x="372" y="232" class="body">macOS and Windows: verified by the OS, so blocked.</text>
+  <text x="372" y="250" class="body">Linux: reads the system bundle. Cloud tokens leak.</text>
+  <rect class="row" x="20" y="270" width="760" height="54" rx="6"/>
+  <rect x="20" y="270" width="4" height="54" rx="2" fill="#e94560"/>
+  <text x="32" y="292" class="name">System CA files</text>
+  <text x="32" y="310" class="who">Linux bundle, macOS cert.pem</text>
+  <rect x="250" y="285" width="96" height="24" rx="12" fill="#e94560" fill-opacity="0.16" stroke="#e94560" stroke-width="1"/>
+  <text x="298" y="301" text-anchor="middle" class="pill" style="fill:#e94560">EXPOSED</text>
+  <text x="372" y="292" class="body">curl, wget, git, Python, PHP: no revocation check.</text>
+  <text x="372" y="310" class="body">Credentials sniffed, curl | sh installers swapped.</text>
+  <rect class="row" x="20" y="330" width="760" height="54" rx="6"/>
+  <rect x="20" y="330" width="4" height="54" rx="2" fill="#e94560"/>
+  <text x="32" y="352" class="name">Own CA copy</text>
+  <text x="32" y="370" class="who">Node.js, Electron, pip certifi</text>
+  <rect x="250" y="345" width="96" height="24" rx="12" fill="#e94560" fill-opacity="0.16" stroke="#e94560" stroke-width="1"/>
+  <text x="298" y="361" text-anchor="middle" class="pill" style="fill:#e94560">EXPOSED</text>
+  <text x="372" y="352" class="body">Frozen root list inside the runtime, on every OS.</text>
+  <text x="372" y="370" class="body">API keys and service calls go to an impostor.</text>
+  <rect class="row" x="20" y="390" width="760" height="54" rx="6"/>
+  <rect x="20" y="390" width="4" height="54" rx="2" fill="#e94560"/>
+  <text x="32" y="412" class="name">Fleet agent</text>
+  <text x="32" y="430" class="who">osqueryd TLS via fleetd certs.pem</text>
+  <rect x="250" y="405" width="96" height="24" rx="12" fill="#e94560" fill-opacity="0.16" stroke="#e94560" stroke-width="1"/>
+  <text x="298" y="421" text-anchor="middle" class="pill" style="fill:#e94560">EXPOSED</text>
+  <text x="372" y="412" class="body">Fake Fleet server reads all host data and agent keys.</text>
+  <text x="372" y="430" class="body">Linux with a stale bundle: orbit runs its scripts as root.</text>
+</svg>
