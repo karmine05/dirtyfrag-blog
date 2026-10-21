@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 C2 tunnel architecture — three lanes from compromised hosts through layered redundant tunnels to common C2 infrastructure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="SHADOW-EARTH-053 C2 tunnel architecture — three lanes from compromised hosts through layered redundant tunnels to common C2 infrastructure">
   <style>
     .lane       { fill: none; stroke: currentColor; stroke-opacity: 0.18; stroke-width: 1.5; stroke-dasharray: 5 4; rx: 10; }
     .node       { fill: currentColor; fill-opacity: 0.05; stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; rx: 8; }
-    .tunnel     { fill: #0f3460; fill-opacity: 0.18; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .tunnel     { fill: #60a5fa; fill-opacity: 0.18; stroke: #60a5fa; stroke-width: 1.5; rx: 8; }
     .c2         { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.5; rx: 8; }
-    .legit      { fill: #533483; fill-opacity: 0.18; stroke: #533483; stroke-width: 1.5; rx: 8; }
+    .legit      { fill: #a78bfa; fill-opacity: 0.18; stroke: #a78bfa; stroke-width: 1.5; rx: 8; }
     .title      { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .subtitle   { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
     .label      { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
@@ -15,6 +15,7 @@
     .flow       { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.6; fill: none; }
     .flow-red   { stroke: #e94560; stroke-opacity: 0.7; stroke-width: 1.6; fill: none; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="420" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">Layered tunnel redundancy → common C2</text>
   <text x="20" y="50" class="subtitle">Multiple tunnel tools deployed in a single environment; if one is detected and blocked, the others sustain the channel.</text>

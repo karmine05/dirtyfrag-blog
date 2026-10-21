@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="ClickFix attack flow — five stages from fake CAPTCHA lure through clipboard hijack, victim paste, stager execution, and payload install">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="ClickFix attack flow — five stages from fake CAPTCHA lure through clipboard hijack, victim paste, stager execution, and payload install">
   <style>
     .stage     { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; fill: currentColor; fill-opacity: 0.05; rx: 8; }
-    .lure      { fill: #533483; fill-opacity: 0.18; stroke: #533483; stroke-width: 1.5; rx: 8; }
+    .lure      { fill: #a78bfa; fill-opacity: 0.18; stroke: #a78bfa; stroke-width: 1.5; rx: 8; }
     .clip      { fill: #fb923c; fill-opacity: 0.18; stroke: #fb923c; stroke-width: 1.5; rx: 8; }
-    .paste     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .paste     { fill: #60a5fa; fill-opacity: 0.14; stroke: #60a5fa; stroke-width: 1.5; rx: 8; }
     .stager    { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.5; rx: 8; }
     .payload   { fill: #e94560; fill-opacity: 0.28; stroke: #e94560; stroke-width: 2; rx: 8; }
     .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
@@ -13,9 +13,10 @@
     .stage-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
     .mono      { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
     .arrow     { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
-    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .danger    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">ClickFix — five-stage copy/paste social engineering</text>
   <text x="20" y="50" class="subtitle">Attacker manipulates the user into executing the command themselves. No exploit needed; the user is the delivery mechanism.</text>
@@ -57,7 +58,7 @@
   <!-- Stage 3: Paste -->
   <rect class="paste" x="328" y="80" width="140" height="220"/>
   <text x="340" y="100" class="stage-num">03</text>
-  <text x="398" y="100" text-anchor="middle" class="trust" style="fill:#0f3460">User action</text>
+  <text x="398" y="100" text-anchor="middle" class="trust" style="fill:#60a5fa">User action</text>
   <text x="398" y="124" text-anchor="middle" class="stage-lbl">Victim pastes</text>
   <text x="398" y="148" text-anchor="middle" class="stage-body">"Press Win+R, then"</text>
   <text x="398" y="162" text-anchor="middle" class="stage-body">"paste and press Enter"</text>
@@ -104,6 +105,7 @@
   <path class="arrow" d="M 624 190 L 634 190" marker-end="url(#arr)"/>
 
   <!-- Footer note -->
-  <text x="400" y="335" text-anchor="middle" class="subtitle">No code-execution vulnerability is exploited. The victim is the delivery mechanism. EDR and AV often miss it because every step uses legitimate tools the user invoked.</text>
-  <text x="400" y="355" text-anchor="middle" class="subtitle">Detection lives at: process tree (Run dialog parent / Terminal piped curl), obfuscation density, staging directories, persistence plists.</text>
+  <text x="400" y="336" text-anchor="middle" class="subtitle">No code-execution vulnerability is exploited. The victim is the delivery mechanism.</text>
+  <text x="400" y="352" text-anchor="middle" class="subtitle">EDR and AV often miss it because every step uses legitimate tools the user invoked.</text>
+  <text x="400" y="368" text-anchor="middle" class="subtitle">Detection lives at: process tree (Run dialog parent / Terminal piped curl), obfuscation density, staging directories, persistence plists.</text>
 </svg>

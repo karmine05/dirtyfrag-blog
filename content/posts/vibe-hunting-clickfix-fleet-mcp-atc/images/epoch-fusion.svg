@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Fusing three views of the disk and reconciling three epochs: Chrome microseconds since 1601, LaunchServices seconds since 2001, and the filesystem Unix epoch land in one ordered OCSF timeline">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Fusing three views of the disk and reconciling three epochs: Chrome microseconds since 1601, LaunchServices seconds since 2001, and the filesystem Unix epoch land in one ordered OCSF timeline">
   <style>
-    .src-chrome { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .src-chrome { fill: #a78bfa; fill-opacity: 0.15; stroke: #a78bfa; stroke-width: 1.5; }
     .src-quo    { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
-    .src-fs     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .src-fs     { fill: #60a5fa; fill-opacity: 0.20; stroke: #60a5fa; stroke-width: 1.5; }
     .fuse       { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 1.8; }
     .timeline   { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; }
     .tick       { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.2; }
     .t-dot      { fill: #e94560; }
-    .t-dot-b    { fill: #533483; }
+    .t-dot-b    { fill: #a78bfa; }
     .t-dot-o    { fill: #fb923c; }
     .title     { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .subtitle  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
@@ -16,9 +16,10 @@
     .stage-body{ font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.75; }
     .mono      { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
     .arrow     { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
-    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .trust     { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .danger    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">One timeline, three epochs</text>
   <text x="20" y="50" class="subtitle">Move 2 fuses three views of the disk; move 4 reconciles the clock each one keeps.</text>
@@ -46,7 +47,7 @@
   <!-- Source 3: filesystem -->
   <rect class="src-fs" x="20" y="240" width="230" height="70"/>
   <text x="32" y="260" class="stage-num">S3</text>
-  <text x="135" y="260" text-anchor="middle" class="trust" style="fill:#0f3460">Disk view</text>
+  <text x="135" y="260" text-anchor="middle" class="trust" style="fill:#60a5fa">Disk view</text>
   <text x="135" y="280" text-anchor="middle" class="stage-body">filesystem scan of staging dirs</text>
   <text x="135" y="296" text-anchor="middle" class="mono">epoch: Unix / btime, mtime</text>
 

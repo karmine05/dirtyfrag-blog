@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="ClickFix obfuscation stack — how an attacker hides a malicious command behind layered encoding so the victim sees gibberish but the shell decodes it on paste">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="ClickFix obfuscation stack — how an attacker hides a malicious command behind layered encoding so the victim sees gibberish but the shell decodes it on paste">
   <style>
-    .layer-a   { fill: #533483; fill-opacity: 0.12; stroke: #533483; stroke-width: 1.5; rx: 8; }
-    .layer-b   { fill: #0f3460; fill-opacity: 0.14; stroke: #0f3460; stroke-width: 1.5; rx: 8; }
+    .layer-a   { fill: #a78bfa; fill-opacity: 0.12; stroke: #a78bfa; stroke-width: 1.5; rx: 8; }
+    .layer-b   { fill: #60a5fa; fill-opacity: 0.14; stroke: #60a5fa; stroke-width: 1.5; rx: 8; }
     .layer-c   { fill: #fb923c; fill-opacity: 0.16; stroke: #fb923c; stroke-width: 1.5; rx: 8; }
     .layer-d   { fill: #e94560; fill-opacity: 0.18; stroke: #e94560; stroke-width: 1.8; rx: 8; }
     .terminal  { fill: #16213e; fill-opacity: 0.35; stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.5; rx: 8; }
@@ -15,6 +15,7 @@
     .term-text   { font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #d1fae5; }
     .term-prompt { font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #fb923c; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="480" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">Obfuscation stack — what the victim sees vs. what runs</text>
   <text x="20" y="50" class="subtitle">Most ClickFix payloads stack three to four encoding layers.</text>

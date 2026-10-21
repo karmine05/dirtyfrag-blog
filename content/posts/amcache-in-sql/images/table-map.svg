@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="Map of the seven amcache SQL tables served from one in-place parse of Amcache.hve: three executable tables joined on program_id, two driver tables, two device tables joined on container_id, plus joins into the rest of osquery on path, image and program_id">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Map of the seven amcache SQL tables served from one in-place parse of Amcache.hve: three executable tables joined on program_id, two driver tables, two device tables joined on container_id, plus joins into the rest of osquery on path, image and program_id">
   <style>
     .hive    { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 2; }
-    .exe     { fill: #533483; fill-opacity: 0.15; stroke: #533483; stroke-width: 1.5; }
+    .exe     { fill: #a78bfa; fill-opacity: 0.15; stroke: #a78bfa; stroke-width: 1.5; }
     .drv     { fill: #fb923c; fill-opacity: 0.15; stroke: #fb923c; stroke-width: 1.5; }
-    .dev     { fill: #16213e; fill-opacity: 0.20; stroke: #0f3460; stroke-width: 1.5; }
+    .dev     { fill: #60a5fa; fill-opacity: 0.20; stroke: #60a5fa; stroke-width: 1.5; }
     .ext     { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.35; stroke-width: 1.5; }
     .title    { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .subtitle { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
@@ -11,18 +11,19 @@
     .key      { font: 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.55; }
     .hive-lbl { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
     .mono     { font: 10px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
-    .tag-e    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-e    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .tag-d    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #fb923c; text-transform: uppercase; letter-spacing: 0.06em; }
-    .tag-v    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #0f3460; text-transform: uppercase; letter-spacing: 0.06em; }
+    .tag-v    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em; }
     .tag-h    { font: 600 9.5px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
     .join     { font: 700 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.7; }
     .arrow    { stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.8; fill: none; }
-    .joinline { stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.2; }
+    .joinline { fill: none; stroke: currentColor; stroke-opacity: 0.4; stroke-width: 1.2; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="380" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">Seven tables, one parse</text>
-  <text x="20" y="50" class="subtitle">One hive, read in place, served as SQL. Three families: what ran, what loaded into the kernel, what was ever plugged in.</text>
-  <text x="20" y="66" class="subtitle">The joins are the point.</text>
+  <text x="20" y="46" class="subtitle">One hive, read in place, served as SQL. Three families: what ran, what loaded into the kernel, what was ever plugged in.</text>
+  <text x="20" y="61" class="subtitle">The joins are the point.</text>
 
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">

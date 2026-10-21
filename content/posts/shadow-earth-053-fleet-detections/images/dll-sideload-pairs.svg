@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="100%" style="max-width: 800px; height: auto;" role="img" aria-label="SHADOW-EARTH-053 DLL sideload pairs — four legitimate signed binaries paired with malicious DLLs they unwittingly load">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="SHADOW-EARTH-053 DLL sideload pairs — four legitimate signed binaries paired with malicious DLLs they unwittingly load">
   <style>
     .card       { fill: currentColor; fill-opacity: 0.04; stroke: currentColor; stroke-opacity: 0.25; stroke-width: 1.5; rx: 10; }
-    .legit-box  { fill: #533483; fill-opacity: 0.14; stroke: #533483; stroke-width: 1.5; rx: 6; }
+    .legit-box  { fill: #a78bfa; fill-opacity: 0.14; stroke: #a78bfa; stroke-width: 1.5; rx: 6; }
     .evil-box   { fill: #e94560; fill-opacity: 0.14; stroke: #e94560; stroke-width: 1.8; rx: 6; }
     .signer     { fill: currentColor; fill-opacity: 0.06; stroke: currentColor; stroke-opacity: 0.3; stroke-width: 1; rx: 12; }
     .title      { font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
@@ -12,9 +12,10 @@
     .signer-txt { font: 10.5px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.65; }
     .hash       { font: 9px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.5; }
     .arrow      { stroke: #e94560; stroke-opacity: 0.7; stroke-width: 1.8; fill: none; }
-    .badge-l    { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: #533483; text-transform: uppercase; letter-spacing: 0.06em; }
+    .badge-l    { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: #a78bfa; text-transform: uppercase; letter-spacing: 0.06em; }
     .badge-e    { font: 600 10px ui-sans-serif, system-ui, sans-serif; fill: #e94560; text-transform: uppercase; letter-spacing: 0.06em; }
   </style>
+  <rect data-panel="bg" x="0" y="0" width="800" height="560" rx="10" fill="#111827"/>
 
   <text x="20" y="28" class="title">Four DLL-sideload pairs — trust abused, not broken</text>
   <text x="20" y="50" class="subtitle">Each row: a legitimate signed binary (left) unwittingly loads a co-located malicious DLL (right).</text>
@@ -106,5 +107,6 @@
   <text x="670" y="500" text-anchor="middle" class="pair-label">CO., LTD.</text>
 
   <!-- Footer note -->
-  <text x="400" y="546" text-anchor="middle" class="subtitle">Plus a Toshiba-signed binary renamed CIATosBtKbd.exe → sideloads TosBtKbd.dll → reads ShadowPad shellcode from a per-host registry value.</text>
+  <text x="400" y="538" text-anchor="middle" class="subtitle">Plus a Toshiba-signed binary renamed CIATosBtKbd.exe → sideloads TosBtKbd.dll</text>
+  <text x="400" y="553" text-anchor="middle" class="subtitle">→ reads ShadowPad shellcode from a per-host registry value.</text>
 </svg>
