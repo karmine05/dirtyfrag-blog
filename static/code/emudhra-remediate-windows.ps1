@@ -5,7 +5,7 @@
 #      Works even where Microsoft's automatic disallowed-list update is blocked or offline.
 #   2. Strips the two compromised roots from fleetd's CA bundle
 #      (C:\Program Files\Orbit\certs.pem), which osqueryd uses for its TLS connection to Fleet.
-#      Only after proving the Fleet server still chains to a root left in the bundle.
+#      Only after proving a CA in the Fleet server's chain still has its key in the bundle.
 # Idempotent: safe to re-run. Built for Fleet "Run script" (runs as SYSTEM).
 # Save it as a Fleet script (it is larger than the 10,000-character ad hoc limit).
 # Rollback: copy certs.pem.pre-emudhra back, and delete the 16 entries from
