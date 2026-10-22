@@ -103,7 +103,7 @@ Each script is idempotent, keeps a `*.pre-emudhra` backup of every file it edits
 | [emudhra-remediate-linux.sh](/dirtyfrag-blog/code/emudhra-remediate-linux.sh) | Upgrades `ca-certificates` (apt, dnf, yum, zypper, apk). Where the distro has no fix yet, distrusts the roots the native way, then cleans the fleetd bundle. |
 | [emudhra-remediate-windows.ps1](/dirtyfrag-blog/code/emudhra-remediate-windows.ps1) | Adds all 16 compromised intermediates to the machine's Untrusted Certificates store, then cleans the fleetd bundle. |
 
-Before editing the fleetd bundle, every script fetches the Fleet server's certificate chain and checks that it still ends at a root left in the filtered file. Hosts pinned to their own Fleet certificate skip that check, because osquery does not use the bundle there. If a script can't prove it is safe, it changes nothing and says so. osquery reloads the file on its next connection, so no agent restart is needed.
+Before editing the fleetd bundle, every script fetches the Fleet server's certificate chain and checks that a CA in it still has its key in the filtered file. Comparing keys matters because Windows can extend a chain through a cross-signed copy of a root, to an older root the bundle doesn't carry. Hosts pinned to their own Fleet certificate skip that check, because osquery does not use the bundle there. If a script can't prove it is safe, it changes nothing and says so. osquery reloads the file on its next connection, so no agent restart is needed.
 
 To roll out:
 
@@ -147,7 +147,7 @@ Re-run the query afterwards. The `root_in_ca_bundle`, `root_in_pem_bundle` and `
 - **Queries:** every table and column was checked against [fleetdm.com/tables](https://fleetdm.com/tables/certificates). The queries ran live in osquery 5.24 on macOS and on Ubuntu 22.04 and 24.04, with Fleet's own `go_binaries` and `file_lines` table code loaded.
 - **Linux script:** ran as root on Ubuntu 22.04 with a held 2021 bundle, Ubuntu 24.04, Debian 12, Rocky Linux 9, Fedora 44 and Alpine. Afterwards `openssl verify` rejected the forged chain and a second run changed nothing. An unreachable Fleet URL, and a Fleet URL that chains through a removed root, both left the agent bundle untouched. Arch Linux was not tested.
 - **macOS script:** ran against copies of the real Apple and fleetd bundles. Apple's own `curl` reached the test host through the original bundle and was refused with the cleaned copy, while GitHub, Apple and PyPI still connected. A Fleet URL that chains through a removed root left the agent bundle untouched.
-- **Windows script:** ran through Fleet on a real Windows host (Windows PowerShell 5.1 as SYSTEM). It added all 16 intermediates to Untrusted Certificates, Windows reported `ExplicitDistrust` for 16 of 16, and the fleetd bundle was cleaned. That host pins its own Fleet certificate, so the Fleet-server chain check and both registry layouts were tested in PowerShell 7.4 instead.
+- **Windows script:** ran through Fleet on a real Windows host (Windows PowerShell 5.1 as SYSTEM). It added all 16 intermediates to Untrusted Certificates, Windows reported `ExplicitDistrust` for 16 of 16, and the fleetd bundle was cleaned. That host pins its own Fleet certificate, so the Fleet-server chain check and both registry layouts were tested in PowerShell 7.4 instead, including the cross-signed chain Windows builds for Google Trust Services certificates (thanks to a Fleet reviewer for catching it).
 
 ## Sources
 
