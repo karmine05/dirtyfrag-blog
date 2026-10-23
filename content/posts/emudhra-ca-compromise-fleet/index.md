@@ -103,7 +103,7 @@ Each script is idempotent, keeps a `*.pre-emudhra` backup of every file it edits
 | [emudhra-remediate-linux.sh](/dirtyfrag-blog/code/emudhra-remediate-linux.sh) | Upgrades `ca-certificates` (apt, dnf, yum, zypper, apk). Where the distro has no fix yet, distrusts the roots the native way, then cleans the fleetd bundle. |
 | [emudhra-remediate-windows.ps1](/dirtyfrag-blog/code/emudhra-remediate-windows.ps1) | Adds all 16 compromised intermediates to the machine's Untrusted Certificates store, then cleans the fleetd bundle. |
 
-Before editing the fleetd bundle, every script fetches the Fleet server's certificate chain and checks that a CA in it still has its key in the filtered file. Comparing keys matters because Windows can extend a chain through a cross-signed copy of a root, to an older root the bundle doesn't carry. Hosts pinned to their own Fleet certificate skip that check, because osquery does not use the bundle there. If a script can't prove it is safe, it changes nothing and says so. osquery reloads the file on its next connection, so no agent restart is needed.
+Before editing the fleetd bundle, every script fetches the Fleet server's certificate chain and checks that a CA in it still matches a self-signed root in the filtered file, by name and public key. Comparing keys matters because Windows can extend a chain through a cross-signed copy of a root, to an older root the bundle doesn't carry. Hosts pinned to their own Fleet certificate skip that check, because osquery does not use the bundle there. If a script can't prove it is safe, it changes nothing and says so. osquery reloads the file on its next connection, so no agent restart is needed.
 
 To roll out:
 
