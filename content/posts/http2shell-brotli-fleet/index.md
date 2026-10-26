@@ -55,7 +55,7 @@ The queries exist for what inventory misses: nvm, Volta and fnm binaries, macOS 
 
 Every query is in [http2shell-fleet-queries.sql](/dirtyfrag-blog/code/http2shell-fleet-queries.sql). Scope each to the platform named in its heading.
 
-**Why the version logic looks odd.** SQLite compares version strings as text: `'1.0.9' < '1.0.10'` is false, `'24.9.0' > '24.22.1'` is true. The queries never use `<` or `>` on a version. Brotli has exactly nine vulnerable releases, so it is an `IN` list. Node.js and Bun are split into major, minor and patch with `CAST`, which keeps the leading digits (`'22.1-1nodesource1'` casts to `22`), and compared as a number.
+**Why the version logic looks odd.** SQLite compares version strings as text: `'1.0.9' < '1.0.10'` is false, `'24.9.0' > '24.22.1'` is true. The queries never use `<` or `>` on a version. Brotli has exactly nine vulnerable releases, so it is an `IN` list. Node.js and Bun are split into major, minor and patch with `CAST`, which keeps the leading digits (`'22.1-1nodesource1'` casts to `22`), and compared as a number. A Node.js major newer than 26 returns `REVIEW`, not `FIXED`, so a future vulnerable line cannot pass the policy silently.
 
 ### 1. Linux: brotli and nodejs packages
 
@@ -75,8 +75,9 @@ k AS (
 )
 SELECT name, version, src,
   CASE WHEN name <> 'nodejs' THEN 'REVIEW-vs-advisory'
+       WHEN maj>26 THEN 'REVIEW'
        WHEN (maj=22 AND mnr*1000+pat>=23004) OR (maj=24 AND mnr*1000+pat>=22001)
-         OR (maj=26 AND mnr*1000+pat>=12001) OR maj>26 THEN 'FIXED'
+         OR (maj=26 AND mnr*1000+pat>=12001) THEN 'FIXED'
        ELSE 'VULNERABLE' END AS status
 FROM k;
 ```
@@ -108,8 +109,9 @@ SELECT name, version, location,
        WHEN name = 'bun' AND maj*1000000+mnr*1000+pat BETWEEN 1000021 AND 1004003 THEN 'VULNERABLE'
        WHEN name = 'bun' THEN 'FIXED'
        WHEN name = 'envoy' THEN 'REVIEW'
+       WHEN maj>26 THEN 'REVIEW'
        WHEN (maj=22 AND mnr*1000+pat>=23004) OR (maj=24 AND mnr*1000+pat>=22001)
-         OR (maj=26 AND mnr*1000+pat>=12001) OR maj>26 THEN 'FIXED'
+         OR (maj=26 AND mnr*1000+pat>=12001) THEN 'FIXED'
        ELSE 'VULNERABLE' END AS status
 FROM n;
 ```
@@ -140,13 +142,16 @@ WHERE path IN ('/usr/bin/node','/usr/local/bin/node','/opt/homebrew/bin/node','/
    OR path LIKE '/home/%/.nvm/versions/node/%/bin/node'
    OR path LIKE '/Users/%/.volta/tools/image/node/%/bin/node'
    OR path LIKE '/home/%/.volta/tools/image/node/%/bin/node'
-   OR path LIKE '/Users/%/Library/Application Support/fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/.local/share/fnm/node-versions/%/installation/bin/node'
    OR path LIKE '/home/%/.local/share/fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/.fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/home/%/.fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/Library/Application Support/fnm/node-versions/%/installation/bin/node'
    OR path LIKE '/Users/%/.bun/bin/bun'
    OR path LIKE '/home/%/.bun/bin/bun';
 ```
 
-The Node version is in the folder name for nvm, Volta and fnm. For `/usr/local/bin/node`, `symlink_target_path` usually points into one of those folders and gives the version for free.
+The Node version is in the folder name for nvm, Volta and fnm. fnm defaults to `~/.local/share/fnm` on macOS and Linux, falls back to `~/.fnm` for old installs, and still reads `~/Library/Application Support/fnm` on Macs that installed it before the switch ([fnm source](https://github.com/Schniz/fnm/blob/master/src/directories.rs)). A custom `FNM_DIR` or `XDG_DATA_HOME` is not covered. For `/usr/local/bin/node`, `symlink_target_path` usually points into one of those folders and gives the version for free.
 
 ### 5. Windows: Node.js, Bun and the .NET native DLL
 
@@ -161,25 +166,30 @@ WHERE path = 'C:\Program Files\nodejs\node.exe'
    OR path LIKE 'C:\Users\%\AppData\Roaming\nvm\%\node.exe';
 ```
 
-.NET has no vendor statement yet. Inventory it now so the day Microsoft ships a fix you already know where it goes.
+The native DLL is the right file. The managed `System.IO.Compression.Brotli` code is a thin wrapper that calls into `System.IO.Compression.Native`, which compiles in the Brotli C decoder ([dotnet/runtime interop](https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/Interop/Interop.Brotli.cs)). .NET has no vendor statement yet. Inventory it now so the day Microsoft ships a fix you already know where it goes.
 
 ### 6. All platforms: who is actually reachable
 
 ```sql
 WITH lp AS (
-  SELECT DISTINCT pid, port, address FROM listening_ports
+  SELECT pid, group_concat(DISTINCT port) AS ports, group_concat(DISTINCT address) AS addresses
+  FROM listening_ports
   WHERE address NOT IN ('127.0.0.1','127.0.1.1','::1','') AND port > 0
+  GROUP BY pid
+),
+hits AS (
+  SELECT lp.pid, p.name, p.path, lp.ports, lp.addresses,
+    (SELECT m.path FROM process_memory_map m WHERE m.pid = lp.pid AND m.path LIKE '%brotli%' LIMIT 1) AS brotli_lib
+  FROM lp JOIN processes p USING (pid)
 )
-SELECT DISTINCT p.pid, p.name, p.path, lp.port, lp.address,
-  (SELECT path FROM process_memory_map m WHERE m.pid = p.pid AND m.path LIKE '%brotli%' LIMIT 1) AS brotli_lib
-FROM lp JOIN processes p USING (pid)
-WHERE lower(p.name) IN ('node','node.exe','bun','bun.exe','envoy','envoy.exe','dotnet','dotnet.exe','nginx','java')
+SELECT pid, name, path, ports, addresses, brotli_lib FROM hits
+WHERE lower(name) IN ('node','node.exe','bun','bun.exe','envoy','envoy.exe','dotnet','dotnet.exe','nginx','java')
    OR brotli_lib IS NOT NULL;
 ```
 
-Two things make this cheap enough to run fleet-wide. `process_memory_map` is only read for pids that are listening, never for every process. And the brotli lookup is a `LIMIT 1` subquery, so it stops at the first hit. Statically linked decoders (Node, Bun) never show up as a library; that is what queries 1 to 5 are for.
+Three things make this cheap enough to run fleet-wide. `process_memory_map` is only read for pids that are listening, never for every process. Ports are grouped first, so a process on 40 ports is one row and its memory map is read once, not 40 times. And the brotli lookup is a `LIMIT 1` subquery, so it stops at the first hit. Statically linked decoders (Node, Bun) never show up as a library; that is what queries 1 to 5 are for.
 
-{{< figure src="images/fleet-live-query.webp" alt="Fleet live query results from 33 hosts, 85 rows: two vLLM worker python3.12 processes on host automater with brotli_lib set to pillow.libs/libbrotlicommon-53534446.so.1.2.0, plus java processes from wazuh-indexer and OpenJDK, and nginx on fleetdm-server, each with pid, listening port and address" caption="Query 6 on 33 hosts. The only brotli library found mapped into a listening process came from a Pillow wheel, not from any package named brotli." >}}
+{{< figure src="images/fleet-live-query.webp" alt="Fleet live query results from 33 hosts, 85 rows: two vLLM worker python3.12 processes on host automater with brotli_lib set to pillow.libs/libbrotlicommon-53534446.so.1.2.0, plus java processes from wazuh-indexer and OpenJDK, and nginx on fleetdm-server, each with pid, listening port and address" caption="An earlier one-row-per-port version of query 6 on 33 hosts. The only brotli library found mapped into a listening process came from a Pillow wheel, not from any package named brotli." >}}
 
 **What it found on 33 hosts.** The vLLM worker processes on one host had `pillow.libs/libbrotlicommon-53534446.so.1.2.0` mapped. The Pillow wheel vendors its own `libbrotli` 1.2.0. No package named `brotli` on that host, no `python_packages` row for it, no Fleet inventory hit. Only the memory map shows it. The Java rows (Wazuh indexer and other JVM services) are listed for review because Netty stacks can pull in `brotli4j` (fixed in 1.24.0). Nginx is listed because `ngx_brotli` links `libbrotlidec`; the empty `brotli_lib` column says this build does not.
 
