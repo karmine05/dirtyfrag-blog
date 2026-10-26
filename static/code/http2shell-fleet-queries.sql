@@ -35,8 +35,9 @@ k AS (
 )
 SELECT name, version, src,
   CASE WHEN name <> 'nodejs' THEN 'REVIEW-vs-advisory'
+       WHEN maj>26 THEN 'REVIEW'
        WHEN (maj=22 AND mnr*1000+pat>=23004) OR (maj=24 AND mnr*1000+pat>=22001)
-         OR (maj=26 AND mnr*1000+pat>=12001) OR maj>26 THEN 'FIXED'
+         OR (maj=26 AND mnr*1000+pat>=12001) THEN 'FIXED'
        ELSE 'VULNERABLE' END AS status
 FROM k;
 
@@ -65,8 +66,9 @@ SELECT name, version, location,
        WHEN name = 'bun' AND maj*1000000+mnr*1000+pat BETWEEN 1000021 AND 1004003 THEN 'VULNERABLE'
        WHEN name = 'bun' THEN 'FIXED'
        WHEN name = 'envoy' THEN 'REVIEW'
+       WHEN maj>26 THEN 'REVIEW'
        WHEN (maj=22 AND mnr*1000+pat>=23004) OR (maj=24 AND mnr*1000+pat>=22001)
-         OR (maj=26 AND mnr*1000+pat>=12001) OR maj>26 THEN 'FIXED'
+         OR (maj=26 AND mnr*1000+pat>=12001) THEN 'FIXED'
        ELSE 'VULNERABLE' END AS status
 FROM n;
 
@@ -92,8 +94,11 @@ WHERE path IN ('/usr/bin/node','/usr/local/bin/node','/opt/homebrew/bin/node','/
    OR path LIKE '/home/%/.nvm/versions/node/%/bin/node'
    OR path LIKE '/Users/%/.volta/tools/image/node/%/bin/node'
    OR path LIKE '/home/%/.volta/tools/image/node/%/bin/node'
-   OR path LIKE '/Users/%/Library/Application Support/fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/.local/share/fnm/node-versions/%/installation/bin/node'
    OR path LIKE '/home/%/.local/share/fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/.fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/home/%/.fnm/node-versions/%/installation/bin/node'
+   OR path LIKE '/Users/%/Library/Application Support/fnm/node-versions/%/installation/bin/node'
    OR path LIKE '/Users/%/.bun/bin/bun'
    OR path LIKE '/home/%/.bun/bin/bun';
 
@@ -117,13 +122,18 @@ WHERE path = 'C:\Program Files\nodejs\node.exe'
 --    that is what queries 1-5 are for.
 -- ---------------------------------------------------------------------------
 WITH lp AS (
-  SELECT DISTINCT pid, port, address FROM listening_ports
+  SELECT pid, group_concat(DISTINCT port) AS ports, group_concat(DISTINCT address) AS addresses
+  FROM listening_ports
   WHERE address NOT IN ('127.0.0.1','127.0.1.1','::1','') AND port > 0
+  GROUP BY pid
+),
+hits AS (
+  SELECT lp.pid, p.name, p.path, lp.ports, lp.addresses,
+    (SELECT m.path FROM process_memory_map m WHERE m.pid = lp.pid AND m.path LIKE '%brotli%' LIMIT 1) AS brotli_lib
+  FROM lp JOIN processes p USING (pid)
 )
-SELECT DISTINCT p.pid, p.name, p.path, lp.port, lp.address,
-  (SELECT path FROM process_memory_map m WHERE m.pid = p.pid AND m.path LIKE '%brotli%' LIMIT 1) AS brotli_lib
-FROM lp JOIN processes p USING (pid)
-WHERE lower(p.name) IN ('node','node.exe','bun','bun.exe','envoy','envoy.exe','dotnet','dotnet.exe','nginx','java')
+SELECT pid, name, path, ports, addresses, brotli_lib FROM hits
+WHERE lower(name) IN ('node','node.exe','bun','bun.exe','envoy','envoy.exe','dotnet','dotnet.exe','nginx','java')
    OR brotli_lib IS NOT NULL;
 
 -- ---------------------------------------------------------------------------
