@@ -25,7 +25,7 @@ Two ways in, both unauthenticated:
 - **Inbound.** A server decompresses a request body sent with `Content-Encoding: br`. Express 5 does this by default through `express.json()`.
 - **Outbound.** An app fetches a Brotli response from a server the attacker controls. Node.js `fetch()`, Python `requests`/`httpx`/`aiohttp` (when `Brotli` or `brotlicffi` is installed) decode it automatically.
 
-Imperva reported code execution on the stock Node.js 24.22.0 Linux arm64 image. Other researchers got crashes. Not in CISA KEV as of 26 October. Full write-up with the per-product table: [Tanium's post](https://www.tanium.com/blog/http2shell-find-and-fix-vulnerable-brotli-copies-with-tanium).
+Imperva reported code execution on the stock Node.js 24.22.0 Linux arm64 image. Other researchers got crashes. Not in CISA KEV as of 26 October.
 
 {{< figure src="images/vulndash-cve.png" alt="Vulnerability dashboard page for CVE-2026-111497 showing EPSS 32.78 percent, one affected host, two affected software entries, SSVC decision Attend with high exploitability, and MITRE ATT&CK mappings T1190 Exploit Public-Facing Application and T1499 Endpoint Denial of Service" caption="SSVC says Attend. EPSS 32.78% four days after publication is high for a bug with no confirmed in-the-wild exploitation." >}}
 
@@ -201,7 +201,6 @@ SELECT 1 FROM os_version WHERE NOT EXISTS (
 
 ## Sources
 
-- [Tanium: HTTP2Shell, find and fix vulnerable Brotli copies](https://www.tanium.com/blog/http2shell-find-and-fix-vulnerable-brotli-copies-with-tanium)
 - [NVD: CVE-2026-111497](https://nvd.nist.gov/vuln/detail/CVE-2026-111497)
 - [Node.js 24.22.1 security release](https://nodejs.org/en/blog/release/v24.22.1)
 - [google/brotli fix commit 0ed4268](https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b)

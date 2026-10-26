@@ -8,7 +8,7 @@
 -- and Bun split major.minor.patch with CAST (which takes the leading digits,
 -- so '22.1-1nodesource1' casts to 22) and compare a numeric key.
 --
--- Fixed versions (Tanium, nodejs.org, PyPI, GitHub releases, verified 2026-10-26):
+-- Fixed versions (nodejs.org, PyPI, GitHub releases, verified 2026-10-26):
 --   brotli      1.0.10, 1.1.1, 1.2.1
 --   Node.js     22.23.4, 24.22.1, 26.12.1 (20.x, 23.x, 25.x are EOL, no fix)
 --   Bun         1.4.4 (vulnerable 1.0.21-1.4.3)
