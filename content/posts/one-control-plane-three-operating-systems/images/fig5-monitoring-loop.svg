@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="100%" style="max-width: 800px; height: auto; color: #e2e8f0;" role="img" aria-label="Monitoring loop: labels re-evaluate, each host's profile set is computed, pushed and applied, the device reports per-key status at check-in, and the console shows verified pending or failed per profile per host">
+  <style>
+    .n1 { fill: #a78bfa; fill-opacity: 0.10; stroke: #a78bfa; stroke-width: 1.5; }
+    .n2 { fill: #60a5fa; fill-opacity: 0.10; stroke: #60a5fa; stroke-width: 1.5; }
+    .n3 { fill: #e94560; fill-opacity: 0.10; stroke: #e94560; stroke-width: 1.5; }
+    .n4 { fill: #fb923c; fill-opacity: 0.10; stroke: #fb923c; stroke-width: 1.5; }
+    .n5 { fill: #34d399; fill-opacity: 0.10; stroke: #34d399; stroke-width: 1.8; }
+    .line{ stroke: currentColor; stroke-opacity: 0.5; stroke-width: 1.4; fill: none; }
+    .title{ font: 600 16px ui-sans-serif, system-ui, sans-serif; fill: currentColor; }
+    .sub  { font: 12px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.6; }
+    .chip { font: 11px ui-sans-serif, system-ui, sans-serif; fill: currentColor; fill-opacity: 0.85; }
+    .mono { font: 10.5px ui-monospace, SFMono-Regular, Menlo, monospace; fill: currentColor; fill-opacity: 0.8; }
+    .acc-v{ fill: #a78bfa; } .acc-b{ fill: #60a5fa; } .acc-p{ fill: #e94560; } .acc-o{ fill: #fb923c; } .acc-g{ fill: #34d399; }
+  </style>
+
+  <text x="20" y="22" class="title">Every profile carries a receipt</text>
+  <text x="20" y="40" class="sub">the MDM check-in is not fire-and-forget: the device reports per-key status, so each profile has a verified state per host</text>
+
+  <!-- node 1 -->
+  <rect x="40" y="66" width="180" height="62" rx="8" class="n1"/>
+  <circle cx="58" cy="86" r="4" class="acc-v"/>
+  <text x="70" y="90" class="chip" font-weight="600">1 · labels re-evaluate</text>
+  <text x="56" y="110" class="mono">attrs change → membership changes</text>
+
+  <!-- node 2 -->
+  <rect x="310" y="66" width="180" height="62" rx="8" class="n2"/>
+  <circle cx="328" cy="86" r="4" class="acc-b"/>
+  <text x="340" y="90" class="chip" font-weight="600">2 · profile set per host</text>
+  <text x="326" y="110" class="mono">AND of label requirements</text>
+
+  <!-- node 3 -->
+  <rect x="580" y="66" width="180" height="62" rx="8" class="n3"/>
+  <circle cx="598" cy="86" r="4" class="acc-p"/>
+  <text x="610" y="90" class="chip" font-weight="600">3 · push + check-in</text>
+  <text x="596" y="110" class="mono">WSTEP · Apple MDM · cycles</text>
+
+  <!-- node 4 -->
+  <rect x="580" y="210" width="180" height="62" rx="8" class="n4"/>
+  <circle cx="598" cy="230" r="4" class="acc-o"/>
+  <text x="610" y="234" class="chip" font-weight="600">4 · device applies</text>
+  <text x="596" y="254" class="mono">per-LocURI status reported back</text>
+
+  <!-- node 5 -->
+  <rect x="310" y="210" width="180" height="62" rx="8" class="n5"/>
+  <circle cx="328" cy="230" r="4" class="acc-g"/>
+  <text x="340" y="234" class="chip" font-weight="600">5 · one status view</text>
+  <text x="326" y="254" class="mono">verified · pending · failed</text>
+
+  <!-- arrows -->
+  <path d="M220 97 H 310" class="line"/>
+  <path d="M490 97 H 580" class="line"/>
+  <path d="M670 128 V 210" class="line"/>
+  <path d="M580 241 H 490" class="line"/>
+  <path d="M310 241 H 220" class="line"/>
+  <path d="M130 210 V 128" class="line"/>
+
+  <!-- center receipt chip -->
+  <rect x="290" y="146" width="220" height="48" rx="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.8"/>
+  <text x="306" y="166" class="mono" fill="#34d399">204/204 · 205/205 · 231/231</text>
+  <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">verified on the Windows MDM fleet</text>
+</svg>

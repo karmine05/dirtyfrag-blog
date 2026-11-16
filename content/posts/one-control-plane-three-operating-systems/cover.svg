@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Cover: one control plane, three operating systems. 34 hosts, 763 CIS policies, 335 MDM profiles under a single Fleet server.">
+  <rect width="1200" height="675" fill="#0d1117"/>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+    <!-- hairlines -->
+    <line x1="0" y1="115" x2="1200" y2="115" stroke="#21262d" stroke-width="1"/>
+    <line x1="0" y1="587" x2="1200" y2="587" stroke="#21262d" stroke-width="1"/>
+    <line x1="800" y1="115" x2="800" y2="587" stroke="#21262d" stroke-width="1"/>
+
+    <!-- kicker -->
+    <text x="72" y="163" font-size="18" letter-spacing="4" fill="#8b949e" font-weight="600">MIXED-OS FLEET · ONE CONTROL PLANE</text>
+
+    <!-- headline -->
+    <text x="72" y="232" font-size="54" font-weight="800" fill="#f0f6fc">Three operating systems,</text>
+    <text x="72" y="294" font-size="54" font-weight="800" fill="#a78bfa">one console.</text>
+
+    <!-- dek -->
+    <text x="72" y="340" font-size="19" fill="#8b949e">Windows, macOS and DMZ Linux under a single Fleet server.</text>
+    <text x="72" y="366" font-size="19" fill="#8b949e">Labels decide scope, profiles do the setting, every control reports back.</text>
+
+    <!-- stats row -->
+    <g>
+      <text x="72" y="508" font-size="36" font-weight="800" fill="#f0f6fc">34</text>
+      <text x="72" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">hosts on one server</text>
+      <text x="264" y="508" font-size="36" font-weight="800" fill="#f0f6fc">763</text>
+      <text x="264" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">CIS policies</text>
+      <text x="456" y="508" font-size="36" font-weight="800" fill="#f0f6fc">335</text>
+      <text x="456" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">MDM profiles</text>
+      <text x="648" y="508" font-size="36" font-weight="800" fill="#34d399">100%</text>
+      <text x="648" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">Win MDM verified</text>
+    </g>
+
+    <!-- right panel cards -->
+    <g>
+      <!-- WIN -->
+      <rect x="828" y="136" width="312" height="96" rx="12" fill="#161b22" stroke="#7c5cd6" stroke-width="1"/>
+      <text x="848" y="176" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#a78bfa">WIN</text>
+      <text x="1120" y="176" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">423 CSP profiles</text>
+      <text x="1120" y="199" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">457 policies · 98 scripts</text>
+      <!-- MAC -->
+      <rect x="828" y="246" width="312" height="96" rx="12" fill="#161b22" stroke="#3b6fd4" stroke-width="1"/>
+      <text x="848" y="286" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#60a5fa">MAC</text>
+      <text x="1120" y="286" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">119 CIS policies</text>
+      <text x="1120" y="309" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">15 profiles · 40 scripts</text>
+      <!-- LNX -->
+      <rect x="828" y="356" width="312" height="96" rx="12" fill="#161b22" stroke="#c2620f" stroke-width="1"/>
+      <text x="848" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#fb923c">LNX</text>
+      <text x="1120" y="396" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">187 STIG policies</text>
+      <text x="1120" y="419" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">158 scripts · no MDM</text>
+      <!-- SCOPE -->
+      <rect x="828" y="466" width="312" height="96" rx="12" fill="#161b22" stroke="#c2417f" stroke-width="1"/>
+      <text x="848" y="506" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#e94560">SCOPE</text>
+      <text x="1120" y="506" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">50 labels</text>
+      <text x="1120" y="529" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">live-evaluated SQL</text>
+      <line x1="828" y1="574" x2="1140" y2="574" stroke="#a78bfa" stroke-width="2"/>
+    </g>
+
+    <!-- footer -->
+    <text x="72" y="640" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8b949e">labels decide scope · profiles set · policies verify</text>
+    <text x="1128" y="640" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8b949e">karmines notes · 2026-11-16</text>
+  </g>
+</svg>
