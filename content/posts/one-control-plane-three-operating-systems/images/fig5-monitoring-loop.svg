@@ -14,13 +14,13 @@
   </style>
 
   <text x="20" y="22" class="title">Every profile carries a receipt</text>
-  <text x="20" y="40" class="sub">the MDM check-in is not fire-and-forget: the device reports per-key status, so each profile has a verified state per host</text>
+  <text x="20" y="40" class="sub">the check-in is not fire-and-forget: the device reports per-key status, so each profile has a verified state per host</text>
 
   <!-- node 1 -->
   <rect x="40" y="66" width="180" height="62" rx="8" class="n1"/>
   <circle cx="58" cy="86" r="4" class="acc-v"/>
   <text x="70" y="90" class="chip" font-weight="600">1 · labels re-evaluate</text>
-  <text x="56" y="110" class="mono">attrs change → membership changes</text>
+  <text x="56" y="110" class="mono">host attrs → membership</text>
 
   <!-- node 2 -->
   <rect x="310" y="66" width="180" height="62" rx="8" class="n2"/>
@@ -32,19 +32,19 @@
   <rect x="580" y="66" width="180" height="62" rx="8" class="n3"/>
   <circle cx="598" cy="86" r="4" class="acc-p"/>
   <text x="610" y="90" class="chip" font-weight="600">3 · push + check-in</text>
-  <text x="596" y="110" class="mono">WSTEP · Apple MDM · cycles</text>
+  <text x="596" y="110" class="mono">WSTEP · Apple MDM · 30s</text>
 
   <!-- node 4 -->
   <rect x="580" y="210" width="180" height="62" rx="8" class="n4"/>
   <circle cx="598" cy="230" r="4" class="acc-o"/>
   <text x="610" y="234" class="chip" font-weight="600">4 · device applies</text>
-  <text x="596" y="254" class="mono">per-LocURI status reported back</text>
+  <text x="596" y="254" class="mono">per-LocURI status back</text>
 
   <!-- node 5 -->
   <rect x="310" y="210" width="180" height="62" rx="8" class="n5"/>
   <circle cx="328" cy="230" r="4" class="acc-g"/>
   <text x="340" y="234" class="chip" font-weight="600">5 · one status view</text>
-  <text x="326" y="254" class="mono">verified · pending · failed</text>
+  <text x="326" y="254" class="mono">verified·pending·failed</text>
 
   <!-- arrows -->
   <path d="M220 97 H 310" class="line"/>
@@ -57,5 +57,5 @@
   <!-- center receipt chip -->
   <rect x="290" y="146" width="220" height="48" rx="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.8"/>
   <text x="306" y="166" class="mono" fill="#34d399">204/204 · 205/205 · 231/231</text>
-  <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">verified on the Windows MDM fleet</text>
+  <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">verified, Windows MDM fleet</text>
 </svg>

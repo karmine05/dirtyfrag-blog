@@ -16,14 +16,14 @@
   </style>
 
   <text x="20" y="22" class="title">One policy, the right kind of fix</text>
-  <text x="20" y="40" class="sub">every control is a SQL check first; the remediation is chosen by what the OS actually supports</text>
+  <text x="20" y="40" class="sub">every control is a SQL check first; the fix follows what the OS supports</text>
 
   <!-- policy -->
   <rect x="250" y="58" width="300" height="64" rx="8" class="pol"/>
   <circle cx="270" cy="78" r="4" class="acc-v"/>
   <text x="282" y="82" class="chip" font-weight="600">POLICY · always-on SQL check</text>
   <text x="266" y="102" class="mono">one setting per policy · pass / fail per host</text>
-  <text x="266" y="116" class="mono">763 CIS policies in the repo · 919 live in the server</text>
+  <text x="266" y="116" class="mono">763 CIS in the repo · 919 live in the server</text>
 
   <path d="M400 122 V 146" class="line"/>
   <!-- decision -->
@@ -42,31 +42,31 @@
   <!-- ladder step 1 -->
   <rect x="30" y="238" width="370" height="64" rx="8" class="l1"/>
   <circle cx="48" cy="258" r="4" class="acc-b"/>
-  <text x="60" y="262" class="chip" font-weight="600">1 · CSP configuration profile — MDM writes the setting</text>
-  <text x="46" y="282" class="mono">Windows CSP XML · macOS .mobileconfig · declarations</text>
-  <text x="46" y="296" class="mono">320 Windows profiles · 15 macOS profiles · scoped by the same labels</text>
+  <text x="60" y="262" class="chip" font-weight="600">1 · CSP profile: MDM writes the setting</text>
+  <text x="46" y="282" class="mono">Windows CSP XML · macOS .mobileconfig</text>
+  <text x="46" y="296" class="mono">320 Windows + 15 macOS profiles, same labels</text>
 
   <path d="M215 302 V 322" class="line"/>
-  <text x="223" y="318" class="lab">no CSP key for this OS build?</text>
+  <text x="225" y="318" class="lab">no CSP key on this build?</text>
 
   <!-- ladder step 2 -->
   <rect x="30" y="326" width="370" height="64" rx="8" class="l2"/>
   <circle cx="48" cy="346" r="4" class="acc-o"/>
-  <text x="60" y="350" class="chip" font-weight="600">2 · script — check mode by default, apply on demand</text>
-  <text x="46" y="370" class="mono">DEFAULT_MODE=--check → exit 0 = compliant · flip one line to fix</text>
+  <text x="60" y="350" class="chip" font-weight="600">2 · script: check by default, apply on demand</text>
+  <text x="46" y="370" class="mono">DEFAULT_MODE=--check → exit 0 = compliant</text>
   <text x="46" y="384" class="mono">98 Windows · 40 macOS · 158 Ubuntu scripts</text>
 
   <!-- per-OS branch column -->
   <rect x="440" y="238" width="340" height="152" rx="8" class="branch"/>
   <text x="456" y="260" class="chip" font-weight="600">THE LADDER, PER OS</text>
-  <text x="456" y="282" class="mono">Windows  — profile-first (MDM), script where no CSP exists</text>
-  <text x="456" y="300" class="mono">macOS    — MDM profiles + scripts, declarations where richer</text>
-  <text x="456" y="318" class="mono">Ubuntu   — no MDM on Linux: policies + check/apply scripts</text>
-  <text x="456" y="336" class="mono">Server   — MDM unavailable by design: scripts + GPO path</text>
-  <text x="456" y="354" class="mono">           the ladder is a property of the OS, encoded once</text>
-  <text x="456" y="372" class="mono">           in the repo, not re-decided per incident</text>
+  <text x="456" y="282" class="mono">Windows · profile-first, script where no CSP</text>
+  <text x="456" y="300" class="mono">macOS · MDM profiles + scripts</text>
+  <text x="456" y="318" class="mono">Ubuntu · no MDM: policies + scripts</text>
+  <text x="456" y="336" class="mono">Server · no MDM by design: scripts + GPO</text>
+  <text x="456" y="354" class="mono">    the ladder is a property of the OS,</text>
+  <text x="456" y="372" class="mono">    encoded once in the repo</text>
 
   <!-- catalog strip -->
   <rect x="30" y="404" width="750" height="28" rx="6" class="cat"/>
-  <text x="46" y="422" class="mono">catalog.csv — one row per policy: csp_uri · profile_file · script_file · scope_label · scope_reason · risk</text>
+  <text x="46" y="422" class="mono">catalog.csv: one row per policy · csp_uri · profile_file · script_file · scope_label · scope_reason</text>
 </svg>

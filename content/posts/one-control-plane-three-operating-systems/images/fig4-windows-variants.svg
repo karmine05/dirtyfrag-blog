@@ -16,12 +16,12 @@
   </style>
 
   <text x="20" y="22" class="title">Windows: one control family, four audiences</text>
-  <text x="20" y="40" class="sub">the CSP surface differs by build and by join state, so one control ships as variants, each gated by labels</text>
+  <text x="20" y="40" class="sub">the CSP surface differs by build and join state, so one control ships as label-gated variants</text>
 
   <!-- source -->
   <rect x="240" y="58" width="320" height="56" rx="8" class="src"/>
   <text x="256" y="80" class="chip" font-weight="600">ONE CIS CONTROL FAMILY</text>
-  <text x="256" y="98" class="mono">firewall · user rights · print spooler · LAPS …</text>
+  <text x="256" y="98" class="mono">firewall · user rights · spooler · LAPS</text>
 
   <path d="M280 114 V 140 M360 114 V 140 M440 114 V 140 M520 114 V 140" class="line"/>
 
@@ -30,7 +30,7 @@
   <circle cx="34" cy="166" r="4" class="acc-v"/>
   <text x="46" y="170" class="chip" font-weight="600">WIN 11 workstations</text>
   <rect x="30" y="182" width="154" height="24" rx="12" fill="none" stroke="#a78bfa" stroke-opacity="0.6" stroke-width="1"/>
-  <text x="44" y="198" class="lab">label: build &gt;= 22000</text>
+  <text x="42" y="198" class="lab">build &gt;= 22000</text>
   <text x="30" y="228" class="chip">full profile,</text>
   <text x="30" y="244" class="chip">every CSP key included</text>
   <text x="30" y="266" class="mono">e.g. firewall profiles:</text>
@@ -45,7 +45,7 @@
   <circle cx="226" cy="166" r="4" class="acc-b"/>
   <text x="238" y="170" class="chip" font-weight="600">WIN 10 workstations</text>
   <rect x="222" y="182" width="154" height="24" rx="12" fill="none" stroke="#60a5fa" stroke-opacity="0.6" stroke-width="1"/>
-  <text x="236" y="198" class="lab">label: build &lt; 22000</text>
+  <text x="234" y="198" class="lab">build &lt; 22000</text>
   <text x="222" y="228" class="chip">variant profile:</text>
   <text x="222" y="244" class="chip">keys this build lacks, out</text>
   <text x="222" y="266" class="mono">same control, 5 of 14 keys</text>
@@ -60,7 +60,7 @@
   <circle cx="418" cy="166" r="4" class="acc-o"/>
   <text x="430" y="170" class="chip" font-weight="600">WINDOWS SERVER</text>
   <rect x="414" y="182" width="154" height="24" rx="12" fill="none" stroke="#fb923c" stroke-opacity="0.6" stroke-width="1"/>
-  <text x="428" y="198" class="lab">label: name LIKE '%Server%'</text>
+  <text x="426" y="198" class="lab">name = '%Server%'</text>
   <text x="414" y="228" class="chip">MDM enrollment</text>
   <text x="414" y="244" class="chip">unavailable by design</text>
   <text x="414" y="266" class="mono">policy checks run as</text>
@@ -75,18 +75,18 @@
   <circle cx="610" cy="166" r="4" class="acc-p"/>
   <text x="622" y="170" class="chip" font-weight="600">LAPS CONTROL</text>
   <rect x="606" y="182" width="164" height="24" rx="12" fill="none" stroke="#e94560" stroke-opacity="0.6" stroke-width="1"/>
-  <text x="620" y="198" class="lab">label: domain-joined</text>
+  <text x="618" y="198" class="lab">label: domain-joined</text>
   <text x="606" y="228" class="chip">rotated admin password</text>
   <text x="606" y="244" class="chip">backs up to a directory</text>
   <text x="606" y="266" class="mono">AD or Entra required,</text>
   <text x="606" y="281" class="mono">enforced by the CSP</text>
   <text x="606" y="296" class="mono">workgroup hosts simply</text>
-  <text x="606" y="311" class="mono">do not receive the profile</text>
+  <text x="606" y="311" class="mono">do not receive it</text>
   <rect x="606" y="330" width="164" height="40" rx="6" class="g"/>
-  <text x="618" y="347" class="mono" fill="#34d399">applies where it can work</text>
-  <text x="618" y="362" class="mono" fill="#34d399" fill-opacity="0.8">nothing to clean up after</text>
+  <text x="618" y="347" class="mono" fill="#34d399">works where it can</text>
+  <text x="618" y="362" class="mono" fill="#34d399" fill-opacity="0.8">no cleanup after</text>
 
   <!-- bottom strip -->
   <rect x="16" y="404" width="768" height="30" rx="6" class="src"/>
-  <text x="32" y="423" class="mono">423 profiles in the team · each host's set computed from its labels · 191 of them are per-build variants</text>
+  <text x="32" y="423" class="mono">423 profiles in the team · each host's set computed from its labels · 191 are per-build variants</text>
 </svg>
