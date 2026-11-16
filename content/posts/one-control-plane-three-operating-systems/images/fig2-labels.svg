@@ -65,6 +65,6 @@
   <rect x="20" y="350" width="760" height="90" rx="8" class="scope"/>
   <text x="40" y="374" class="chip" font-weight="600">SCOPE = AND OF LABEL REQUIREMENTS: each profile and policy carries its label set</text>
   <text x="40" y="396" class="mono">Win11 host  →  full benchmark, 231 profiles verified     Win10 host  →  variant set, 205 verified</text>
-  <text x="40" y="414" class="mono">macOS host  →  MDM profiles + 119 CIS macOS policies       Ubuntu DMZ  →  187 STIG policies + scripts, no MDM</text>
+  <text x="40" y="414" class="mono">macOS host  →  MDM profiles + 119 CIS macOS policies       Ubuntu DMZ  →  187 STIG policies + scripts</text>
   <text x="40" y="430" class="sub">a new host is enrolled and auto-scoped on its first check-in; a build or join-state change re-scopes it. nothing is tuned per host.</text>
 </svg>

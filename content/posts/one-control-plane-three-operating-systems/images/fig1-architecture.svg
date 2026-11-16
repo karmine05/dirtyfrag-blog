@@ -42,7 +42,7 @@
   <text x="38" y="322" class="chip">docker swarm · 3 managers + 7 workers</text>
   <text x="38" y="340" class="chip">Wazuh indexers ×8 · masters + data</text>
   <text x="38" y="358" class="chip">AdGuard · LB · Fleet server itself</text>
-  <text x="38" y="378" class="mono">no MDM on Linux: osquery + scripts</text>
+  <text x="38" y="378" class="mono">no MDM channel here: osquery + scripts</text>
 
   <!-- channels -->
   <path d="M310 110 H 372" class="line"/>

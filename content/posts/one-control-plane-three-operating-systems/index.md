@@ -58,11 +58,11 @@ Most device management write-ups start from a homogeneous estate: one OS, one jo
 | Windows 10 / 11 workstations      | 4     | 3 domain-joined (dexterlabs.local), 1 workgroup | enrolled via mdm_bridge      |
 | Windows Server 2022               | 3     | domain controllers                            | none, by design              |
 | macOS 27.2                        | 2     | 1 MDM-enrolled, 1 agent-only                  | Apple MDM                    |
-| Ubuntu 24.04 / 26.04, DMZ segment | 25    | no AD involvement                             | none (there is no MDM on Linux) |
+| Ubuntu 24.04 / 26.04, DMZ segment | 25    | no AD involvement                             | no MDM channel (server fleet)    |
 
 The Linux side is a real production DMZ: three docker-swarm managers and seven workers on 26.04, eight Wazuh indexer nodes on 24.04, AdGuard Home, the load balancer, and the Fleet server itself, which manages its own box like everyone else.
 
-Four audiences, four different capabilities: Windows that can do MDM and Windows that cannot, a Mac that is enrolled and one that is not, and a Linux segment no MDM product on the market will touch. The management model has to absorb that spread without a second console, and that is the spec this post addresses.
+Four audiences, four different capabilities: Windows that can do MDM and Windows that cannot, a Mac that is enrolled and one that is not, and a Linux segment made entirely of DMZ servers. Fleet ships an MDM channel for Linux desktops, and it earns its own post. This one is about what the server segment gets instead: full visibility and control, on the same plane. The management model has to absorb that spread without a second console, and that is the spec this post addresses.
 
 ## Scope is a label, and a label is a query
 
@@ -149,13 +149,15 @@ The MacBook Pro is MDM-enrolled in Fleet. The root CA profile and the fleetd con
 
 The scope label is one line: `SELECT 1 FROM mdm WHERE enrolled = 'true'`. 119 CIS macOS 26 policies run against both machines; 15 profiles and 40 scripts are the fix path; and the MDM-enrolled label is the only thing separating what the MDM channel delivers from what the agent channel delivers. Enrollment changes, and the set changes with it.
 
-## The DMZ Linux: no MDM, no problem
+## The DMZ Linux: full visibility, no MDM channel
 
-Twenty-five Ubuntu boxes, and no MDM for Linux by design. The management surface for this segment is the same three-piece kit, minus the profile channel:
+Twenty-five Ubuntu boxes, and every one of them is a server. Fleet ships an MDM channel for Linux desktops: first-class support across the major distros, with remote lock and wipe, LUKS2 disk-encryption enforcement, script execution, and a self-service page. That is a follow-up post, because the machines in this DMZ are not desktops. For them the MDM channel stays off, and the management surface is the same three-piece kit minus the profile channel:
 
 - **Policies.** The same SQL checks, the same pass/fail model: 187 of them from the Ubuntu 24.04 STIG baseline, running against the swarm nodes, the indexers, and the network gear.
 - **Scripts.** The same check/apply contract, 158 of them: patching, service hardening, CVE remediations, each one attachable to the policy it fixes.
 - **Live queries and scheduled packs.** For the state a one-shot check cannot own.
+
+No MDM channel does not mean no control. Every box reports the same osquery surface the rest of the estate sees: software, processes, services, disk and network state, and the STIG pass/fail on each one. A box that drifts shows up in the same list as a drifted Mac or Windows host, and the fix is a script that runs at scale, on demand or attached to the failing policy.
 
 The point is that the DMZ boxes do not get a second management model. They join the same label space, the same policy view, and the same status page. *Which STIG controls are failing anywhere in the estate* is one list, not three, and it updates itself.
 

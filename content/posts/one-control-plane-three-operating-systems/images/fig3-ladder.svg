@@ -61,7 +61,7 @@
   <text x="456" y="260" class="chip" font-weight="600">THE LADDER, PER OS</text>
   <text x="456" y="282" class="mono">Windows · profile-first, script where no CSP</text>
   <text x="456" y="300" class="mono">macOS · MDM profiles + scripts</text>
-  <text x="456" y="318" class="mono">Ubuntu · no MDM: policies + scripts</text>
+  <text x="456" y="318" class="mono">Ubuntu · policies + scripts, MDM channel off</text>
   <text x="456" y="336" class="mono">Server · no MDM by design: scripts + GPO</text>
   <text x="456" y="354" class="mono">    the ladder is a property of the OS,</text>
   <text x="456" y="372" class="mono">    encoded once in the repo</text>
