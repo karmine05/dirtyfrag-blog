@@ -1,41 +1,23 @@
 ---
-canonical: "https://karmine05.github.io/dirtyfrag-blog/posts/vibe-hunting-clickfix-fleet-mcp-atc/"
-meta-article:modified_time: "2026-09-14T09:00:00-04:00"
-meta-article:published_time: "2026-09-14T09:00:00-04:00"
-meta-article:section: posts
-meta-article:tag: Security-Ops
-meta-author: Dhruv Majumdar
-meta-description: "Auto table construction turns every SQLite artifact on the endpoint into a queryable table. fleet-mcp turns Fleet into a tool catalog an agent can drive. Put them together and ClickFix triage stops being a console-hopping exercise and becomes an autonomous hunt: state the intent in English, the agent composes the SQL, fuses browser, filesystem and kernel evidence into one OCSF timeline, reaches a verdict, and acts on it."
-meta-keywords: fleet,fleet-mcp,atc,osquery,clickfix,autonomous-hunting,vibe-hunting,detection-engineering,security-ops,threat-hunting,ocsf,incident-response,macos
-meta-og:description: "Auto table construction turns every SQLite artifact on the endpoint into a queryable table. fleet-mcp turns Fleet into a tool catalog an agent can drive. Put them together and ClickFix triage becomes an autonomous hunt: state the intent in English, the agent composes the SQL, fuses the evidence into one OCSF timeline, reaches a verdict, and acts."
-meta-og:locale: en
-meta-og:site_name: "karmine's notes"
-meta-og:title: "Vibe Hunting: autonomous ClickFix hunting with fleet-mcp and ATC"
-meta-og:type: article
-meta-og:url: "https://karmine05.github.io/dirtyfrag-blog/posts/vibe-hunting-clickfix-fleet-mcp-atc/"
-meta-title: "Vibe Hunting: autonomous ClickFix hunting with fleet-mcp and ATC · karmine's notes"
-meta-twitter:card: summary
-meta-twitter:description: "State the hunt in English. The agent composes the ATC SQL, fuses browser, filesystem and kernel evidence into one OCSF timeline, reaches a verdict, and acts on it."
-meta-twitter:title: "Vibe Hunting: autonomous ClickFix hunting with fleet-mcp and ATC"
-title: "Vibe Hunting: autonomous ClickFix hunting with fleet-mcp and ATC"
+title: 'Vibe Hunting: autonomous ClickFix hunting with fleet-mcp and ATC'
+date: '2026-09-14T09:00:00-04:00'
 slug: vibe-hunting-clickfix-fleet-mcp-atc
-date: "2026-09-14T09:00:00-04:00"
-categories:
-  - Security-Ops
+description: 'Auto table construction turns every SQLite artifact on the endpoint into a queryable table. fleet-mcp turns Fleet into a tool catalog an agent can drive. Put them together and ClickFix triage stops being a console-hopping exercise and becomes an autonomous hunt: state the intent in English, the agent composes the SQL, fuses browser, filesystem and kernel evidence into one OCSF timeline, reaches a verdict, and acts on it.'
 tags:
-  - Fleet
-  - Fleet-MCP
-  - ATC
-  - Osquery
-  - ClickFix
-  - Autonomous-Hunting
-  - Detection-Engineering
-  - Security-Ops
-  - Threat-Hunting
-  - OCSF
-  - Incident-Response
-  - macOS
-showTableOfContents: true
+- fleet
+- fleet-mcp
+- atc
+- osquery
+- clickfix
+- autonomous-hunting
+- detection-engineering
+- security-ops
+- threat-hunting
+- ocsf
+- incident-response
+- macos
+categories:
+- security-ops
 ---
 
 {{< figure src="fig0-lure-teams.png" alt="Fake Microsoft Teams dialog reading Audio Driver Conflict Detected with a Run Audio Fix Script button" caption="The lure: a fake Microsoft Teams *Audio Driver Conflict*, served from the campaign host, with one button that copies a command to the clipboard. Everything below is an agent reconstructing what happened after someone clicked it—without a human opening a single console." >}}

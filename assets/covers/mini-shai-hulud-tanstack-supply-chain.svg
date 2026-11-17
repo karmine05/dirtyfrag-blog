@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Mini Shai-Hulud. Detecting a live npm worm with Fleet.">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#111c33"/></linearGradient>
+<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#a3e635" stop-opacity=".34"/><stop offset="1" stop-color="#a3e635" stop-opacity="0"/></radialGradient>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#94a3b8" stroke-opacity=".08"/></pattern>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<rect width="1200" height="630" fill="url(#grid)"/>
+<circle cx="930" cy="315" r="320" fill="url(#glow)"/>
+<rect x="0" y="0" width="10" height="630" fill="#a3e635"/>
+<g font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace">
+<rect x="70" y="70" width="300.40000000000003" height="40" rx="8" fill="#a3e635" fill-opacity=".14" stroke="#a3e635" stroke-opacity=".6"/>
+<text x="87" y="97" font-size="20" font-weight="700" letter-spacing="2" fill="#a3e635">SUPPLY CHAIN · NPM</text>
+</g>
+<g font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
+<text x="70" y="250" font-size="60" font-weight="800" fill="#f8fafc" letter-spacing="-1"><tspan x="70" dy="0">Mini Shai-Hulud</tspan></text>
+<text x="70" y="320" font-size="28" fill="#cbd5e1"><tspan x="70" dy="0">Detecting a live npm worm with Fleet</tspan></text>
+</g>
+<g font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace" font-size="20" fill="#94a3b8">
+<text x="70" y="574">karmine's notes</text>
+<text x="70" y="574" dx="190" fill="#a3e635">/</text><text x="70" y="574" dx="210">fleet · osquery · detection engineering</text>
+</g>
+<g transform="translate(930 315)" fill="none"><path d="M0 -105l90 45v110l-90 45-90-45v-110z" stroke="#a3e635" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M-90 -60l90 45 90-45M0 -15v105" stroke="#a3e635" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/><path d="M-45 -82l90 45" stroke="#a3e635" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/><circle cx="62" cy="62" r="24" fill="#0b1220" stroke="#a3e635" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M52 62h20M62 52v20" stroke="#a3e635" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" transform="rotate(45 62 62)"/></g>
+</svg>

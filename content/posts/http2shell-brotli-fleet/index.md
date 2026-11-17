@@ -1,20 +1,28 @@
 ---
-title: "HTTP2Shell (CVE-2026-111497): Hunt Vulnerable Brotli Copies with Fleet"
-date: 2026-10-26T14:00:00-04:00
+title: 'HTTP2Shell (CVE-2026-111497): Hunt Vulnerable Brotli Copies with Fleet'
+date: '2026-10-26T14:00:00-04:00'
+description: 'Short brief on CVE-2026-111497, the Brotli decoder overflow behind HTTP2Shell, and six Fleet queries that find every vulnerable copy: distro packages, Homebrew, Node .pkg receipts, nvm/Volta/fnm binaries, Python wheels, Windows installs, and the processes actually listening on the network.'
+summary: 'CVE-2026-111497 is a buffer overflow in Google''s Brotli decoder (1.0.3 to 1.2.0) that is compiled into Node.js, Bun, Envoy, Python Brotli wheels, .NET and the browsers. A crafted Content-Encoding: br body reaches it with no login. The upstream fix is tiny; finding every bundled copy is the work. This post ships six Fleet queries with version logic that does not trust SQLite string comparison, a policy pattern, and what the queries found on a real fleet (hint: Pillow bundles libbrotli 1.2.0).'
+tags:
+- fleet
+- osquery
+- brotli
+- nodejs
+- bun
+- envoy
+- python
+- macos
+- windows
+- linux
+- detection-engineering
+- cve-2026-111497
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "brotli", "nodejs", "bun", "envoy", "python", "macos", "windows", "linux", "detection-engineering", "cve-2026-111497"]
-categories: ["security-ops"]
-description: "Short brief on CVE-2026-111497, the Brotli decoder overflow behind HTTP2Shell, and six Fleet queries that find every vulnerable copy: distro packages, Homebrew, Node .pkg receipts, nvm/Volta/fnm binaries, Python wheels, Windows installs, and the processes actually listening on the network."
-summary: "CVE-2026-111497 is a buffer overflow in Google's Brotli decoder (1.0.3 to 1.2.0) that is compiled into Node.js, Bun, Envoy, Python Brotli wheels, .NET and the browsers. A crafted Content-Encoding: br body reaches it with no login. The upstream fix is tiny; finding every bundled copy is the work. This post ships six Fleet queries with version logic that does not trust SQLite string comparison, a policy pattern, and what the queries found on a real fleet (hint: Pillow bundles libbrotli 1.2.0)."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
-{{< alert "circle-info" >}}
-**TL;DR.** CVE-2026-111497 (CVSS 4.0 score 9.2) is a Brotli decoder overflow, not an HTTP/2 bug. Anything that decodes `Content-Encoding: br` with Brotli 1.0.3 to 1.2.0 is exposed: Node.js, Bun, Envoy, Python `Brotli`/`brotlicffi`, .NET, Electron. Check Fleet's Software page first, then run the [six queries](#detect-six-fleet-queries). Download all of them as one file: [http2shell-fleet-queries.sql](/dirtyfrag-blog/code/http2shell-fleet-queries.sql).
-{{< /alert >}}
+> [!NOTE]
+> **TL;DR.** CVE-2026-111497 (CVSS 4.0 score 9.2) is a Brotli decoder overflow, not an HTTP/2 bug. Anything that decodes `Content-Encoding: br` with Brotli 1.0.3 to 1.2.0 is exposed: Node.js, Bun, Envoy, Python `Brotli`/`brotlicffi`, .NET, Electron. Check Fleet's Software page first, then run the [six queries](#detect-six-fleet-queries). Download all of them as one file: [http2shell-fleet-queries.sql](/dirtyfrag-blog/code/http2shell-fleet-queries.sql).
 
 ## What it is
 

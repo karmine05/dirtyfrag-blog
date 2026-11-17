@@ -1,0 +1,46 @@
+sections: [hero, metrics, cards, principles, cta]
+
+hero:
+  align: start
+  eyebrow: Security operations · Detection engineering · Agentic AI
+  title_lines:
+    - words: [{ text: Security, } , { text: you can audit. }]
+    - words: [{ text: AI, }, { text: you can verify., accent: true }]
+  lead: Field notes from two decades at the seam between detection theory and operational reality. Threat briefs, osquery and Fleet detections, and AI agents whose work stays inspectable, every claim backed by a query result.
+  actions:
+    - { label: Read the latest, url: posts/, icon: fa-solid fa-newspaper, style: primary }
+    - { label: About the author, url: about/, icon: fa-solid fa-user-shield, style: ghost }
+
+metrics:
+  items:
+    - { value: 14, label: Field-tested posts, icon: fa-solid fa-file-lines }
+    - { value: 3, label: Operating systems per control plane, icon: fa-solid fa-layer-group }
+    - { value: 20, suffix: "+", label: Years in security operations, icon: fa-solid fa-shield-halved }
+
+cards:
+  eyebrow: Latest from the lab
+  title: Recent posts
+  columns: 3
+  link_label: Read the post
+  items:
+    - { title: "One control plane, three operating systems", meta: "2026-11-16 · device-management", desc: "A mixed-OS fleet — Windows, macOS and DMZ Ubuntu — under one Fleet server.", image: covers/one-control-plane-three-operating-systems.svg, url: posts/one-control-plane-three-operating-systems/ }
+    - { title: "CVE-2026-98432: Linux TCP Use-After-Free. Find It, Mitigate It, Auto-Remove It with Fleet", meta: "2026-10-30 · osquery", desc: "Short brief on CVE-2026-98432, a race in the Linux IPv4 TCP handshake that Anthropic turned into a remote root exploit, with the Fleet queries, policies and one self-remo", image: covers/cve-2026-98432-linux-tcp-uaf-fleet.svg, url: posts/cve-2026-98432-linux-tcp-uaf-fleet/ }
+    - { title: "HTTP2Shell (CVE-2026-111497): Hunt Vulnerable Brotli Copies with Fleet", meta: "2026-10-26 · osquery", desc: "Short brief on CVE-2026-111497, the Brotli decoder overflow behind HTTP2Shell, and six Fleet queries that find every vulnerable copy: distro packages, Homebrew, Node .pkg", image: covers/http2shell-brotli-fleet.svg, url: posts/http2shell-brotli-fleet/ }
+    - { title: "eMudhra CA Key Compromise: Find and Fix the Trust Stores Your Browser Doesn't Cover", meta: "2026-10-21 · osquery", desc: "Plain-language brief on the October 2026 eMudhra intermediate CA key compromise, its blast radius across curl, Go, Node.js, Python and Fleet's own agent, plus three valid", image: covers/emudhra-ca-compromise-fleet.svg, url: posts/emudhra-ca-compromise-fleet/ }
+    - { title: "One Agent, One Fleet, One Reboot: Upgrading and Mitigating a Kernel KEV Wave with Fleet, MCP, and Local AI", meta: "2026-09-27 · fleet-mcp", desc: "A local AI agent drives a Fleet upgrade and a kernel KEV mitigation wave over MCP.", image: covers/fleet-kever-agent-upgrade-runbook.svg, url: posts/fleet-kever-agent-upgrade-runbook/ }
+    - { title: "The Amcache gap, closed: seven SQL tables for live Windows DFIR", meta: "2026-09-21 · osquery", desc: "osquery gained its first Amcache table.", image: covers/amcache-in-sql.svg, url: posts/amcache-in-sql/ }
+
+principles:
+  eyebrow: How these notes work
+  title: The model accelerates the work without hiding it
+  items:
+    - { title: Artifacts, not catalogs, icon: fa-solid fa-magnifying-glass, desc: "Respond to what the exploit does on the host, not to whether a database has caught up with a CVE ID." }
+    - { title: Every answer shows its SQL, icon: fa-solid fa-database, desc: "Agents compose the query, the analyst sees it. Assumptions are named, results are reproducible." }
+    - { title: One control plane, icon: fa-solid fa-diagram-project, desc: "Humans and agents operate through the same policy layer, so what either may touch is decided in one place." }
+
+cta:
+  title: Start with the AI-forward bet.
+  text: "fleet-mcp, vibe hunting and agentic-detector: three answers to the same question — can an agent do this on my fleet, and can I still audit it?"
+  label: Read the manifesto
+  url: posts/fleet-mcp-manifesto/
+  style: primary

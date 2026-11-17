@@ -1,25 +1,17 @@
 ---
-title: "About karmine"
-summary: "About Dhruv Majumdar — security operations across two decades, now building the auditable AI layer of the stack."
+title: About karmine
+date: '2025-12-21T09:00:00-05:00'
+lastmod: '2026-11-16T09:00:00-05:00'
+description: About Dhruv Majumdar — VP of Security Solutions, head of security for a mixed-OS fleet. Two decades leading MxDR, compromise assessments, and cyber threat intelligence; now driving security with agents and device policy.
+summary: About Dhruv Majumdar — security operations across two decades, now building the auditable AI layer of the stack.
 draft: false
-date: "2025-12-21T09:00:00-05:00"
-lastmod: "2026-11-16T09:00:00-05:00"
-showToc: true
-showReadingTime: true
-showWordCount: true
-showHero: false
-showTableOfContents: false
-meta-title: "About · karmine's notes"
-meta-description: "About Dhruv Majumdar — VP of Security Solutions, head of security for a mixed-OS fleet. Two decades leading MxDR, compromise assessments, and cyber threat intelligence; now driving security with agents and device policy."
-meta-author: Dhruv Majumdar
-meta-og:title: "About Dhruv Majumdar — two decades leading the defense, now driving security with agents"
-meta-og:description: "Two decades leading MxDR, compromise assessments, and cyber threat intelligence. Now: security driven by agents and device policy, on one control plane."
-meta-og:site_name: "karmine's notes"
-meta-og:locale: en
-meta-og:type: website
-meta-article:published_time: "2025-12-21T09:00:00-05:00"
-meta-article:modified_time: "2026-11-16T09:00:00-05:00"
-meta-keywords: about,dhruv majumdar,security-ops,mxdr,threat-hunting,fleet,osquery,mcp,ai,agentic-ai
+type: blog
+menus:
+  main:
+    identifier: about
+    weight: 20
+reading_time: false
+featured_image: none
 ---
 
 {{< figure src="images/infographic.svg" alt="Infographic: two decades leading MxDR, compromise assessments, and cyber threat intelligence — now driving security with agents and device policy on one control plane" >}}

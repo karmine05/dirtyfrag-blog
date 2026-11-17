@@ -1,20 +1,27 @@
 ---
-title: "eMudhra CA Key Compromise: Find and Fix the Trust Stores Your Browser Doesn't Cover"
-date: 2026-10-21T12:00:00-04:00
+title: 'eMudhra CA Key Compromise: Find and Fix the Trust Stores Your Browser Doesn''t Cover'
+date: '2026-10-21T12:00:00-04:00'
+description: Plain-language brief on the October 2026 eMudhra intermediate CA key compromise, its blast radius across curl, Go, Node.js, Python and Fleet's own agent, plus three validated Fleet queries and three remediation scripts for macOS, Windows and Linux.
+summary: 'Eight eMudhra intermediate CA keys were generated as tiny, guessable numbers, so anyone can forge a trusted certificate for any website. Browsers and operating systems blocked them within three days. Everything that keeps its own copy of the trusted roots did not: Linux CA bundles, macOS /etc/ssl/cert.pem, Node.js, Python certifi, and the CA bundle Fleet''s own agent uses to reach the Fleet server. This brief explains the blast radius in plain words and ships three Fleet queries and three Fleet scripts (macOS, Windows, Linux) that find and fix the exposure, tested on real hosts and containers.'
+tags:
+- fleet
+- osquery
+- pki
+- tls
+- certificates
+- macos
+- windows
+- linux
+- detection-engineering
+- remediation
+- emudhra
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "pki", "tls", "certificates", "macos", "windows", "linux", "detection-engineering", "remediation", "emudhra"]
-categories: ["security-ops"]
-description: "Plain-language brief on the October 2026 eMudhra intermediate CA key compromise, its blast radius across curl, Go, Node.js, Python and Fleet's own agent, plus three validated Fleet queries and three remediation scripts for macOS, Windows and Linux."
-summary: "Eight eMudhra intermediate CA keys were generated as tiny, guessable numbers, so anyone can forge a trusted certificate for any website. Browsers and operating systems blocked them within three days. Everything that keeps its own copy of the trusted roots did not: Linux CA bundles, macOS /etc/ssl/cert.pem, Node.js, Python certifi, and the CA bundle Fleet's own agent uses to reach the Fleet server. This brief explains the blast radius in plain words and ships three Fleet queries and three Fleet scripts (macOS, Windows, Linux) that find and fix the exposure, tested on real hosts and containers."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
-{{< alert "circle-info" >}}
-**TL;DR.** Eight eMudhra intermediate CA keys can be recomputed by anyone. Browsers and OS trust stores are already protected. Tools that carry their **own** list of trusted roots are not, and that includes the bundle Fleet's agent uses. Run the three [queries](/dirtyfrag-blog/posts/emudhra-ca-compromise-fleet/#detect-three-fleet-queries) to find exposed hosts. Run the three [scripts](/dirtyfrag-blog/posts/emudhra-ca-compromise-fleet/#fix-three-fleet-scripts) to fix them.
-{{< /alert >}}
+> [!NOTE]
+> **TL;DR.** Eight eMudhra intermediate CA keys can be recomputed by anyone. Browsers and OS trust stores are already protected. Tools that carry their **own** list of trusted roots are not, and that includes the bundle Fleet's agent uses. Run the three [queries](/dirtyfrag-blog/posts/emudhra-ca-compromise-fleet/#detect-three-fleet-queries) to find exposed hosts. Run the three [scripts](/dirtyfrag-blog/posts/emudhra-ca-compromise-fleet/#fix-three-fleet-scripts) to fix them.
 
 ## What happened, in plain words
 

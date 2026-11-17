@@ -1,38 +1,21 @@
 ---
-canonical: "https://karmine05.github.io/dirtyfrag-blog/posts/one-control-plane-three-operating-systems/"
-meta-article:modified_time: "2026-11-16T16:00:00-05:00"
-meta-article:published_time: "2026-11-16T16:00:00-05:00"
-meta-article:section: posts
-meta-author: Dhruv Majumdar
-meta-description: "A mixed-OS fleet — Windows, macOS and DMZ Ubuntu — under one Fleet server. Labels decide scope, MDM profiles do the setting, a full policy layer verifies, and every control reports its status back per host."
-meta-keywords: fleet,fleetdm,device-management,mdm,cis,compliance,windows,macos,linux,ubuntu,osquery,labels,configuration-profiles,dmz,active-directory,security-ops,endpoint-management
-meta-og:description: "A fleet across Windows, macOS and DMZ Linux runs on one Fleet server. Labels decide scope, MDM profiles set, the policy layer verifies, and every control reports back per host."
-meta-og:locale: en
-meta-og:site_name: "karmine's notes"
-meta-og:title: "One control plane, three operating systems"
-meta-og:type: article
-meta-og:url: "https://karmine05.github.io/dirtyfrag-blog/posts/one-control-plane-three-operating-systems/"
-meta-title: "One control plane, three operating systems · karmine's notes"
-meta-twitter:card: summary
-meta-twitter:description: "Windows, macOS and DMZ Linux under one Fleet server: labels decide scope, profiles do the setting, every control reports back."
-meta-twitter:title: "One control plane, three operating systems"
-title: "One control plane, three operating systems"
+title: One control plane, three operating systems
+date: '2026-11-16T16:00:00-05:00'
 slug: one-control-plane-three-operating-systems
-date: "2026-11-16T16:00:00-05:00"
-categories:
-  - Security-Ops
+description: A mixed-OS fleet — Windows, macOS and DMZ Ubuntu — under one Fleet server. Labels decide scope, MDM profiles do the setting, a full policy layer verifies, and every control reports its status back per host.
 tags:
-  - Fleet
-  - Device-Management
-  - MDM
-  - CIS
-  - Compliance
-  - Windows
-  - macOS
-  - Linux
-  - Osquery
-  - Security-Ops
-showTableOfContents: true
+- fleet
+- device-management
+- mdm
+- cis
+- compliance
+- windows
+- macos
+- linux
+- osquery
+- security-ops
+categories:
+- security-ops
 ---
 
 {{< figure src="images/fig1-architecture.svg" alt="Fleet architecture: Windows workstations and domain controllers, macOS machines and a DMZ of Ubuntu servers, each running one osquery agent, with MDM channels for the client OSes, all feeding a single Fleet server" caption="The whole estate: Windows workstations and domain controllers, a handful of Macs, and a DMZ of Ubuntu servers. One osquery agent per host (osquery is the open-source agent Fleet ships; it answers SQL questions about the machine); the MDM channels ride the same server for the enrolled Windows and Apple hosts." >}}

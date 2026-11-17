@@ -1,15 +1,19 @@
 ---
-title: "Notepad++ trusted-directory bypass (GHSA-p58x-r3c9-x9p6): find it with Fleet, portable copies included"
-date: 2026-06-10T09:00:00-04:00
+title: 'Notepad++ trusted-directory bypass (GHSA-p58x-r3c9-x9p6): find it with Fleet, portable copies included'
+date: '2026-06-10T09:00:00-04:00'
+description: A High-severity Notepad++ advisory with no assigned CVE. How to find vulnerable installs and portable copies with Fleet and osquery, and a policy to track patch status continuously — because a VM scanner sees the installed program but misses the portable .exe.
+summary: GHSA-p58x-r3c9-x9p6 is a path-traversal bypass of the CVE-2026-48800 patch in Notepad++ v8.9.6.1, fixed in v8.9.6.2. It carries no CVE of its own, so vulnerability scanners that key on CVE catalogs may not flag it — and even when they do, they catch the registry-installed program while a portable notepad++.exe dropped in Downloads goes unseen. This post validates the advisory, then ships a Fleet/osquery identification query and a policy that fails when a vulnerable copy is present, installed or portable.
+tags:
+- fleet
+- osquery
+- windows
+- vulnerability-management
+- detection-engineering
+- notepad-plus-plus
+- portable-apps
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "windows", "vulnerability-management", "detection-engineering", "notepad-plus-plus", "portable-apps"]
-categories: ["security-ops"]
-description: "A High-severity Notepad++ advisory with no assigned CVE. How to find vulnerable installs and portable copies with Fleet and osquery, and a policy to track patch status continuously — because a VM scanner sees the installed program but misses the portable .exe."
-summary: "GHSA-p58x-r3c9-x9p6 is a path-traversal bypass of the CVE-2026-48800 patch in Notepad++ v8.9.6.1, fixed in v8.9.6.2. It carries no CVE of its own, so vulnerability scanners that key on CVE catalogs may not flag it — and even when they do, they catch the registry-installed program while a portable notepad++.exe dropped in Downloads goes unseen. This post validates the advisory, then ships a Fleet/osquery identification query and a policy that fails when a vulnerable copy is present, installed or portable."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
 > **The point of this writeup:** vulnerability management isn't CVE management — and it isn't installer management either. This advisory has no CVE, so catalog-driven scanners may stay quiet. And Notepad++ ships as a portable build, so a scanner reading the Windows registry sees the installed program but never the portable `notepad++.exe` someone unzipped into Downloads. Track the artifact (the binary and its version on disk), not just the catalog entry.
