@@ -1,15 +1,21 @@
 ---
-title: "Seeing the AI Layer: Detecting Agents, MCP Servers, and IDE Plugins on Every Endpoint with osquery"
-date: 2026-06-22T09:00:00-04:00
+title: 'Seeing the AI Layer: Detecting Agents, MCP Servers, and IDE Plugins on Every Endpoint with osquery'
+date: '2026-06-22T09:00:00-04:00'
+description: agentic-detector is a cross-platform osquery extension that surfaces the AI software layer — MCP servers, agent CLIs, IDE plugins, desktop apps, live AI network sockets, and agent instruction files — through a single queryable table. This post covers why the visibility gap exists, how the extension works, and how to deploy it across your fleet.
+summary: 'Your EDR knows about processes and network connections. Your MDM knows about installed apps. Neither one knows that someone on your team is running an npx-fetched MCP server that has shell-exec capability and a plaintext secret baked into its config. agentic-detector is a cross-platform osquery extension that fixes that. One table — ai_tools — gives you the full AI software inventory per host: MCP servers, agent CLIs, IDE plugins, desktop apps, live network sockets, and the agent instruction files that tell AI what it''s allowed to do. Deployable through Fleet in minutes.'
+tags:
+- fleet
+- osquery
+- ai
+- mcp
+- detection-engineering
+- security-ops
+- agentic-ai
+- supply-chain
+- threat-hunting
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "ai", "mcp", "detection-engineering", "security-ops", "agentic-ai", "supply-chain", "threat-hunting"]
-categories: ["security-ops"]
-description: "agentic-detector is a cross-platform osquery extension that surfaces the AI software layer — MCP servers, agent CLIs, IDE plugins, desktop apps, live AI network sockets, and agent instruction files — through a single queryable table. This post covers why the visibility gap exists, how the extension works, and how to deploy it across your fleet."
-summary: "Your EDR knows about processes and network connections. Your MDM knows about installed apps. Neither one knows that someone on your team is running an npx-fetched MCP server that has shell-exec capability and a plaintext secret baked into its config. agentic-detector is a cross-platform osquery extension that fixes that. One table — ai_tools — gives you the full AI software inventory per host: MCP servers, agent CLIs, IDE plugins, desktop apps, live network sockets, and the agent instruction files that tell AI what it's allowed to do. Deployable through Fleet in minutes."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
 > **One sentence:** your fleet has an AI software layer that your existing tools can't see — `agentic-detector` puts a queryable osquery table over it.

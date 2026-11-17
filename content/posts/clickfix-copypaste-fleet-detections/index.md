@@ -1,15 +1,22 @@
 ---
-title: "ClickFix — Copy/Paste Social Engineering: Threat Brief and Fleet Detection Pack"
-date: 2026-05-26T13:00:00-04:00
+title: 'ClickFix — Copy/Paste Social Engineering: Threat Brief and Fleet Detection Pack'
+date: '2026-05-26T13:00:00-04:00'
+description: Threat brief and Fleet/osquery detection guide for the ClickFix copy/paste social-engineering technique. Five-stage attack flow, validated detection queries for Windows and macOS, hardening playbook, atomic indicators table.
+summary: ClickFix is the most active cross-platform initial-access technique of 2026 — fake CAPTCHAs and support prompts that silently copy a malicious command to the clipboard, instruct the user to paste it into the Windows Run dialog or macOS Terminal, and deliver infostealers (Lumma, AMOS), remote-access tools (NetSupport RAT), and AppleScript keychain stealers. No code-execution vulnerability is exploited — the victim is the delivery mechanism. This brief walks the five-stage attack flow, lists atomic indicators, and ships a Fleet/osquery detection pack with every query validated against the current Fleet table schema.
+tags:
+- fleet
+- osquery
+- windows
+- macos
+- social-engineering
+- infostealer
+- threat-intel
+- detection-engineering
+- clickfix
+- netsupport-rat
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "windows", "macos", "social-engineering", "infostealer", "threat-intel", "detection-engineering", "clickfix", "netsupport-rat"]
-categories: ["security-ops"]
-description: "Threat brief and Fleet/osquery detection guide for the ClickFix copy/paste social-engineering technique. Five-stage attack flow, validated detection queries for Windows and macOS, hardening playbook, atomic indicators table."
-summary: "ClickFix is the most active cross-platform initial-access technique of 2026 — fake CAPTCHAs and support prompts that silently copy a malicious command to the clipboard, instruct the user to paste it into the Windows Run dialog or macOS Terminal, and deliver infostealers (Lumma, AMOS), remote-access tools (NetSupport RAT), and AppleScript keychain stealers. No code-execution vulnerability is exploited — the victim is the delivery mechanism. This brief walks the five-stage attack flow, lists atomic indicators, and ships a Fleet/osquery detection pack with every query validated against the current Fleet table schema."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
 ## Executive summary
@@ -49,7 +56,7 @@ Recent reporting documents at least five distinct clusters using this method to 
 
 The same lure produces different post-paste behaviour by platform. The Mermaid flowchart below shows the divergence at stage 3.
 
-{{< mermaid >}}
+```mermaid
 flowchart TD
   classDef lure fill:#533483,stroke:#533483,color:#fff
   classDef clip fill:#fb923c,stroke:#fb923c,color:#fff
@@ -65,7 +72,7 @@ flowchart TD
   M --> MS["Stager: curl + base64 | zsh<br/>fetches second-stage"]:::mac
   WS --> P1["NetSupport RAT / Lumma /<br/>commodity infostealer<br/>persistence: Run key / Task"]:::pay
   MS --> P2["AMOS / MacSync /<br/>AppleScript keychain stealer<br/>persistence: LaunchDaemon"]:::pay
-{{< /mermaid >}}
+```
 
 ### Obfuscation stack
 

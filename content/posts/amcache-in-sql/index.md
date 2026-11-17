@@ -1,39 +1,22 @@
 ---
-canonical: "https://karmine05.github.io/dirtyfrag-blog/posts/amcache-in-sql/"
-meta-article:modified_time: "2026-09-21T09:45:00-04:00"
-meta-article:published_time: "2026-09-21T09:45:00-04:00"
-meta-article:section: posts
-meta-article:tag: Security-Ops
-meta-author: karmine
-meta-description: "osquery gained its first Amcache table. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
-meta-keywords: amcache,amcache.hve,osquery,fleet,windows,dfir,incident-response,threat-hunting,shimcache,byovd,usb-forensics,registry-hive,security-ops
-meta-og:description: "osquery gained its first Amcache table. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR."
-meta-og:locale: en
-meta-og:site_name: "karmine's notes"
-meta-og:title: "The Amcache gap, closed: seven SQL tables for live Windows DFIR"
-meta-og:type: article
-meta-og:url: "https://karmine05.github.io/dirtyfrag-blog/posts/amcache-in-sql/"
-meta-twitter:card: summary_large_image
-meta-twitter:description: "Seven live queries on a Windows 11 Pro box, real results, and what each table is for in detection and IR."
-meta-twitter:title: "The Amcache gap, closed: seven SQL tables for live Windows DFIR"
-title: "The Amcache gap, closed: seven SQL tables for live Windows DFIR"
+title: 'The Amcache gap, closed: seven SQL tables for live Windows DFIR'
+date: '2026-09-21T09:45:00-04:00'
 slug: amcache-in-sql
-date: "2026-09-21T09:45:00-04:00"
-categories:
-  - Security-Ops
+description: osquery gained its first Amcache table. A new extension parses the hive in place, while locked, on a live Windows host and serves it as seven SQL tables. Seven live queries on a Windows 11 Pro box, and what each one is for in detection and IR.
 tags:
-  - Amcache
-  - Osquery
-  - Fleet
-  - Windows
-  - DFIR
-  - Incident-Response
-  - Threat-Hunting
-  - Registry
-  - ShimCache
-  - BYOVD
-  - Security-Ops
-showTableOfContents: true
+- amcache
+- osquery
+- fleet
+- windows
+- dfir
+- incident-response
+- threat-hunting
+- registry
+- shimcache
+- byovd
+- security-ops
+categories:
+- security-ops
 ---
 
 > **One sentence:** Windows writes a rolling inventory of every executable, driver and device it has ever seen, osquery had no way to read that history until now, and seven new SQL tables turn it into a live DFIR surface.

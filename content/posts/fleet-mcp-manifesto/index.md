@@ -1,15 +1,19 @@
 ---
-title: "Endpoint Risk and Threat Hunting, in Plain English: A Fleet MCP Manifesto"
-date: 2026-05-13T09:00:00-04:00
+title: 'Endpoint Risk and Threat Hunting, in Plain English: A Fleet MCP Manifesto'
+date: '2026-05-13T09:00:00-04:00'
+description: 'Why fleet-mcp exists. A manifesto for natural-language endpoint security: ask a question in English, get a real osquery scan across every host you own, with the SQL shown to you and the assumptions named.'
+summary: Endpoint risk and threat hunting with Fleet just got a lot easier with the MCP. fleet-mcp is a Model Context Protocol server that turns Fleet's API into a typed tool catalog any AI agent can call. This is the manifesto — why it exists, what it does, what it deliberately won't do, and what it gives you that a REST API never could.
+tags:
+- fleet
+- mcp
+- osquery
+- ai
+- threat-hunting
+- detection-engineering
+- security-ops
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "mcp", "osquery", "ai", "threat-hunting", "detection-engineering", "security-ops"]
-categories: ["security-ops"]
-description: "Why fleet-mcp exists. A manifesto for natural-language endpoint security: ask a question in English, get a real osquery scan across every host you own, with the SQL shown to you and the assumptions named."
-summary: "Endpoint risk and threat hunting with Fleet just got a lot easier with the MCP. fleet-mcp is a Model Context Protocol server that turns Fleet's API into a typed tool catalog any AI agent can call. This is the manifesto — why it exists, what it does, what it deliberately won't do, and what it gives you that a REST API never could."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
 > **The pitch in one sentence:** endpoint risk and threat hunting with Fleet just got a lot easier with the MCP. Ask a question in English. Get a real osquery scan across every host you own. See the SQL. See the assumptions. Decide what to do next.

@@ -1,15 +1,22 @@
 ---
-title: "SHADOW-EARTH-053 — Threat Brief, Kill Chain, and Validated Fleet Queries"
-date: 2026-05-26T11:00:00-04:00
+title: SHADOW-EARTH-053 — Threat Brief, Kill Chain, and Validated Fleet Queries
+date: '2026-05-26T11:00:00-04:00'
+description: Threat brief and detection engineering guide for Trend Micro's SHADOW-EARTH-053 disclosure — Lockheed kill chain with per-stage Diamond Model, consolidated atomic indicators, and a Fleet/osquery detection bundle validated against the current Fleet table schema.
+summary: Trend Micro disclosed SHADOW-EARTH-053 on 30 April 2026 — a China-aligned cyberespionage campaign exploiting ProxyLogon against unpatched Microsoft Exchange and IIS to deploy GODZILLA web shells and ShadowPad across South, East, and Southeast Asia plus one NATO target. This brief documents the campaign through Lockheed's seven kill-chain stages with a Diamond Model rendered for each stage, consolidates the atomic indicators, and ships a vetted Fleet/osquery detection pack. Every query in the pack has been audited against fleetdm.com/tables before publication — schema bugs in the publicly circulating versions are called out and corrected inline.
+tags:
+- fleet
+- osquery
+- windows
+- linux
+- macos
+- exchange
+- threat-intel
+- detection-engineering
+- shadowpad
+- china-nexus
+categories:
+- security-ops
 draft: false
-tags: ["fleet", "osquery", "windows", "linux", "macos", "exchange", "threat-intel", "detection-engineering", "shadowpad", "china-nexus"]
-categories: ["security-ops"]
-description: "Threat brief and detection engineering guide for Trend Micro's SHADOW-EARTH-053 disclosure — Lockheed kill chain with per-stage Diamond Model, consolidated atomic indicators, and a Fleet/osquery detection bundle validated against the current Fleet table schema."
-summary: "Trend Micro disclosed SHADOW-EARTH-053 on 30 April 2026 — a China-aligned cyberespionage campaign exploiting ProxyLogon against unpatched Microsoft Exchange and IIS to deploy GODZILLA web shells and ShadowPad across South, East, and Southeast Asia plus one NATO target. This brief documents the campaign through Lockheed's seven kill-chain stages with a Diamond Model rendered for each stage, consolidates the atomic indicators, and ships a vetted Fleet/osquery detection pack. Every query in the pack has been audited against fleetdm.com/tables before publication — schema bugs in the publicly circulating versions are called out and corrected inline."
-showHero: false
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
 ---
 
 ## Executive summary
@@ -60,7 +67,7 @@ The Polish target is the geographic outlier. Trend Micro frame it as opportunist
 
 The Diamond Model below summarises the campaign at the cluster level. Per-stage diamonds in the kill chain section specialise this view.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv  fill:#1a1a2e,stroke:#e94560,color:#fff,stroke-width:2px
   classDef cap  fill:#16213e,stroke:#0f3460,color:#fff,stroke-width:2px
@@ -74,19 +81,20 @@ graph LR
   C -->|on| I
   I -->|targets| V
   V -.->|attracts| A
-{{< /mermaid >}}
+```
 
 ## Lockheed kill chain — stage by stage
 
 Each stage below documents the TTPs reported by Trend Micro, renders a Diamond Model specialised to that stage, lists the relevant ATT&CK technique IDs (derived; Trend Micro do not publish ATT&CK mappings), and where useful includes an inline visual.
 
-{{< timeline >}}
 
-{{< timelineItem icon="search" header="Stage 1 — Reconnaissance" badge="T1595" subheader="External enumeration of unpatched Exchange/IIS surface" md="true" >}}
+### Stage 1 — Reconnaissance
+
+`T1595` · *External enumeration of unpatched Exchange/IIS surface*
 
 External reconnaissance for unpatched Exchange and IIS surface. Trend Micro do not publish the scanning infrastructure, but the consistent selection of ProxyLogon-vulnerable hosts across the targeted geographies implies systematic external enumeration. In at least one observed intrusion, AnyDesk appears as a *first-stage* delivery channel — an indicator that credentials sourced from prior breaches or stealer-log marketplaces may seed some target lists rather than scanning alone.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -99,19 +107,20 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|targets| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1595.002 (Active Scanning — Vulnerability Scanning), T1592 (Gather Victim Host Information).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="wand-magic-sparkles" header="Stage 2 — Weaponisation" badge="T1574.002" subheader="DLL-sideload trio: signed binary + malicious DLL + registry shellcode" md="true" >}}
+### Stage 2 — Weaponisation
+
+`T1574.002` · *DLL-sideload trio: signed binary + malicious DLL + registry shellcode*
 
 The weaponisation pattern is consistent across every observed intrusion: a legitimate, *signed* executable vulnerable to DLL sideloading, a co-located malicious DLL, and the encrypted ShadowPad payload stored in the registry and deleted after first execution. Four sideload pairs are documented by SHA-256, plus a fifth Toshiba-signed loader that fetches the shellcode from `HKCU\Software\<ComputerName>\scode` and executes it via `EnumDesktopsA` callback injection.
 
 {{< figure src="images/dll-sideload-pairs.svg" alt="Four DLL sideload pairs visualisation — GameHook.exe with graphics-hook-filter32.dll signed by ORANGE VIEW LIMITED; imecmnt.exe with imjp14k.dll signed by Microsoft Corporation; xReport.exe with Uxtheme.dll signed by Mainline Net Holdings; LUManager.EXE with MPS.dll signed by Samsung Electronics" caption="Each signed binary loads its co-located DLL as the operating system designed it to. Signing-cert verification passes; the trust placement is what fails." >}}
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -123,13 +132,14 @@ graph LR
   V["<b>Victim</b><br>(none yet — kit build)"]:::vic
   A -->|crafts| C
   C -->|staged at| I
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1027 (Obfuscated Files), T1574.002 (DLL Side-Loading), T1112 (Modify Registry — payload storage).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="envelope" header="Stage 3 — Delivery" badge="T1190" subheader="ProxyLogon RCE, AnyDesk handoff, React2Shell on Linux (low conf.)" md="true" >}}
+### Stage 3 — Delivery
+
+`T1190` · *ProxyLogon RCE, AnyDesk handoff, React2Shell on Linux (low conf.)*
 
 Three observed delivery paths.
 
@@ -139,7 +149,7 @@ Three observed delivery paths.
 
 **Tertiary, low confidence:** Linux NOODLERAT delivery via CVE-2025-55182 (React2Shell) exploitation, with implants retrieved from `194.38.11.3:1790`. The temporal context matters: Trend Micro first observed this delivery path in **December 2025** — twelve months after the campaign's initial ProxyLogon-based Windows activity began. React2Shell exploitation itself was observed by multiple vendors as part of broader CVE-2025-55182 activity; what Trend Micro hedge with low confidence is the attribution of *these specific Linux samples* to SHADOW-EARTH-053. The link rests on shared staging infrastructure (`194.38.11.3:1790` also hosted ShadowPad samples retrieved by the cluster in mid-December 2025) and registration patterns on the NOODLERAT C2 domain `check.office365-update.com`.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -152,17 +162,18 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|targets| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1190 (Exploit Public-Facing Application), T1219 (Remote Access Software — AnyDesk).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="bug" header="Stage 4 — Exploitation" badge="T1018" subheader="RCE under w3wp.exe; Active Directory and Exchange reconnaissance via web shell" md="true" >}}
+### Stage 4 — Exploitation
+
+`T1018` · *RCE under w3wp.exe; Active Directory and Exchange reconnaissance via web shell*
 
 ProxyLogon exploitation gives remote code execution under the IIS worker process `w3wp.exe`. Trend Micro captured the operator running domain-admin enumeration, `nltest /dclist`, `nslookup` against internal Exchange servers, `csvde.exe` for Active Directory CSV export, and PowerView's `Get-DomainUser` cmdlet — all under the web-shell process tree. A 28 KB custom binary, `DomainMachines.exe`, was deployed to enumerate machines over LDAP and probe ports 139/445 (SMB), 80/443/8080/8443 (HTTP), 3389 (RDP), 5985/5986 (WinRM), 3306 (MySQL), 1433 (MSSQL), and 88 (Kerberos).
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -175,13 +186,14 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|targets| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1190 (continued), T1059 (Command and Scripting Interpreter), T1018 (Remote System Discovery), T1087 (Account Discovery), T1069 (Permission Groups Discovery).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="download" header="Stage 5 — Installation" badge="T1505.003" subheader="GODZILLA web shells, ShadowPad loader, Scheduled Task M1onltor" md="true" >}}
+### Stage 5 — Installation
+
+`T1505.003` · *GODZILLA web shells, ShadowPad loader, Scheduled Task M1onltor*
 
 Three persistence anchors are layered at every observed victim.
 
@@ -191,7 +203,7 @@ Three persistence anchors are layered at every observed victim.
 
 **Scheduled Task.** The task `M1onltor` runs the sideloaded loader every five minutes at highest privileges. The five-minute interval is operationally consequential: the `scode` registry value is effectively a continuous Fleet policy target — if it is present, it is executing.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -204,13 +216,14 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|persists on| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1505.003 (Server Software Component — Web Shell), T1574.002 (DLL Side-Loading), T1112 (Modify Registry), T1053.005 (Scheduled Task/Job).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="cloud" header="Stage 6 — Command and Control" badge="T1071.001" subheader="Layered redundant tunnels — IOX, GOST, Wstunnel, custom tunnel-core" md="true" >}}
+### Stage 6 — Command and Control
+
+`T1071.001` · *Layered redundant tunnels — IOX, GOST, Wstunnel, custom tunnel-core*
 
 Operational redundancy is the load-bearing C2 design. Multiple tunnel tools are deployed in a single environment, all pointing at the same external infrastructure; detection or blocking of any one tool does not interrupt the channel.
 
@@ -224,7 +237,7 @@ Operational redundancy is the load-bearing C2 design. Multiple tunnel tools are 
 - **`mdync.exe`** beaconing to `141.164.46.77`, dropped by `TosBtKbd.dll`. Binary not recovered.
 - **NOODLERAT (Linux)** with C2 `check.office365-update.com` — domain registered 2025-11-19. Trend Micro attribute this link with low confidence.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -237,13 +250,14 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|tunnels to/from| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1071.001 (Application Layer — Web Protocols), T1090.001 (Internal Proxy), T1090.002 (External Proxy), T1219 (AnyDesk), T1071.004 (DNS — NOODLERAT C2).
 
-{{< /timelineItem >}}
 
-{{< timelineItem icon="skull-crossbones" header="Stage 7 — Actions on Objectives" badge="T1114.002" subheader="LSASS theft, DCSync, EWS mailbox export, RingQ defence evasion" md="true" >}}
+### Stage 7 — Actions on Objectives
+
+`T1114.002` · *LSASS theft, DCSync, EWS mailbox export, RingQ defence evasion*
 
 Three observed objective categories.
 
@@ -258,7 +272,7 @@ Three observed objective categories.
 - **RingQ packer.** An open-source binary packer of Chinese origin, available on GitHub, designed to pack malicious binaries so that they evade signature-based antivirus and EDR detection. Trend Micro detected at least one RingQ-packed sample in a SHADOW-EARTH-053 environment. Detection guidance: scan staging directories (`C:\Users\Public`, `C:\ProgramData`) for unusually small executables with high entropy and Chinese-language string artefacts in the unpacker stub.
 - **System-binary masquerading.** `net.exe` and PowerShell binaries copied into `C:\ProgramData` with randomised `.log` suffixes (pattern: `$<RANDOM>.log` filenames, e.g. `$D5PLAA1.log`, `$9XF5WLD.log`, `$C06KCQ2.log`) to defeat process-name-based detection while preserving original signed-binary hashes. This technique specifically targets EDR configurations that rely on filename matching rather than hash verification or behavioural analysis.
 
-{{< mermaid >}}
+```mermaid
 graph LR
   classDef adv fill:#1a1a2e,stroke:#e94560,color:#fff
   classDef cap fill:#16213e,stroke:#0f3460,color:#fff
@@ -271,13 +285,11 @@ graph LR
   A -->|uses| C
   C -->|on| I
   I -->|exfils from| V
-{{< /mermaid >}}
+```
 
 **ATT&CK:** T1003.001 (LSASS Memory), T1003.006 (DCSync), T1218.011 (Rundll32), T1021.001 (RDP), T1021.002 (SMB/Admin Shares), T1560.001 (Archive via Utility), T1114.002 (Remote Email Collection), T1036.005 (Match Legitimate Name).
 
-{{< /timelineItem >}}
 
-{{< /timeline >}}
 
 ## SHADOW-EARTH-053 / -054 temporal overlap
 
@@ -285,7 +297,7 @@ Trend Micro's Figure 1 documents a recurring temporal pattern in which the same 
 
 Trend Micro categorise this relationship as **"Type A collaboration"** (terminology from their *Premier Pass-as-a-Service* model published the previous year): independent exploitation of the same vulnerabilities by separate intrusion sets, with similar initial-access techniques and overlapping post-exploitation tooling, where any apparent coordination is incidental rather than intentional. Trend Micro explicitly considered and rejected the "same group with two TTPs" hypothesis — in three cases, -054 malware appeared at sites already compromised by -053, with no apparent connection between the two malware families, which would be operationally inconsistent for a single actor.
 
-{{< mermaid >}}
+```mermaid
 gantt
   title SHADOW-EARTH-053 + -054 temporal overlap
   dateFormat YYYY-MM
@@ -296,13 +308,13 @@ gantt
   section -053
     ShadowPad deployment          :active, b1, 2025-06, 9M
     Linux NOODLERAT (low conf.)  :crit,   b2, 2025-12, 1M
-{{< /mermaid >}}
+```
 
 **Operational implication:** detection rules tuned to either cluster's toolkit will partially fire on the other's, and that overlap is intended — defenders investigating a -053 indicator should assume -054 may also be present at the same victim, and vice versa.
 
 ## Atomic indicators
 
-Consolidated atomic indicators from the Trend Micro report. Atomic indicators rotate quickly; treat the IP and domain entries as block-and-alert items for the next two to four weeks, and prioritise the behavioural detections in the [detection guidelines](#detection-guidelines) section for durable coverage.
+Consolidated atomic indicators from the Trend Micro report. Atomic indicators rotate quickly; treat the IP and domain entries as block-and-alert items for the next two to four weeks, and prioritise the behavioural detections in the [detection guidelines](#detection-guidelines-three-behavioural-lenses) section for durable coverage.
 
 | Type | Value | Context |
 |---|---|---|
@@ -327,7 +339,7 @@ Consolidated atomic indicators from the Trend Micro report. Atomic indicators ro
 
 ## Response playbook
 
-Recommended actions, ordered by priority. Each item maps to one or more queries in the [detection guidelines](#detection-guidelines) below.
+Recommended actions, ordered by priority. Each item maps to one or more queries in the [detection guidelines](#detection-guidelines-three-behavioural-lenses) below.
 
 ### Priority 1 — patch posture and atomic blocking (first 24 hours)
 
@@ -367,7 +379,7 @@ Every query below has been validated against the current [Fleet table schema](ht
 
 ### Lens 1 — Web shell and Exchange/IIS abuse
 
-#### 1.1 GODZILLA web shell filenames (Windows)
+#### 1.1 GODZILLA web shell filenames (Windows) {#1-1-godzilla-web-shell-filenames-windows}
 
 ```sql
 SELECT f.path, f.filename, f.size, f.mtime, h.sha256

@@ -1,61 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Cover: one control plane, three operating systems. A mixed fleet of Windows, macOS and DMZ Linux under a single Fleet server.">
-  <rect width="1200" height="675" fill="#0d1117"/>
-  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
-    <!-- hairlines -->
-    <line x1="0" y1="115" x2="1200" y2="115" stroke="#21262d" stroke-width="1"/>
-    <line x1="0" y1="587" x2="1200" y2="587" stroke="#21262d" stroke-width="1"/>
-    <line x1="800" y1="115" x2="800" y2="587" stroke="#21262d" stroke-width="1"/>
-
-    <!-- kicker -->
-    <text x="72" y="163" font-size="18" letter-spacing="4" fill="#8b949e" font-weight="600">MIXED-OS FLEET · ONE CONTROL PLANE</text>
-
-    <!-- headline -->
-    <text x="72" y="232" font-size="54" font-weight="800" fill="#f0f6fc">Three operating systems,</text>
-    <text x="72" y="294" font-size="54" font-weight="800" fill="#a78bfa">one console.</text>
-
-    <!-- dek -->
-    <text x="72" y="340" font-size="19" fill="#8b949e">Windows, macOS and DMZ Linux under a single Fleet server.</text>
-    <text x="72" y="366" font-size="19" fill="#8b949e">Labels decide scope, profiles do the setting, every control reports back.</text>
-
-    <!-- stats row -->
-    <g>
-      <text x="72" y="508" font-size="36" font-weight="800" fill="#f0f6fc">3</text>
-      <text x="72" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">OS on one server</text>
-      <text x="264" y="508" font-size="36" font-weight="800" fill="#f0f6fc">700+</text>
-      <text x="264" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">CIS/STIG policies</text>
-      <text x="456" y="508" font-size="36" font-weight="800" fill="#f0f6fc">400+</text>
-      <text x="456" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">MDM profiles</text>
-      <text x="648" y="508" font-size="36" font-weight="800" fill="#34d399">100%</text>
-      <text x="648" y="534" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">Win MDM verified</text>
-    </g>
-
-    <!-- right panel cards -->
-    <g>
-      <!-- WIN -->
-      <rect x="828" y="136" width="312" height="96" rx="12" fill="#161b22" stroke="#7c5cd6" stroke-width="1"/>
-      <text x="848" y="176" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#a78bfa">WIN</text>
-      <text x="1120" y="176" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">400+ CSP profiles</text>
-      <text x="1120" y="199" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">CIS benchmark · scripts</text>
-      <!-- MAC -->
-      <rect x="828" y="246" width="312" height="96" rx="12" fill="#161b22" stroke="#3b6fd4" stroke-width="1"/>
-      <text x="848" y="286" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#60a5fa">MAC</text>
-      <text x="1120" y="286" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">CIS baseline</text>
-      <text x="1120" y="309" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">MDM profiles + scripts</text>
-      <!-- LNX -->
-      <rect x="828" y="356" width="312" height="96" rx="12" fill="#161b22" stroke="#c2620f" stroke-width="1"/>
-      <text x="848" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#fb923c">LNX</text>
-      <text x="1120" y="396" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">STIG baseline</text>
-      <text x="1120" y="419" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">scripts · no MDM channel</text>
-      <!-- SCOPE -->
-      <rect x="828" y="466" width="312" height="96" rx="12" fill="#161b22" stroke="#c2417f" stroke-width="1"/>
-      <text x="848" y="506" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" font-weight="700" letter-spacing="3" fill="#e94560">SCOPE</text>
-      <text x="1120" y="506" text-anchor="end" font-size="19" font-weight="700" fill="#f0f6fc">label set</text>
-      <text x="1120" y="529" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">live-evaluated SQL</text>
-      <line x1="828" y1="574" x2="1140" y2="574" stroke="#a78bfa" stroke-width="2"/>
-    </g>
-
-    <!-- footer -->
-    <text x="72" y="640" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8b949e">labels decide scope · profiles set · policies verify</text>
-    <text x="1128" y="640" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#8b949e">karmines notes · 2026-11-16</text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="One control plane, three operating systems. Labels, profiles and policies across Windows, macOS and Linux.">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#111c33"/></linearGradient>
+<radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#818cf8" stop-opacity=".34"/><stop offset="1" stop-color="#818cf8" stop-opacity="0"/></radialGradient>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#94a3b8" stroke-opacity=".08"/></pattern>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<rect width="1200" height="630" fill="url(#grid)"/>
+<circle cx="930" cy="315" r="320" fill="url(#glow)"/>
+<rect x="0" y="0" width="10" height="630" fill="#818cf8"/>
+<g font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace">
+<rect x="70" y="70" width="389.20000000000005" height="40" rx="8" fill="#818cf8" fill-opacity=".14" stroke="#818cf8" stroke-opacity=".6"/>
+<text x="87" y="97" font-size="20" font-weight="700" letter-spacing="2" fill="#818cf8">FLEET · MDM · COMPLIANCE</text>
+</g>
+<g font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
+<text x="70" y="200" font-size="54" font-weight="800" fill="#f8fafc" letter-spacing="-1"><tspan x="70" dy="0">One control plane,</tspan><tspan x="70" dy="62">three operating</tspan><tspan x="70" dy="62">systems</tspan></text>
+<text x="70" y="394" font-size="28" fill="#cbd5e1"><tspan x="70" dy="0">Labels, profiles and policies across</tspan><tspan x="70" dy="36">Windows, macOS and Linux</tspan></text>
+</g>
+<g font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace" font-size="20" fill="#94a3b8">
+<text x="70" y="574">karmine's notes</text>
+<text x="70" y="574" dx="190" fill="#818cf8">/</text><text x="70" y="574" dx="210">fleet · osquery · detection engineering</text>
+</g>
+<g transform="translate(930 315)" fill="none"><path d="M0 -95l105 48-105 48-105-48z" stroke="#818cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M-105 4l105 48 105-48" stroke="#818cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M-105 56l105 48 105-48" stroke="#818cf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></g>
 </svg>

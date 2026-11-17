@@ -1,0 +1,82 @@
+# karmine's notes — Hugo + OINK theme (https://github.com/pgsty/oink)
+title: karmine's notes
+baseURL: https://karmine05.github.io/dirtyfrag-blog/
+defaultContentLanguage: en
+enableRobotsTXT: true
+enableEmoji: true
+enableGitInfo: false
+timeZone: America/New_York
+summaryLength: 0
+buildFuture: true
+
+languages:
+  en:
+    label: English
+    locale: en-US
+    weight: 1
+    title: karmine's notes
+    params:
+      description: Investigator's notes on security operations, fleet management, detection engineering and the AI layer of the security stack.
+
+taxonomies:
+  tag: tags
+  category: categories
+
+# OINK's Markdown components depend on these Goldmark settings; Hugo does not
+# merge a theme module's Goldmark config. Passthrough keeps LaTeX delimiters.
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    parser:
+      attribute:
+        block: true
+      wrapStandAloneImageWithinParagraph: false
+    extensions:
+      passthrough:
+        enable: true
+        delimiters:
+          block: [['\[', '\]'], ['$$', '$$']]
+          inline: [['\(', '\)']]
+  highlight:
+    noClasses: false
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
+
+outputs:
+  home: [HTML, RSS]
+  page: [HTML]
+  section: [HTML, RSS]
+
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+  priority: 0.5
+
+params:
+  offline_search: true
+  copyright:
+    authors: Dhruv Majumdar
+    from_year: 2026
+  github_repo: https://github.com/karmine05/dirtyfrag-blog
+  github_branch: main
+  author: Dhruv Majumdar
+  ui:
+    preset: slate
+    preset_menu: [paper, slate, ink, terminal]
+    dark_mode: true
+    blog_index: cards
+    blog_index_columns: 3
+    featured_image: banner
+    reading_time: true
+    image_zoom: true
+    backlinks: false
+    share: [linkedin, email, copy]
+
+module:
+  imports:
+    - path: github.com/pgsty/oink
+  hugoVersion:
+    extended: true
+    min: 0.168.0

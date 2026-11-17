@@ -1,42 +1,22 @@
 ---
-canonical: "https://karmine05.github.io/dirtyfrag-blog/posts/fleet-kever-agent-upgrade-runbook/"
-meta-article:modified_time: "2026-09-27T14:00:00-04:00"
-meta-article:published_time: "2026-09-27T14:00:00-04:00"
-meta-article:section: posts
-meta-article:tag: Security-Ops
-meta-author: Dhruv Majumdar
-meta-description: "A local AI agent drives a Fleet upgrade and a kernel KEV mitigation wave over MCP. One honest osquery later, 24 of 25 noble hosts were verified running the patched kernel from memory, not from the package database, and the two KEVs with no fix yet sat in a watchlist with a written closure condition instead of a green column."
-meta-keywords: fleet,fleet-mcp,osquery,kev,kernel,linux,local-llm,vllm,vulnerability-management,security-ops,incident-response,runbook,reboot
-meta-og:description: "A local AI agent drives a Fleet upgrade and a kernel KEV mitigation wave over MCP. Installed versus running is the whole story: the reboot is the mitigation, the kernel in memory is the evidence, and the open KEVs stay in a watchlist until the USN lands."
-meta-og:locale: en
-meta-og:site_name: "karmine's notes"
-meta-og:title: "One Agent, One Fleet, One Reboot: Upgrading and Mitigating a Kernel KEV Wave with Fleet, MCP, and Local AI"
-meta-og:type: article
-meta-og:url: "https://karmine05.github.io/dirtyfrag-blog/posts/fleet-kever-agent-upgrade-runbook/"
-meta-title: "One Agent, One Fleet, One Reboot: Fleet, MCP, and Local AI against a Kernel KEV Wave · karmine's notes"
-meta-twitter:card: summary
-meta-twitter:description: "Installed is not running. The reboot is the mitigation and the kernel in memory is the evidence. A local LLM, fleet-mcp, and one osquery turn a double problem into a verified runbook."
-meta-twitter:title: "One Agent, One Fleet, One Reboot: Fleet, MCP, and Local AI against a Kernel KEV Wave"
-title: "One Agent, One Fleet, One Reboot: Upgrading and Mitigating a Kernel KEV Wave with Fleet, MCP, and Local AI"
+title: 'One Agent, One Fleet, One Reboot: Upgrading and Mitigating a Kernel KEV Wave with Fleet, MCP, and Local AI'
+date: '2026-09-27T14:00:00-04:00'
 slug: fleet-kever-agent-upgrade-runbook
-date: "2026-09-27T14:00:00-04:00"
-categories:
-  - Security-Ops
+description: A local AI agent drives a Fleet upgrade and a kernel KEV mitigation wave over MCP. One honest osquery later, 24 of 25 noble hosts were verified running the patched kernel from memory, not from the package database, and the two KEVs with no fix yet sat in a watchlist with a written closure condition instead of a green column.
 tags:
-  - Fleet
-  - Fleet-MCP
-  - Osquery
-  - KEV
-  - Linux
-  - Kernel
-  - AI
-  - Local-LLM
-  - Vulnerability-Management
-  - Security-Ops
-  - Incident-Response
-showTableOfContents: true
-showReadingTime: true
-showWordCount: true
+- fleet
+- fleet-mcp
+- osquery
+- kev
+- linux
+- kernel
+- ai
+- local-llm
+- vulnerability-management
+- security-ops
+- incident-response
+categories:
+- security-ops
 ---
 
 > **One sentence:** a local AI agent, a Model Context Protocol bridge to Fleet, and one honest query later, 24 Linux hosts were upgraded, rebooted, verified, and the two kernel KEVs that still have no fix sat in a watchlist instead of a "patched" column.

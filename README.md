@@ -1,67 +1,57 @@
-# investigator's notes — blog source
+# karmine's notes
 
-Source for [investigator.github.io](https://example.github.io/) (replace with your actual GitHub Pages URL once published).
+Source for <https://karmine05.github.io/dirtyfrag-blog/>: security operations, Fleet/osquery detection engineering and agentic AI.
 
-Built with [Hugo](https://gohugo.io/) and the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme. Deployed to GitHub Pages via the workflow in `.github/workflows/hugo.yml`.
+Built with [Hugo](https://gohugo.io/) Extended (0.168.0 or newer) and the [OINK](https://github.com/pgsty/oink) theme, pulled in as a Hugo Module (pinned in `go.mod`). Deployed to GitHub Pages by `.github/workflows/hugo.yml` on every push to `main`.
 
-## Repo layout
+## Layout
 
 ```
 .
+├── hugo.yaml                  # the only site config
+├── go.mod / go.sum            # pins the OINK theme version
+├── data/home/en.yaml          # home page sections (hero, metrics, recent posts)
 ├── content/
-│   ├── _index.md                                    # homepage
-│   ├── about.md                                     # about page
-│   └── posts/
-│       └── pre-cve-response-with-fleet/
-│           ├── index.md                             # the post
-│           └── images/                              # post-bundle images (sanitized)
-├── static/
-│   └── code/                                        # downloadable artifacts (.sh, .sql, .yml)
-├── themes/PaperMod/                                 # submodule — fetched on init
-├── .github/workflows/hugo.yml                       # Pages deploy workflow
-├── archetypes/default.md
-├── hugo.toml                                        # site config
-├── .gitignore
-├── .gitmodules
-├── LICENSE
-└── README.md                                        # this file
-```
-
-## First-time setup (after cloning)
-
-```bash
-git clone --recurse-submodules https://github.com/<you>/<this-repo>.git
-cd <this-repo>
-
-# If you forgot --recurse-submodules:
-git submodule update --init --recursive
+│   ├── _index.md              # home
+│   ├── about/                 # about page
+│   └── posts/<slug>/          # one page bundle per post: index.md, cover.svg, images/
+├── assets/covers/             # copies of post covers for the home page cards
+├── static/code/               # downloadable queries, scripts, policies
+└── scripts/gen_covers.py      # regenerates every post's cover.svg
 ```
 
 ## Local development
 
-Install Hugo (extended; on macOS: `brew install hugo`). Then:
+Needs Go 1.27+ and Hugo **Extended** (the standard build cannot compile the theme's Sass).
 
 ```bash
-hugo serve
+hugo server
 ```
 
-Browse to `http://localhost:1313/`. Edits hot-reload.
+Open <http://localhost:1313/dirtyfrag-blog/>. Production check:
 
-## Publishing to GitHub Pages
+```bash
+hugo --gc --minify --environment production --printPathWarnings
+```
 
-1. Push to GitHub.
-2. Repo Settings → Pages → Source: **GitHub Actions**.
-3. Edit `hugo.toml` → set `baseURL` to your actual GitHub Pages URL (e.g. `https://<you>.github.io/`).
-4. Push again. The workflow in `.github/workflows/hugo.yml` builds and deploys on every push to `main`.
-
-## Adding a new post
+## Writing a post
 
 ```bash
 hugo new content posts/my-new-post/index.md
 ```
 
-That creates a [page bundle](https://gohugo.io/content-management/page-bundles/) so you can drop images alongside the markdown and reference them as `![alt](images/foo.png)`.
+- Tags and categories are lowercase (`fleet`, not `Fleet`), or the site grows duplicate tag pages.
+- Callouts are GitHub-style: `> [!NOTE]`, `> [!WARNING]`.
+- Diagrams are fenced code with the `mermaid` language.
+- Cover: add the post to `POSTS` in `scripts/gen_covers.py`, run `python3 scripts/gen_covers.py`. OINK picks up `cover.svg` from the bundle automatically.
+- Links to files in `static/code/` use `/dirtyfrag-blog/code/<file>`.
+
+## Upgrading the theme
+
+```bash
+hugo mod get github.com/pgsty/oink@latest && hugo mod tidy
+```
 
 ## License
 
-All blog content and the artifacts in `static/code/` are MIT-licensed. See [`LICENSE`](LICENSE).
+Content and the artifacts in `static/code/` are MIT-licensed. See [`LICENSE`](LICENSE).
