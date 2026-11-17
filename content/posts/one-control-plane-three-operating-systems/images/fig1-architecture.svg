@@ -21,27 +21,27 @@
   <!-- Windows island -->
   <rect x="20" y="58" width="290" height="104" rx="8" class="win"/>
   <circle cx="38" cy="76" r="4" class="acc-v"/>
-  <text x="50" y="80" class="chip" font-weight="600">WINDOWS · 7 hosts</text>
-  <text x="38" y="100" class="chip">Windows 10 Pro 22H2 ×2 (AD + workgroup)</text>
-  <text x="38" y="118" class="chip">Windows 11 Pro ×2 (AD + workgroup)</text>
-  <text x="38" y="136" class="chip">Server 2022 ×3 · domain controllers</text>
+  <text x="50" y="80" class="chip" font-weight="600">WINDOWS · workstations + DCs</text>
+  <text x="38" y="100" class="chip">Windows 10 Pro (AD + workgroup)</text>
+  <text x="38" y="118" class="chip">Windows 11 Pro (AD + workgroup)</text>
+  <text x="38" y="136" class="chip">Server 2022 · domain controllers</text>
   <text x="38" y="154" class="mono">agent + mdm_bridge where client-OS</text>
 
   <!-- macOS island -->
   <rect x="20" y="178" width="290" height="86" rx="8" class="mac"/>
   <circle cx="38" cy="196" r="4" class="acc-b"/>
-  <text x="50" y="200" class="chip" font-weight="600">macOS · 2 hosts</text>
-  <text x="38" y="220" class="chip">MacBook Pro · macOS 27.2 · MDM enrolled</text>
-  <text x="38" y="238" class="chip">Mac mini · macOS 27.2 · agent only</text>
+  <text x="50" y="200" class="chip" font-weight="600">macOS · workstations</text>
+  <text x="38" y="220" class="chip">MacBook Pro · MDM enrolled</text>
+  <text x="38" y="238" class="chip">Mac mini · agent only</text>
   <text x="38" y="256" class="mono">Apple MDM channel + declarative mgmt</text>
 
   <!-- Ubuntu island -->
   <rect x="20" y="280" width="290" height="112" rx="8" class="lnx"/>
   <circle cx="38" cy="298" r="4" class="acc-o"/>
-  <text x="50" y="302" class="chip" font-weight="600">UBUNTU · 25 hosts · DMZ</text>
-  <text x="38" y="322" class="chip">docker swarm · 3 managers + 6 workers</text>
-  <text x="38" y="340" class="chip">Wazuh ×12 · 3 managers + 8 indexers</text>
-  <text x="38" y="358" class="chip">AdGuard · LB · automater · Fleet</text>
+  <text x="50" y="302" class="chip" font-weight="600">UBUNTU · DMZ servers</text>
+  <text x="38" y="322" class="chip">docker swarm · managers + workers</text>
+  <text x="38" y="340" class="chip">Wazuh cluster · managers + indexers</text>
+  <text x="38" y="358" class="chip">AdGuard · LB · automation · Fleet</text>
   <text x="38" y="378" class="mono">no MDM channel here: osquery + scripts</text>
 
   <!-- channels -->
@@ -63,12 +63,12 @@
 
   <rect x="400" y="182" width="360" height="66" rx="6" class="layer"/>
   <text x="414" y="202" class="chip" font-weight="600">OSQUERY LAYER</text>
-  <text x="414" y="220" class="mono">live queries · 919 policies · 14 scripts</text>
-  <text x="414" y="238" class="mono">scheduled packs · inventory · 50 labels</text>
+  <text x="414" y="220" class="mono">live queries · full policy layer</text>
+  <text x="414" y="238" class="mono">scheduled packs · inventory · labels</text>
 
   <rect x="400" y="260" width="360" height="66" rx="6" class="layer"/>
   <text x="414" y="280" class="chip" font-weight="600">MDM LAYER</text>
-  <text x="414" y="298" class="mono">Windows: mdm_bridge/WSTEP · 423 CSP profiles</text>
+  <text x="414" y="298" class="mono">Windows: mdm_bridge/WSTEP · CSP profiles</text>
   <text x="414" y="316" class="mono">macOS: Apple MDM · profiles + declarations</text>
 
   <rect x="400" y="338" width="360" height="38" rx="6" class="layer"/>

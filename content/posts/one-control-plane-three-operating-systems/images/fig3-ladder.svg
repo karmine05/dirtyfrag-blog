@@ -23,7 +23,7 @@
   <circle cx="270" cy="78" r="4" class="acc-v"/>
   <text x="282" y="82" class="chip" font-weight="600">POLICY · always-on SQL check</text>
   <text x="266" y="102" class="mono">one setting per policy, pass/fail</text>
-  <text x="266" y="116" class="mono">763 CIS in repo · 919 live</text>
+  <text x="266" y="116" class="mono">CIS baseline in repo · live in server</text>
 
   <path d="M400 122 V 146" class="line"/>
   <!-- decision -->
@@ -44,7 +44,7 @@
   <circle cx="48" cy="258" r="4" class="acc-b"/>
   <text x="60" y="262" class="chip" font-weight="600">1 · CSP profile: MDM writes the setting</text>
   <text x="46" y="282" class="mono">Windows CSP XML · macOS .mobileconfig</text>
-  <text x="46" y="296" class="mono">326 Win + 15 macOS files, same labels</text>
+  <text x="46" y="296" class="mono">Win + macOS files, one per family</text>
 
   <path d="M215 302 V 322" class="line"/>
   <text x="225" y="318" class="lab">no CSP key on this build?</text>
@@ -54,7 +54,7 @@
   <circle cx="48" cy="346" r="4" class="acc-o"/>
   <text x="60" y="350" class="chip" font-weight="600">2 · script: check by default, apply on demand</text>
   <text x="46" y="370" class="mono">DEFAULT_MODE=--check → exit 0 = compliant</text>
-  <text x="46" y="384" class="mono">98 Windows · 40 macOS · 158 Ubuntu scripts</text>
+  <text x="46" y="384" class="mono">check/fix scripts, one per OS</text>
 
   <!-- per-OS branch column -->
   <rect x="440" y="238" width="340" height="152" rx="8" class="branch"/>

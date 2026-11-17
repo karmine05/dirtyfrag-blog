@@ -55,7 +55,7 @@
 
   <!-- center receipt chip -->
   <rect x="290" y="146" width="220" height="48" rx="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.8"/>
-  <text x="306" y="166" class="mono" fill="#34d399">204/204 · 205/205 · 231/231</text>
-  <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">verified, Windows MDM fleet</text>
+  <text x="306" y="166" class="mono" fill="#34d399">100% verified, every host</text>
+  <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">Windows MDM fleet, this week</text>
   <text x="200" y="172" class="sub" text-anchor="middle">every check-in</text>
 </svg>

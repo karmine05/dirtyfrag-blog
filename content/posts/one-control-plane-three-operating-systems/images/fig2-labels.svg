@@ -55,7 +55,7 @@
   <path d="M210 232 V 262 M600 232 V 262" class="line"/>
 
   <!-- label chips row -->
-  <text x="20" y="278" class="lab">19 REPO LABELS + LIVE ONES → 50 IN THE SERVER</text>
+  <text x="20" y="278" class="lab">REPO LABELS + LIVE ONES → ONE SET IN THE SERVER</text>
   <rect x="20" y="288" width="760" height="34" rx="17" class="out"/>
   <text x="40" y="309" class="chip">Win11 WS · Win10 WS · member servers · MDM-enrolled · domain-joined · TPM ready · macOS MDM · …</text>
 
@@ -64,7 +64,7 @@
   <!-- scope box -->
   <rect x="20" y="350" width="760" height="90" rx="8" class="scope"/>
   <text x="40" y="374" class="chip" font-weight="600">SCOPE = AND OF LABEL REQUIREMENTS: each profile and policy carries its label set</text>
-  <text x="40" y="396" class="mono">Win11 host  →  full benchmark, 231 profiles verified     Win10 host  →  variant set, 205 verified</text>
-  <text x="40" y="414" class="mono">macOS host  →  MDM profiles + 119 CIS macOS policies       Ubuntu DMZ  →  187 STIG policies + scripts</text>
+  <text x="40" y="396" class="mono">Win11 host  →  full benchmark, 100% verified     Win10 host  →  variant set, 100% verified</text>
+  <text x="40" y="414" class="mono">macOS host  →  MDM profiles + CIS policies       Ubuntu DMZ  →  STIG policies + scripts</text>
   <text x="40" y="430" class="sub">a new host is enrolled and auto-scoped on its first check-in; a build or join-state change re-scopes it. nothing is tuned per host.</text>
 </svg>
