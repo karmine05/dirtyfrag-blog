@@ -10,10 +10,10 @@ showWordCount: true
 showHero: false
 showTableOfContents: false
 meta-title: "About · karmine's notes"
-meta-description: "About Dhruv Majumdar — VP of Security Solutions. Two decades across MxDR, VMDR, CTI and red teaming, now building the auditable AI layer of security operations: fleet-mcp, agentic-detector, agent-assisted hunting."
+meta-description: "About Dhruv Majumdar — VP of Security Solutions, head of security for a mixed-OS fleet. Two decades leading MxDR, compromise assessments, and cyber threat intelligence; now driving security with agents and device policy."
 meta-author: Dhruv Majumdar
-meta-og:title: "About Dhruv Majumdar — the auditable AI layer of security operations"
-meta-og:description: "Two decades across MxDR, VMDR, CTI and red teaming. Now the operators are human and agent — and the work stays auditable. fleet-mcp, agentic-detector, vibe hunting."
+meta-og:title: "About Dhruv Majumdar — two decades leading the defense, now driving security with agents"
+meta-og:description: "Two decades leading MxDR, compromise assessments, and cyber threat intelligence. Now: security driven by agents and device policy, on one control plane."
 meta-og:site_name: "karmine's notes"
 meta-og:locale: en
 meta-og:type: website
@@ -22,9 +22,11 @@ meta-article:modified_time: "2026-11-16T09:00:00-05:00"
 meta-keywords: about,dhruv majumdar,security-ops,mxdr,threat-hunting,fleet,osquery,mcp,ai,agentic-ai
 ---
 
-{{< figure src="images/hero.svg" alt="About: Dhruv Majumdar, VP of Security Solutions — twenty years across MxDR, VMDR, CTI and red teaming, now building the auditable AI layer of security operations" >}}
+{{< figure src="images/infographic.svg" alt="Infographic: two decades leading MxDR, compromise assessments, and cyber threat intelligence — now driving security with agents and device policy on one control plane" >}}
 
-**Dhruv Majumdar** — **VP of Security Solutions**. Two decades plus across **MxDR**, **VMDR**, **Cyber Threat Intelligence**, and **Red Teaming**. These notes are the working-out: the tools, the patterns, and the moves that survive contact with real adversaries and real fleets.
+**Dhruv Majumdar** — **VP of Security Solutions**, head of security for a mixed-OS fleet. Two decades working in and leading **MxDR** programs, **compromise assessments**, and **Cyber Threat Intelligence** — the programs where the defense has to be reproducible, not just plausible. Now the job is being driven forward by **agents and device policy**: the operators are human and agent, and the control plane decides what either one may touch.
+
+These notes are the working-out: the tools, the patterns, and the moves that survive contact with real adversaries and real fleets.
 
 Most of what I write touches the seam between detection theory and operational reality — where MxDR programs run on artifacts not catalogs, where vulnerability response works backwards from exploit primitives instead of forwards from a CVE ID, and where a red team's "found it" only matters if the blue side can reproduce it on every endpoint they own.
 

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 920" width="1200" height="920" role="img" aria-label="Infographic: Dhruv Majumdar, VP of Security Solutions and head of security for the fleet. Two decades leading MxDR, compromise assessments, and cyber threat intelligence. Now driving security with agents and device policy: fleet-mcp, vibe hunting, agentic-detector, and device governance on one control plane across three operating systems. Talks at BSides, DC416, conINT, HacKP; on four security podcasts.">
+  <defs>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#e94560"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="920" fill="#0d1117"/>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+    <!-- header -->
+    <line x1="0" y1="158" x2="1200" y2="158" stroke="#21262d" stroke-width="1"/>
+    <text x="72" y="52" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="4" fill="#8b949e" font-weight="600">KARMINE'S NOTES · ABOUT</text>
+    <text x="72" y="108" font-size="44" font-weight="800" fill="#f0f6fc">Dhruv Majumdar</text>
+    <text x="72" y="142" font-size="20" font-weight="700" fill="#a78bfa">VP of Security Solutions · Head of Security for the Fleet</text>
+
+    <!-- decades band -->
+    <text x="72" y="200" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="3" fill="#8b949e" font-weight="700">TWO DECADES LEADING THE DEFENSE</text>
+
+    <!-- MxDR -->
+    <rect x="72" y="220" width="344" height="195" rx="12" fill="#161b22" stroke="#7c5cd6" stroke-width="1"/>
+    <text x="92" y="262" font-size="26" font-weight="800" fill="#a78bfa">MxDR</text>
+    <text x="92" y="296" font-size="15" fill="#c9d1d9">led detection &amp; response programs</text>
+    <text x="92" y="320" font-size="15" fill="#c9d1d9">artifacts, not catalogs</text>
+    <text x="92" y="344" font-size="15" fill="#c9d1d9">Mac · Windows · Linux</text>
+    <text x="92" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">signal → disposition, full lifecycle</text>
+
+    <!-- Compromise Assessments -->
+    <rect x="434" y="220" width="344" height="195" rx="12" fill="#161b22" stroke="#c2620f" stroke-width="1"/>
+    <text x="454" y="262" font-size="23" font-weight="800" fill="#fb923c">Compromise Assessments</text>
+    <text x="454" y="296" font-size="15" fill="#c9d1d9">red team operations:</text>
+    <text x="454" y="320" font-size="15" fill="#c9d1d9">prove what survives defenses</text>
+    <text x="454" y="344" font-size="15" fill="#c9d1d9">"found it" must be reproducible</text>
+    <text x="454" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">offense that tests real defenses</text>
+
+    <!-- CTI -->
+    <rect x="796" y="220" width="344" height="195" rx="12" fill="#161b22" stroke="#3b6fd4" stroke-width="1"/>
+    <text x="816" y="262" font-size="22" font-weight="800" fill="#60a5fa">Cyber Threat Intelligence</text>
+    <text x="816" y="296" font-size="15" fill="#c9d1d9">intel that changes what</text>
+    <text x="816" y="320" font-size="15" fill="#c9d1d9">you look for, not just</text>
+    <text x="816" y="344" font-size="15" fill="#c9d1d9">what you read</text>
+    <text x="816" y="386" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">adversary-informed hunting</text>
+
+    <text x="425" y="322" font-size="20" fill="#8b949e" text-anchor="middle">→</text>
+    <text x="787" y="322" font-size="20" fill="#8b949e" text-anchor="middle">→</text>
+
+    <!-- connector -->
+    <line x1="600" y1="415" x2="600" y2="436" stroke="#34d399" stroke-width="2"/>
+    <text x="600" y="460" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2" fill="#34d399">THE SEAM MOVED: THE OPERATORS ARE NO LONGER ONLY HUMAN</text>
+
+    <!-- now band -->
+    <text x="72" y="505" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="3" fill="#34d399" font-weight="700">NOW · HEAD OF SECURITY FOR THE FLEET</text>
+    <text x="72" y="540" font-size="20" fill="#f0f6fc">Security driven by agents and device policy — one control plane, three operating systems.</text>
+
+    <!-- OPERATE -->
+    <rect x="72" y="560" width="258" height="170" rx="12" fill="#161b22" stroke="#7c5cd6" stroke-width="1"/>
+    <text x="92" y="592" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" letter-spacing="2" fill="#a78bfa">OPERATE</text>
+    <text x="92" y="622" font-size="17" font-weight="800" fill="#f0f6fc">fleet-mcp</text>
+    <text x="92" y="650" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">English in, real scans out</text>
+    <text x="92" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">SQL shown to the analyst</text>
+    <text x="92" y="706" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">typed tool catalog for agents</text>
+
+    <!-- HUNT -->
+    <rect x="342" y="560" width="258" height="170" rx="12" fill="#161b22" stroke="#3b6fd4" stroke-width="1"/>
+    <text x="362" y="592" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" letter-spacing="2" fill="#60a5fa">HUNT</text>
+    <text x="362" y="622" font-size="17" font-weight="800" fill="#f0f6fc">vibe hunting</text>
+    <text x="362" y="650" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">agent composes the SQL</text>
+    <text x="362" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">evidence → OCSF timeline</text>
+    <text x="362" y="706" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">verdict, then action</text>
+
+    <!-- SEE -->
+    <rect x="612" y="560" width="258" height="170" rx="12" fill="#161b22" stroke="#c2620f" stroke-width="1"/>
+    <text x="632" y="592" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" letter-spacing="2" fill="#fb923c">SEE</text>
+    <text x="632" y="622" font-size="17" font-weight="800" fill="#f0f6fc">agentic-detector</text>
+    <text x="632" y="650" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">the AI layer, queryable</text>
+    <text x="632" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">MCP servers · agent CLIs</text>
+    <text x="632" y="706" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">AI is now attack surface</text>
+
+    <!-- GOVERN -->
+    <rect x="882" y="560" width="258" height="170" rx="12" fill="#161b22" stroke="#1a7f5a" stroke-width="1"/>
+    <text x="902" y="592" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="700" letter-spacing="2" fill="#34d399">GOVERN</text>
+    <text x="902" y="622" font-size="17" font-weight="800" fill="#f0f6fc">device policy</text>
+    <text x="902" y="650" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">3 OS, one control plane</text>
+    <text x="902" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#8b949e">labels decide scope</text>
+    <text x="902" y="706" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#8b949e">GitOps-backed, auditable</text>
+
+    <!-- footer -->
+    <line x1="0" y1="790" x2="1200" y2="790" stroke="#21262d" stroke-width="1"/>
+    <line x1="72" y1="783" x2="360" y2="783" stroke="url(#rule)" stroke-width="2"/>
+    <text x="72" y="835" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">TALKS · BSides, DC416, conINT, HacKP</text>
+    <text x="72" y="868" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" fill="#8b949e">ON THE AIR · Beyond the Alert, Detection at Scale, Blue Team Warrior, Hacking Security Radio</text>
+    <text x="1128" y="835" text-anchor="end" font-size="16" font-weight="700" fill="#f0f6fc">"the model accelerates the work"</text>
+    <text x="1128" y="862" text-anchor="end" font-size="16" font-weight="700" fill="#f0f6fc">without hiding it"</text>
+  </g>
+</svg>
