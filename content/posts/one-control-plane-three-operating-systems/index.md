@@ -140,7 +140,7 @@ The Windows profiles live in a single Fleet team (Fleet's workspace object that 
 - **Win 10 workstations** (build below 22000) get a `CIS-Win10-*` variant with the keys that build does not carry removed. The Windows CSP surface versions its keys, and a control that writes a dozen keys on a current build writes a handful on an older one. The variants in the team are exactly that delta, scoped by the build label so the wrong OS never sees the wrong file.
 - **LAPS** is the scope that is not about the OS. Windows LAPS rotates the local administrator password and backs the result up to a directory, AD or Entra; the CSP writes the rule, and LAPS enforces it. The LAPS profile therefore carries a domain-joined label on top of its OS scope, and the workgroup hosts in the fleet simply do not receive the control. The population that can pass it is exactly the population that gets it. For the boxes LAPS does not reach, local admin is not a standing state either: it is a grant made from Fleet on demand.
 
-The result this week: every enrolled workstation came back fully verified, the workgroup one a profile short because LAPS does not apply there. Its state shows in the same view as the domain-joined hosts.
+The result at last check-in: every enrolled workstation came back fully verified, the workgroup one a profile short because LAPS does not apply there. Its state shows in the same view as the domain-joined hosts.
 
 ## macOS: MDM the Apple way
 
