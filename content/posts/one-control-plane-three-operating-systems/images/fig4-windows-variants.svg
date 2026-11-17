@@ -65,7 +65,7 @@
   <text x="414" y="228" class="chip">MDM enrollment</text>
   <text x="414" y="244" class="chip">unavailable by design</text>
   <text x="414" y="266" class="mono">policy checks run as</text>
-  <text x="414" y="281" class="mono">osquery (no mdm_bridge),</text>
+  <text x="414" y="281" class="mono">osquery (no MDM enrollment),</text>
   <text x="414" y="296" class="mono">fixes via scripts / GPO</text>
   <rect x="414" y="330" width="154" height="40" rx="6" class="g"/>
   <text x="426" y="347" class="mono" fill="#34d399">every DC, by design</text>
