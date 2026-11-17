@@ -16,14 +16,14 @@
   </style>
 
   <text x="20" y="22" class="title">One server, three operating systems</text>
-  <text x="20" y="40" class="sub">one osquery agent per host; MDM rides the same server where the OS supports it</text>
+  <text x="20" y="40" class="sub">one osquery agent per host; MDM rides the same server for the enrolled Windows and Apple hosts</text>
 
   <!-- Windows island -->
   <rect x="20" y="58" width="290" height="104" rx="8" class="win"/>
   <circle cx="38" cy="76" r="4" class="acc-v"/>
   <text x="50" y="80" class="chip" font-weight="600">WINDOWS · 7 hosts</text>
   <text x="38" y="100" class="chip">Windows 10 Pro 22H2 ×2 (AD + workgroup)</text>
-  <text x="38" y="118" class="chip">Windows 11 Pro ×2 · domain-joined</text>
+  <text x="38" y="118" class="chip">Windows 11 Pro ×2 (AD + workgroup)</text>
   <text x="38" y="136" class="chip">Server 2022 ×3 · domain controllers</text>
   <text x="38" y="154" class="mono">agent + mdm_bridge where client-OS</text>
 
@@ -39,18 +39,18 @@
   <rect x="20" y="280" width="290" height="112" rx="8" class="lnx"/>
   <circle cx="38" cy="298" r="4" class="acc-o"/>
   <text x="50" y="302" class="chip" font-weight="600">UBUNTU · 25 hosts · DMZ</text>
-  <text x="38" y="322" class="chip">docker swarm · 3 managers + 7 workers</text>
-  <text x="38" y="340" class="chip">Wazuh indexers ×8 · masters + data</text>
-  <text x="38" y="358" class="chip">AdGuard · LB · Fleet server itself</text>
+  <text x="38" y="322" class="chip">docker swarm · 3 managers + 6 workers</text>
+  <text x="38" y="340" class="chip">Wazuh ×12 · 3 managers + 8 indexers</text>
+  <text x="38" y="358" class="chip">AdGuard · LB · automater · Fleet</text>
   <text x="38" y="378" class="mono">no MDM channel here: osquery + scripts</text>
 
   <!-- channels -->
   <path d="M310 110 H 372" class="line"/>
   <path d="M310 221 H 372" class="line dash"/>
   <path d="M310 336 H 372" class="line dash"/>
-  <text x="316" y="103" class="lab">osquery + WSTEP</text>
-  <text x="316" y="214" class="lab">osquery + Apple MDM</text>
-  <text x="316" y="329" class="lab">osquery</text>
+  <text x="329" y="103" class="lab">WSTEP</text>
+  <text x="314" y="214" class="lab">Apple MDM</text>
+  <text x="322" y="329" class="lab">osquery</text>
 
   <!-- server -->
   <rect x="380" y="58" width="400" height="334" rx="10" class="srv"/>

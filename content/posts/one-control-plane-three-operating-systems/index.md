@@ -36,7 +36,7 @@ tags:
 showTableOfContents: true
 ---
 
-{{< figure src="images/fig1-architecture.svg" alt="Fleet architecture: seven Windows hosts, two macOS hosts and twenty-five Ubuntu DMZ hosts, each running one osquery agent, with MDM channels for the client OSes, all feeding a single Fleet server" caption="The whole estate: seven Windows hosts, two Macs, twenty-five Ubuntu boxes in the DMZ. One osquery agent per host; the MDM channels ride the same server where the OS supports them." >}}
+{{< figure src="images/fig1-architecture.svg" alt="Fleet architecture: seven Windows hosts, two macOS hosts and twenty-five Ubuntu DMZ hosts, each running one osquery agent, with MDM channels for the client OSes, all feeding a single Fleet server" caption="The whole estate: seven Windows hosts, two Macs, twenty-five Ubuntu boxes in the DMZ. One osquery agent per host (osquery is the open-source agent Fleet ships; it answers SQL questions about the machine); the MDM channels ride the same server for the enrolled Windows and Apple hosts." >}}
 
 > **One sentence:** A 34-host fleet spanning three operating systems and two network domains runs on one Fleet server, with dynamic labels deciding what applies where, MDM profiles doing the setting, 919 policies verifying it, and a verified state per profile per host.
 
@@ -45,9 +45,9 @@ showTableOfContents: true
 | **The fleet**       | 34 hosts: 7 Windows (2× Win 10, 2× Win 11, 3× Server 2022 domain controllers), 2 macOS 27, 25 Ubuntu 24.04/26.04 in the DMZ          |
 | **The control plane** | One Fleet server: console, REST API, fleetctl, fleet-mcp, and the Windows and Apple MDM endpoints                                    |
 | **The scope**       | 50 labels, mostly live-evaluated osquery SQL; 19 of them carry the CIS baseline                                                       |
-| **The policy layer** | 919 policies live in the server; 763 CIS/STIG policies in the baseline repo (457 Windows, 119 macOS, 187 Ubuntu)                     |
-| **The setting layer** | 423 Windows CSP profiles and 2 macOS profiles live; 296 check/fix scripts in the repo                                                 |
-| **The proof**       | 204/204, 205/205 and 231/231 profiles verified on the three MDM-enrolled Windows hosts, this week                                     |
+| **The policy layer** | 919 policies live in the server: the 763 CIS/STIG baseline (457 Windows, 119 macOS, 187 Ubuntu) plus 156 house checks, mostly software-update state |
+| **The setting layer** | 423 Windows CSP profiles (CSP is the Configuration Service Provider API that MDM profiles write through) and 23 macOS profiles live; 296 check/fix scripts in the repo |
+| **The proof**       | 204/204, 205/205 and 231/231 profiles verified on three of the four MDM-enrolled Windows workstations, this week                      |
 
 ## The fleet, as it actually is
 
@@ -55,12 +55,12 @@ Most device management write-ups start from a homogeneous estate: one OS, one jo
 
 | Audience                          | Hosts | Join state                                   | MDM                          |
 | --------------------------------- | ----- | -------------------------------------------- | ---------------------------- |
-| Windows 10 / 11 workstations      | 4     | 3 domain-joined (dexterlabs.local), 1 workgroup | enrolled via mdm_bridge      |
+| Windows 10 / 11 workstations      | 4     | 2 domain-joined (dexterlabs.local), 2 workgroup | all four enrolled via mdm_bridge |
 | Windows Server 2022               | 3     | domain controllers                            | none, by design              |
 | macOS 27.2                        | 2     | 1 MDM-enrolled, 1 agent-only                  | Apple MDM                    |
 | Ubuntu 24.04 / 26.04, DMZ segment | 25    | no AD involvement                             | no MDM channel (server fleet)    |
 
-The Linux side is a real production DMZ: three docker-swarm managers and seven workers on 26.04, eight Wazuh indexer nodes on 24.04, AdGuard Home, the load balancer, and the Fleet server itself, which manages its own box like everyone else.
+The Linux side is a real production DMZ: a docker swarm of three managers and six workers on 26.04, twelve Wazuh boxes on 24.04 (three managers, eight indexer nodes, one dashboard), AdGuard Home, the load balancer, an automation box, and the Fleet server itself, which manages its own box like everyone else.
 
 Four audiences, four different capabilities: Windows that can do MDM and Windows that cannot, a Mac that is enrolled and one that is not, and a Linux segment made entirely of DMZ servers. Fleet ships an MDM channel for Linux desktops, and it earns its own post. This one is about what the server segment gets instead: full visibility and control, on the same plane. The management model has to absorb that spread without a second console, and that is the spec this post addresses.
 
@@ -109,7 +109,7 @@ What the model buys:
 The baseline repo encodes a ladder for every control:
 
 1. **Policy.** One SQL check, one setting, pass or fail per host, always on. The baseline carries 763 of them: 457 from the CIS Windows 11 Intune benchmark (337 Level 1, 86 Level 2, 34 BitLocker), 119 from CIS macOS 26, and 187 from the DISA STIG for Ubuntu 24.04.
-2. **CSP profile.** Where MDM can write the setting, the fix is a configuration profile: 320 Windows CSP XML files, 15 macOS `.mobileconfig` files, plus Apple declarations where a richer data shape fits.
+2. **CSP profile.** Where MDM can write the setting, the fix is a configuration profile: 326 Windows CSP XML files, 15 macOS `.mobileconfig` files, plus Apple declarations (declarative management, Apple's newer push-based profile format) where a richer data shape fits. Not every file ships as a profile, because some controls run as scripts on the target builds; the deployed families reach the server as 421 live CIS profiles, including the 191 per-build Win 10 variants, and two house profiles ride along: an RDP allow rule and an OS update policy.
 3. **Script.** Where no CSP key exists on that OS build, the fix is a script that ships in check mode by default and flips to apply with one line.
 
 `catalog.csv` turns the ladder into data. One row per policy, with columns for `csp_uri`, `profile_file`, `script_file`, `scope_label` and `scope_reason`. When a policy fails, the fix is a field lookup, not an investigation.
@@ -133,21 +133,21 @@ Check mode changes nothing and exits 0 when the host is compliant, 1 otherwise. 
 
 {{< figure src="images/fig4-windows-variants.svg" alt="Windows per-OS scoping: one CIS control family fans out to a full Win11 profile, a stripped Win10 variant, a script path for Server, and a domain-join-gated LAPS profile, each branch selected by labels" caption="The CSP surface is versioned, so one control family ships as label-gated variants: full set for Win 11, a per-build variant for Win 10, the script path for Server, and a join-state gate for LAPS." >}}
 
-Windows is where the MDM depth shows. The four client-OS hosts enroll through Fleet's `mdm_bridge`, and the three domain controllers stay outside MDM by design, since Server cannot enroll. They still carry every osquery-based policy check and take script remediations, so the absence of MDM removes a channel, not visibility.
+Windows is where the MDM depth shows. The four workstations enroll through Fleet's `mdm_bridge`, the Windows MDM channel that runs on the Fleet server itself; the three domain controllers stay outside MDM by design, since Server cannot enroll. They still carry every osquery-based policy check and take script remediations, so the absence of MDM removes a channel, not visibility.
 
-The 423 profiles in the team are not 423 hand-tuned files. They are variants of control families, each gated by labels:
+The 423 profiles live in a single Fleet team (Fleet's workspace object that groups hosts, profiles and policies), and they are not 423 hand-tuned files. They are control families and their per-build variants, each gated by labels:
 
 - **Win 11 workstations** (build 22000 or later) get the full profile: every CSP key the benchmark names.
 - **Win 10 workstations** (build below 22000) get a `CIS-Win10-*` variant with the keys that build does not carry removed. The Windows CSP surface versions its keys, and a control that writes 14 keys on 25H2 writes 5 on 19045. The 191 variants in the team are exactly that delta, scoped by the build label so the wrong OS never sees the wrong file.
-- **LAPS** is the scope that is not about the OS. Windows LAPS rotates the local administrator password and backs the result up to a directory, AD or Entra, a hard rule the CSP enforces. The LAPS profile therefore carries a domain-joined label on top of its OS scope, and the one workgroup host in the fleet simply does not receive the control. The population that can pass it is exactly the population that gets it.
+- **LAPS** is the scope that is not about the OS. Windows LAPS rotates the local administrator password and backs the result up to a directory, AD or Entra, a hard rule the CSP enforces. The LAPS profile therefore carries a domain-joined label on top of its OS scope, and the two workgroup hosts in the fleet simply do not receive the control. The population that can pass it is exactly the population that gets it.
 
-The result this week: 231/231 verified on the Win 11 host, 205/205 on the domain-joined Win 10 host, and 204/204 on the workgroup one, one profile fewer, because LAPS does not apply there.
+The result this week: 231/231 verified on the domain-joined Win 11 host, 205/205 on the domain-joined Win 10, and 204/204 on the workgroup Win 10, one profile fewer because LAPS does not apply there. The fourth workstation, a Win 11 26H2 box in the workgroup, is enrolled in the same loop, and its state shows in the same view.
 
 ## macOS: MDM the Apple way
 
-The MacBook Pro is MDM-enrolled in Fleet. The root CA profile and the fleetd configuration arrive through Apple MDM, and declarative management is available for the settings that outgrow classic profiles. The Mac mini runs agent-only and still gets the full policy layer.
+The MacBook Pro is MDM-enrolled in Fleet. The root CA profile and the fleetd configuration (Fleet's agent daemon) arrive through Apple MDM, and declarative management is available for the settings that outgrow classic profiles. The Mac mini runs agent-only and still gets the full policy layer.
 
-The scope label is one line: `SELECT 1 FROM mdm WHERE enrolled = 'true'`. 119 CIS macOS 26 policies run against both machines; 15 profiles and 40 scripts are the fix path; and the MDM-enrolled label is the only thing separating what the MDM channel delivers from what the agent channel delivers. Enrollment changes, and the set changes with it.
+The scope label is one line: `SELECT 1 FROM mdm WHERE enrolled = 'true'`. 119 CIS macOS 26 policies run against both machines; the 15 baseline profiles and 40 scripts are the fix path, and the 23 live profiles on the server add disk encryption, Santa, and the enrollment set; the MDM-enrolled label is the only thing separating what the MDM channel delivers from what the agent channel delivers. Enrollment changes, and the set changes with it.
 
 ## The DMZ Linux: full visibility, no MDM channel
 
@@ -184,7 +184,7 @@ That is the whole operating model: **labels are the scope, profiles are the fix,
 
 ## Run it yourself
 
-The backbone is the [fleet-cis-baselines](https://github.com/karmine05/fleet-cis-baselines) repo: 763 policies, 335 MDM profiles, 296 check/fix scripts, 19 scope labels, and `apply_policy_scope.py`, which wires policies to labels with a dry run before anything touches a team.
+The backbone is the [fleet-cis-baselines](https://github.com/karmine05/fleet-cis-baselines) repo: 763 policies, 341 MDM profiles (326 Windows, 15 macOS), 296 check/fix scripts, 19 scope labels, and `apply_policy_scope.py`, which wires policies to labels with a dry run before anything touches a team.
 
 ```sh
 fleetctl apply -f labels/labels.yml

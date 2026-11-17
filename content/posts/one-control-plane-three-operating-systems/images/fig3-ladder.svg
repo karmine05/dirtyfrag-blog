@@ -22,8 +22,8 @@
   <rect x="250" y="58" width="300" height="64" rx="8" class="pol"/>
   <circle cx="270" cy="78" r="4" class="acc-v"/>
   <text x="282" y="82" class="chip" font-weight="600">POLICY · always-on SQL check</text>
-  <text x="266" y="102" class="mono">one setting per policy · pass / fail per host</text>
-  <text x="266" y="116" class="mono">763 CIS in the repo · 919 live in the server</text>
+  <text x="266" y="102" class="mono">one setting per policy, pass/fail</text>
+  <text x="266" y="116" class="mono">763 CIS in repo · 919 live</text>
 
   <path d="M400 122 V 146" class="line"/>
   <!-- decision -->
@@ -44,7 +44,7 @@
   <circle cx="48" cy="258" r="4" class="acc-b"/>
   <text x="60" y="262" class="chip" font-weight="600">1 · CSP profile: MDM writes the setting</text>
   <text x="46" y="282" class="mono">Windows CSP XML · macOS .mobileconfig</text>
-  <text x="46" y="296" class="mono">320 Windows + 15 macOS profiles, same labels</text>
+  <text x="46" y="296" class="mono">326 Win + 15 macOS files, same labels</text>
 
   <path d="M215 302 V 322" class="line"/>
   <text x="225" y="318" class="lab">no CSP key on this build?</text>

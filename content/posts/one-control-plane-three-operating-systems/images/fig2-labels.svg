@@ -57,7 +57,7 @@
   <!-- label chips row -->
   <text x="20" y="278" class="lab">19 REPO LABELS + LIVE ONES → 50 IN THE SERVER</text>
   <rect x="20" y="288" width="760" height="34" rx="17" class="out"/>
-  <text x="40" y="309" class="chip">Win11 WS · Win10 WS · Server all · member servers · MDM-enrolled · domain-joined · TPM ready · macOS MDM · …</text>
+  <text x="40" y="309" class="chip">Win11 WS · Win10 WS · member servers · MDM-enrolled · domain-joined · TPM ready · macOS MDM · …</text>
 
   <path d="M400 322 V 344" class="line"/>
 

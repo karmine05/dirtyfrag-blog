@@ -51,11 +51,11 @@
   <path d="M490 97 H 580" class="line"/>
   <path d="M670 128 V 210" class="line"/>
   <path d="M580 241 H 490" class="line"/>
-  <path d="M310 241 H 220" class="line"/>
-  <path d="M130 210 V 128" class="line"/>
+  <path d="M310 241 H 130 V 128" class="line"/>
 
   <!-- center receipt chip -->
   <rect x="290" y="146" width="220" height="48" rx="8" fill="none" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.8"/>
   <text x="306" y="166" class="mono" fill="#34d399">204/204 · 205/205 · 231/231</text>
   <text x="306" y="182" class="mono" fill="#34d399" fill-opacity="0.75">verified, Windows MDM fleet</text>
+  <text x="200" y="172" class="sub" text-anchor="middle">every check-in</text>
 </svg>
