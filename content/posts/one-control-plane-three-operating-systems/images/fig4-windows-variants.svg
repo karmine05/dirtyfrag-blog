@@ -48,7 +48,7 @@
   <rect x="222" y="182" width="154" height="24" rx="12" fill="none" stroke="#60a5fa" stroke-opacity="0.6" stroke-width="1"/>
   <text x="234" y="198" class="lab">build &lt; 22000</text>
   <text x="222" y="228" class="chip">variant profile:</text>
-  <text x="222" y="244" class="chip">keys this build lacks, out</text>
+  <text x="222" y="244" class="chip">missing keys removed</text>
   <text x="222" y="266" class="mono">a handful of keys kept</text>
   <text x="222" y="281" class="mono">CIS-Win10-* variants</text>
   <text x="222" y="296" class="mono">in the team today</text>
@@ -85,7 +85,7 @@
   <text x="606" y="311" class="mono">do not receive it</text>
   <rect x="606" y="330" width="164" height="40" rx="6" class="g"/>
   <text x="618" y="347" class="mono" fill="#34d399">works where it can</text>
-  <text x="618" y="362" class="mono" fill="#34d399" fill-opacity="0.8">no cleanup after</text>
+  <text x="618" y="362" class="mono" fill="#34d399" fill-opacity="0.8">excluded by label</text>
 
   <!-- bottom strip -->
   <rect x="16" y="404" width="768" height="30" rx="6" class="cat"/>

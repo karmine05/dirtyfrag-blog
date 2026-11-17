@@ -45,9 +45,9 @@
   <text x="38" y="378" class="mono">no MDM channel here: osquery + scripts</text>
 
   <!-- channels -->
-  <path d="M310 110 H 372" class="line"/>
-  <path d="M310 221 H 372" class="line dash"/>
-  <path d="M310 336 H 372" class="line dash"/>
+  <path d="M310 110 H 380" class="line"/>
+  <path d="M310 221 H 380" class="line dash"/>
+  <path d="M310 336 H 380" class="line dash"/>
   <text x="329" y="103" class="lab">WSTEP</text>
   <text x="314" y="214" class="lab">Apple MDM</text>
   <text x="322" y="329" class="lab">osquery</text>

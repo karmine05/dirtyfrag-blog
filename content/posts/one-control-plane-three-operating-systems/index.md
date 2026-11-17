@@ -46,7 +46,7 @@ showTableOfContents: true
 | **The scope**       | one label set, mostly live-evaluated osquery SQL; a subset carries the CIS baseline                                                   |
 | **The policy layer** | hundreds of policies live in the server: the full CIS/STIG baseline for each OS, plus a house layer of operational checks, mostly software-update state |
 | **The setting layer** | a few hundred Windows CSP profiles (CSP is the Configuration Service Provider API that MDM profiles write through) and a dozen-plus macOS profiles live; hundreds of check/fix scripts in the repo |
-| **The proof**       | 100% of profiles verified on every MDM-enrolled Windows workstation, this week                                                        |
+| **The proof**       | 100% of profiles verified on every MDM-enrolled Windows workstation, as of its last check-in                                        |
 
 ## The fleet, as it actually is
 
@@ -67,7 +67,7 @@ Four audiences, four different capabilities: Windows that can do MDM and Windows
 
 {{< figure src="images/fig2-labels.svg" alt="Label scoping flow: host attributes read by osquery feed dynamic label SQL queries, the labels gate profiles and policies, and each host receives exactly the set its labels select" caption="A label is an osquery query evaluated on a cycle. A host's profile set is the intersection of its labels, recomputed from facts, not from an admin's list." >}}
 
-In Fleet the question *which hosts does this apply to* has one answer shape: a query. A dynamic label is an osquery `SELECT` the server evaluates continuously, and a host that matches is a member. No list to maintain, no group to join, no inventory spreadsheet to keep in sync.
+In Fleet the question *which hosts does this apply to* has one answer shape: a query. A dynamic label is an osquery `SELECT` the server evaluates on a cycle, and a host that matches is a member. No list to maintain, no group to join, no inventory spreadsheet to keep in sync.
 
 Two labels from the CIS baseline, verbatim from the server:
 
@@ -108,7 +108,7 @@ Many of the Windows profiles in the team are per-build variants, and they exist 
 The baseline repo encodes a ladder for every control:
 
 1. **Policy.** One SQL check, one setting, pass or fail per host, always on. The baseline carries the full set per OS: the CIS Windows 11 Intune benchmark across all its levels, the CIS macOS benchmark, and the DISA STIG for Ubuntu.
-2. **CSP profile.** Where MDM can write the setting, the fix is a configuration profile: Windows CSP XML files and macOS `.mobileconfig` files, one per control family, plus Apple declarations (declarative management, Apple's newer push-based profile format) where a richer data shape fits. Not every control ships as a profile, because some run as scripts on the target builds; the deployed families reach the server as a few hundred live CIS profiles, including the per-build Win 10 variants, plus a small set of house profiles: an RDP allow rule and an OS update policy.
+2. **CSP profile.** Where MDM can write the setting, the fix is a configuration profile: Windows CSP XML files and macOS `.mobileconfig` files, one per control family, plus Apple declarations (Declarative Device Management: declarative desired-state payloads the device applies and owns) where a richer data shape fits. Not every control ships as a profile, because some run as scripts on the target builds; the deployed families reach the server as a few hundred live CIS profiles, including the per-build Win 10 variants, plus a small set of house profiles: an RDP allow rule and an OS update policy.
 3. **Script.** Where no CSP key exists on that OS build, the fix is a script that ships in check mode by default and flips to apply with one line.
 
 `catalog.csv` turns the ladder into data. One row per policy, with columns for `csp_uri`, `profile_file`, `script_file`, `scope_label` and `scope_reason`. When a policy fails, the fix is a field lookup, not an investigation.
@@ -138,7 +138,7 @@ The Windows profiles live in a single Fleet team (Fleet's workspace object that 
 
 - **Win 11 workstations** (build 22000 or later) get the full profile: every CSP key the benchmark names.
 - **Win 10 workstations** (build below 22000) get a `CIS-Win10-*` variant with the keys that build does not carry removed. The Windows CSP surface versions its keys, and a control that writes a dozen keys on a current build writes a handful on an older one. The variants in the team are exactly that delta, scoped by the build label so the wrong OS never sees the wrong file.
-- **LAPS** is the scope that is not about the OS. Windows LAPS rotates the local administrator password and backs the result up to a directory, AD or Entra, a hard rule the CSP enforces. The LAPS profile therefore carries a domain-joined label on top of its OS scope, and the workgroup hosts in the fleet simply do not receive the control. The population that can pass it is exactly the population that gets it.
+- **LAPS** is the scope that is not about the OS. Windows LAPS rotates the local administrator password and backs the result up to a directory, AD or Entra; the CSP writes the rule, and LAPS enforces it. The LAPS profile therefore carries a domain-joined label on top of its OS scope, and the workgroup hosts in the fleet simply do not receive the control. The population that can pass it is exactly the population that gets it. For the boxes LAPS does not reach, local admin is not a standing state either: it is a grant made from Fleet on demand.
 
 The result this week: every enrolled workstation came back fully verified, the workgroup one a profile short because LAPS does not apply there. Its state shows in the same view as the domain-joined hosts.
 
@@ -160,13 +160,15 @@ No MDM channel does not mean no control. Every box reports the same osquery surf
 
 The point is that the DMZ boxes do not get a second management model. They join the same label space, the same policy view, and the same status page. *Which STIG controls are failing anywhere in the estate* is one list, not three, and it updates itself.
 
+The Fleet server deserves the same scrutiny, because it is the one box that can reach every other box. It gets no special treatment: it is one of the DMZ Ubuntu servers, it runs the same STIG baseline, and its own state is GitOps-backed, so every change to it lands in version control and is auditable and restorable like any other host in the estate. Its MDM endpoints are reachable only from within the estate. When it is down, check-ins queue on the agents and the estate resumes when it is back; no host state is lost in the interval.
+
 ## Monitoring: every profile carries a receipt
 
-{{< figure src="images/fig5-monitoring-loop.svg" alt="Monitoring loop: labels re-evaluate, each host's profile set is computed, pushed and applied, the device reports per-key status at check-in, and the console shows verified pending or failed per profile per host" caption="The MDM check-in is not fire-and-forget: the device reports per-key status, so each profile has a verified state per host. The Windows MDM fleet fully verified this week." >}}
+{{< figure src="images/fig5-monitoring-loop.svg" alt="Monitoring loop: labels re-evaluate, each host's profile set is computed, pushed and applied, the device reports per-key status at check-in, and the console shows verified pending or failed per profile per host" caption="The MDM check-in is not fire-and-forget: the device reports per-key status, so each profile has a verified state per host, as of its last check-in." >}}
 
-MDM deployments usually end at *delivered*. Fleet's check-in does not. When a Windows host syncs, it reports the status of every key it applied, and the server stores that per profile, per host. The console shows verified, pending or failed, with the offending key in the detail column when something is off. A fully green row is not *the profile was sent*; it is *the profile's keys are on the device and the device says so*.
+MDM deployments usually end at *delivered*. Fleet's check-in does not. When a Windows host syncs, it reports the status of every key it applied, and the server stores that per profile, per host. The console shows verified, pending or failed, with the offending key in the detail column when something is off. A fully green row is not *the profile was sent*; it is *the profile's keys are on the device and the device says so*. Check-ins land on the order of a minute, so the view is live. A host that stops checking in shows as offline in the same view, and its verified state reads as last-known, not current: the 100% is only as fresh as the newest check-in.
 
-That changes the shape of the compliance conversation. Coverage is a count. Drift is a diff. *Which hosts are missing control X* is a query, and the answer updates itself the moment a host changes state, because the label evaluation and the check-in loop run continuously.
+That changes the shape of the compliance conversation. Coverage is a count. Drift is a diff. *Which hosts are missing control X* is a query, and the answer updates itself the moment a host changes state, because the label evaluation and the check-in loop keep running.
 
 ## Why this scales
 
