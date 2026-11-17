@@ -1,52 +1,71 @@
 ---
-title: "about"
-date: 2026-05-22T12:00:00-04:00
+title: "About karmine"
+summary: "About Dhruv Majumdar — security operations across two decades, now building the auditable AI layer of the stack."
 draft: false
+date: "2025-12-21T09:00:00-05:00"
+lastmod: "2026-11-16T09:00:00-05:00"
+showToc: true
+showReadingTime: true
+showWordCount: true
 showHero: false
-showAuthor: false
 showTableOfContents: false
-showReadingTime: false
-showWordCount: false
-showBreadcrumbs: false
-showDate: false
-showDateUpdated: false
-showEdit: false
-showHeadingAnchors: false
-showPagination: false
-showRelatedContent: false
-showSummary: false
-showTaxonomies: false
-sharingLinks: []
+meta-title: "About · karmine's notes"
+meta-description: "About Dhruv Majumdar — VP of Security Solutions. Two decades across MxDR, VMDR, CTI and red teaming, now building the auditable AI layer of security operations: fleet-mcp, agentic-detector, agent-assisted hunting."
+meta-author: Dhruv Majumdar
+meta-og:title: "About Dhruv Majumdar — the auditable AI layer of security operations"
+meta-og:description: "Two decades across MxDR, VMDR, CTI and red teaming. Now the operators are human and agent — and the work stays auditable. fleet-mcp, agentic-detector, vibe hunting."
+meta-og:site_name: "karmine's notes"
+meta-og:locale: en
+meta-og:type: website
+meta-article:published_time: "2025-12-21T09:00:00-05:00"
+meta-article:modified_time: "2026-11-16T09:00:00-05:00"
+meta-keywords: about,dhruv majumdar,security-ops,mxdr,threat-hunting,fleet,osquery,mcp,ai,agentic-ai
 ---
+
+{{< figure src="images/hero.svg" alt="About: Dhruv Majumdar, VP of Security Solutions — twenty years across MxDR, VMDR, CTI and red teaming, now building the auditable AI layer of security operations" >}}
 
 **Dhruv Majumdar** — **VP of Security Solutions**. Two decades plus across **MxDR**, **VMDR**, **Cyber Threat Intelligence**, and **Red Teaming**. These notes are the working-out: the tools, the patterns, and the moves that survive contact with real adversaries and real fleets.
 
 Most of what I write touches the seam between detection theory and operational reality — where MxDR programs run on artifacts not catalogs, where vulnerability response works backwards from exploit primitives instead of forwards from a CVE ID, and where a red team's "found it" only matters if the blue side can reproduce it on every endpoint they own.
 
+The seam has moved again. The operators are no longer only human — agents now sit inside the security stack, and the question is no longer *can they help* but *can their work still be audited*. These notes follow agents through that stack: how an agent earns the right to touch a fleet, how its work stays inspectable, and how you keep sight of the AI layer running on your own endpoints. The rule across all of it: **the model accelerates the work without hiding it.**
+
+## The AI-forward bet
+
+Three things I have built and shipped, each an answer to the same question — *can an agent do this on my fleet, and can I still audit it?*
+
+- **Ask, and see the SQL.** [fleet-mcp](https://karmine05.github.io/dirtyfrag-blog/posts/fleet-mcp-manifesto/) turns Fleet into a typed tool catalog any AI agent can call. English in, a real osquery scan across every host you own out — with the SQL and the assumptions shown to the analyst, not buried in a trace.
+- **Hunt with the agent in the loop.** [Vibe hunting](https://karmine05.github.io/dirtyfrag-blog/posts/vibe-hunting-clickfix-fleet-mcp-atc/): state the intent in English, the agent composes the SQL, fuses browser, filesystem and kernel evidence into one OCSF timeline, reaches a verdict, and acts on it. The analyst reviews the timeline, not the tool output.
+- **See the AI layer you are running.** [agentic-detector](https://karmine05.github.io/dirtyfrag-blog/posts/agentic-detector/): one osquery table over MCP servers, agent CLIs, IDE plugins, live AI sockets, and the instruction files that tell agents what they are allowed to do. An npx-fetched MCP server with shell-exec capability is now part of your attack surface — so it belongs in your inventory.
+
+The writing runs on a living lab: a mixed-OS estate where agents operate through the same control plane as the humans, and every claim in these notes comes back as a query result rather than a screenshot. Start with [one control plane, three operating systems](https://karmine05.github.io/dirtyfrag-blog/posts/one-control-plane-three-operating-systems/).
+
 ## What I work on
 
-- **MxDR — Managed Extended Detection and Response** — operating detection programs across endpoint, identity, cloud, and SaaS planes; turning telemetry into reproducible, action-ready signal.
-- **VMDR — Vulnerability Management, Detection, and Response** — pre-CVE response, artifact-based exposure scoping, and closing the gap between "the vendor said this fixes it" and "the host actually fixed it."
-- **Cyber Threat Intelligence** — adversary tradecraft to detection engineering pipeline; making CTI count where it matters (the query, the policy, the run-book), not where it doesn't (the slide).
-- **Red Teaming** — engagement design, tooling, and the post-exercise translation into durable defensive instrumentation.
-- **AI for security operations** — natural-language interfaces over Fleet / osquery / MCP with the SQL still visible to the analyst. Where the model accelerates the work without hiding it.
+- **MxDR / VMDR and detection engineering** — the full lifecycle from signal to disposition, across Mac, Windows, and Linux
+- **Threat hunting as a craft** — artifact-driven, adversarially informed, and reproducible across fleets
+- **Cyber Threat Intelligence** — CTI that changes what you look for, not just what you read
+- **Red team operations** — the offense side, focused on what actually gets past real defenses
+- **AI for Security Operations** — natural-language interfaces over Fleet, osquery, and MCP that make agent output auditable, with SQL still shown to the human analyst
 
 ## Speaking
 
-BSides, DC416, conINT, HacKP, and others. Topics span AI-assisted threat hunting, supply-chain incident detection, and adversary emulation tradecraft.
+I present at security conferences and user groups. Recent stages: **BSides**, **DC416**, **conINT**, **HacKP**.
 
 ## On the air
 
-- **Beyond the Alert** (Dropzone AI) — [*What Happens When Your AI Agent Learns How to Escape Your Own Lab?*](https://beyondthealert.podbean.com/). The alert problem as a culture problem first, a technology problem second. Red-team-in-the-loop AI lessons.
-- **Detection at Scale** (Panther, host Jack Naglieri) — [*How to Mature Your Detection and Response*](https://panther.com/podcasts/dhruv-majumdar). Maturing the SOC → D&R transition, threat-modeling questions worth asking, data lakes vs usability trade-offs, LLMs for exfil detection.
-- **Blue Team Warrior Podcast** — [Episode #084](https://open.spotify.com/show/12U14pB4BcOzFwO7NbRuQq). Three questions, eight minutes. Blue-team operator-to-operator.
-- **BSides Edmonton 2018** — [*Threat Hunting*](https://www.youtube.com/watch?v=UknWIXdO6FA) (talk). Tactical threat intelligence into reproducible hunting playbooks.
+I've appeared on several security podcasts over the past year and a half:
+
+- [**Beyond the Alert**](https://open.spotify.com/show/5d3b3513-881a-425a-88c9-d6440a31b5d5) — AI agents breaking out of the lab, AI in vulnerability triage, hunting with the model, agentic CTI, agentic SOC, AI supply chain
+- [**Detection at Scale**](https://podcasters.spotify.com/pod/show/detection-at-scale) — MDM, device management, and why the endpoint is the new perimeter
+- [**Blue Team Warrior**](https://podcasters.spotify.com/pod/show/blue-team-warrior) — MxDR in practice, detection engineering, and the operational reality of running a defense
+- [**Hacking Security Radio**](https://hackingsecurityradio.com) — a 4-hour deep dive on hunting, CTI, and the MxDR lifecycle
 
 ## Find me
 
-- LinkedIn: [linkedin.com/in/neondhruv](https://www.linkedin.com/in/neondhruv/)
-- GitHub: [github.com/karmine05](https://github.com/karmine05)
+- [LinkedIn](https://www.linkedin.com/in/neondhruv/)
+- [GitHub](https://github.com/karmine05)
 
 ---
 
-Opinions are my own.
+*Opinions are my own.*
