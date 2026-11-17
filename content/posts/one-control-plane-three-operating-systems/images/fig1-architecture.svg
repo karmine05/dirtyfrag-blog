@@ -25,7 +25,7 @@
   <text x="38" y="100" class="chip">Windows 10 Pro (AD + workgroup)</text>
   <text x="38" y="118" class="chip">Windows 11 Pro (AD + workgroup)</text>
   <text x="38" y="136" class="chip">Server 2022 · domain controllers</text>
-  <text x="38" y="154" class="mono">agent + mdm_bridge where client-OS</text>
+  <text x="38" y="154" class="mono">agent + Fleet MDM on client OSes</text>
 
   <!-- macOS island -->
   <rect x="20" y="178" width="290" height="86" rx="8" class="mac"/>
@@ -39,9 +39,9 @@
   <rect x="20" y="280" width="290" height="112" rx="8" class="lnx"/>
   <circle cx="38" cy="298" r="4" class="acc-o"/>
   <text x="50" y="302" class="chip" font-weight="600">UBUNTU · DMZ servers</text>
-  <text x="38" y="322" class="chip">docker swarm · managers + workers</text>
-  <text x="38" y="340" class="chip">Wazuh cluster · managers + indexers</text>
-  <text x="38" y="358" class="chip">AdGuard · LB · automation · Fleet</text>
+  <text x="38" y="322" class="chip">container hosts · managers + workers</text>
+  <text x="38" y="340" class="chip">SIEM cluster · managers + indexers</text>
+  <text x="38" y="358" class="chip">DNS · LB · automation · Fleet</text>
   <text x="38" y="378" class="mono">no MDM channel here: osquery + scripts</text>
 
   <!-- channels -->
@@ -68,7 +68,7 @@
 
   <rect x="400" y="260" width="360" height="66" rx="6" class="layer"/>
   <text x="414" y="280" class="chip" font-weight="600">MDM LAYER</text>
-  <text x="414" y="298" class="mono">Windows: mdm_bridge/WSTEP · CSP profiles</text>
+  <text x="414" y="298" class="mono">Windows: Fleet MDM (WSTEP) · CSP profiles</text>
   <text x="414" y="316" class="mono">macOS: Apple MDM · profiles + declarations</text>
 
   <rect x="400" y="338" width="360" height="38" rx="6" class="layer"/>
